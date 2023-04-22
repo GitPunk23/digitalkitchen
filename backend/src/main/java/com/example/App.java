@@ -2,8 +2,6 @@ package com.example;
 
 import com.database.DatabaseManager;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -17,7 +15,7 @@ public class App
         DatabaseManager dbManager = new DatabaseManager();
 
         try {
-            Connection conn = dbManager.getConnection();
+            Connection conn = DatabaseManager.getConnection();
             if (conn != null) {
                 System.out.println("Connected to database successfully!");
 
