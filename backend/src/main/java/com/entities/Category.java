@@ -19,4 +19,13 @@ public class Category {
     @Column(name = "name")
     private String name;
 
+    public Long getID() {
+        return this.ID;
+    }
+
+    public String getValues() {
+        String sql = "("+ this.name + ")";
+        return sql;
+    }
+
 }

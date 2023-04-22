@@ -36,4 +36,14 @@ public class RecipeIngredients {
 
     @Column(name = "notes")
     private String notes;
+
+    public Long getID() {
+        return this.ID;
+    }
+
+    public String getValues() {
+        String sql = "("+ this.recipe.getID() + ", " + this.ingredient.getID() + ", " 
+                   + this.measurement.getID() + ", " + this.quantity + ", " + this.notes + ")";
+        return sql;
+    }
 }

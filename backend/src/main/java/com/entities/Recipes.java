@@ -38,4 +38,14 @@ public class Recipes {
     @Column(name = "notes")
     private String notes;
 
+    public Long getID() {
+        return this.ID;
+    }
+
+    public String getValues() {
+        String sql = "("+ this.category.getID() + ", " + this.name + ", " + this.description + ", "
+                    + this.servings + ", " + this.caloriesPerServing + ", " + this.notes +")";
+        return sql;
+    }
+
 }

@@ -19,4 +19,13 @@ public class Tags {
     @Column(name = "tag")
     private String tag;
 
+    public Long getID() {
+        return this.ID;
+    }
+
+    public String getValues() {
+        String sql = "("+ this.tag +")";
+        return sql;
+    }
+
 }

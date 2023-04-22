@@ -25,4 +25,13 @@ public class RecipeTags {
     @JoinColumn(name = "tag_id", referencedColumnName = "id")
     private Tags tag;
 
+    public Long getID() {
+        return this.ID;
+    }
+
+    public String getValues() {
+        String sql = "("+ this.recipe.getID() + ", " + this.tag.getID()  +")";
+        return sql;
+    }
+
 }

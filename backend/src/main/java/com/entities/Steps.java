@@ -29,4 +29,13 @@ public class Steps {
     @Column(name = "step_description")
     private String description;
 
+    public Long getID() {
+        return this.ID;
+    }
+
+    public String getValues() {
+        String sql = "("+ this.recipe.getID() + ", " + this.stepNumber + ", " + this.description +")";
+        return sql;
+    }
+
 }

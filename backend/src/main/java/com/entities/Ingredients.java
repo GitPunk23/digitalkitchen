@@ -18,4 +18,13 @@ public class Ingredients {
     @Column(name = "ingredient")
     private String ingredient;
 
+    public Long getID() {
+        return this.ID;
+    }
+
+    public String getValues() {
+        String sql = "("+ this.ingredient +")";
+        return sql;
+    }
+
 }

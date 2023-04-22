@@ -19,4 +19,13 @@ public class Measurements {
     @Column(name = "measurement")
     private String measurement;
 
+    public Long getID() {
+        return this.ID;
+    }
+
+    public String getValues() {
+        String sql = "("+ this.measurement +")";
+        return sql;
+    }
+
 }
