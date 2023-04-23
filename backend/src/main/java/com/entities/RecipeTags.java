@@ -15,22 +15,31 @@ public class RecipeTags {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+    private int ID;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id", referencedColumnName = "id")
     private Recipes recipe;
 
+    private int recipeID;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tag_id", referencedColumnName = "id")
     private Tags tag;
 
-    public Long getID() {
+    private int tagID;
+
+    public RecipeTags(int recipeID, int tagID) {
+        this.recipeID = recipeID;
+        this.tagID = tagID;
+    }
+
+    public int getID() {
         return this.ID;
     }
 
     public String getValues() {
-        String sql = "("+ this.recipe.getID() + ", " + this.tag.getID()  +")";
+        String sql = "("+ this.recipeID + ", " + this.tagID  +")";
         return sql;
     }
 

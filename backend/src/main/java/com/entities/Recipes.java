@@ -22,11 +22,13 @@ public class Recipes {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+    private int ID;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
+
+    private int categoryID;
 
     @Column(name = "name")
     private String name;
@@ -52,13 +54,32 @@ public class Recipes {
     @OneToMany(mappedBy = "recipes", cascade = CascadeType.ALL)
     private List<RecipeTags> tags;
     
-    public Long getID() {
+    /**
+     * Creates Recipe to be inserted into the database
+     * @param categoryID Category ID
+     * @param name Name of the recipe
+     * @param description Description of the recipe
+     * @param servings Number of servings
+     * @param caloriesPerServing Calories per serving
+     * @param notes Notes for the recipe
+     */
+    public Recipes(int categoryID, String name, String description, int servings, int caloriesPerServing,
+                    String notes) {
+        this.categoryID = categoryID;
+        this.name = name;
+        this.description = description;
+        this.servings = servings;
+        this.caloriesPerServing = caloriesPerServing;
+        this.notes = notes;
+    }
+    
+    public int getID() {
         return this.ID;
     }
 
     public String getValues() {
-        String sql = "("+ /*this.category.getID() + ", " +*/ this.name + ", " + this.description + ", "
-                    + this.servings + ", " + this.caloriesPerServing + ", " + this.notes +")";
+        String sql = "("+ this.categoryID + ", '" + this.name + "', '" + this.description + "', "
+                    + this.servings + ", " + this.caloriesPerServing + ", '" + this.notes +"')";
         return sql;
     }
 

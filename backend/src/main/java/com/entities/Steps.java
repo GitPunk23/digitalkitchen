@@ -17,11 +17,13 @@ public class Steps {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+    private int ID;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id", referencedColumnName = "id")
     private Recipes recipe;
+
+    private int recipeID;
 
     @Column(name = "step_number")
     private int stepNumber;
@@ -29,12 +31,18 @@ public class Steps {
     @Column(name = "step_description")
     private String description;
 
-    public Long getID() {
+    public Steps(int recipeID, int stepNumber, String description) {
+        this.recipeID = recipeID;
+        this.stepNumber = stepNumber;
+        this.description = description;
+    }
+
+    public int getID() {
         return this.ID;
     }
 
     public String getValues() {
-        String sql = "("+ this.recipe.getID() + ", " + this.stepNumber + ", " + this.description +")";
+        String sql = "("+ this.recipeID + ", " + this.stepNumber + ", " + this.description +")";
         return sql;
     }
 
