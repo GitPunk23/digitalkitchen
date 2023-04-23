@@ -24,7 +24,7 @@ public class Measurements {
     }
 
     public String getValues() {
-        String sql = "("+ this.measurement +")";
+        String sql = "('"+ this.measurement +"')";
         return sql;
     }
 

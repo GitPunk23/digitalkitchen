@@ -21,15 +21,15 @@ public class Category {
     @Column(name = "name")
     private String name;
 
+    @OneToMany(mappedBy = "categories")
+    private List<Recipes> recipes;
+
     public int getID() {
         return this.ID;
     }
 
-    @OneToMany(mappedBy = "categories")
-    private List<Recipes> recipes;
-
     public String getValues() {
-        String sql = "("+ this.name + ")";
+        String sql = "('"+ this.name + "')";
         return sql;
     }
 

@@ -57,7 +57,7 @@ public class RecipeIngredients {
 
     public String getValues() {
         String sql = "("+ this.recipeID + ", " + this.ingredientID + ", " 
-                   + this.measurementID + ", " + this.quantity + ", " + this.notes + ")";
+                   + this.measurementID + ", " + this.quantity + ", '" + this.notes + "')";
         return sql;
     }
 }

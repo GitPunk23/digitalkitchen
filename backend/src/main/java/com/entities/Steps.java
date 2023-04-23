@@ -42,7 +42,7 @@ public class Steps {
     }
 
     public String getValues() {
-        String sql = "("+ this.recipeID + ", " + this.stepNumber + ", " + this.description +")";
+        String sql = "("+ this.recipeID + ", " + this.stepNumber + ", '" + this.description +"')";
         return sql;
     }
 

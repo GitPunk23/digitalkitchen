@@ -24,7 +24,7 @@ public class Tags {
     }
 
     public String getValues() {
-        String sql = "("+ this.tag +")";
+        String sql = "('"+ this.tag +"')";
         return sql;
     }
 

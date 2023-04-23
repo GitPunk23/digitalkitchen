@@ -23,7 +23,7 @@ public class Ingredients {
     }
 
     public String getValues() {
-        String sql = "("+ this.ingredient +")";
+        String sql = "('"+ this.ingredient +"')";
         return sql;
     }
 
