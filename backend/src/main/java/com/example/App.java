@@ -1,10 +1,10 @@
 package com.example;
 
+import com.api.RecipeController;
 import com.database.DatabaseManager;
 import com.database.impl.RecipesImpl;
 import com.entities.Recipes;
 
-import endpoints.RecipeController;
 import java.sql.Connection;
 import java.sql.SQLException;
 
