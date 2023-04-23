@@ -1,6 +1,10 @@
 package com.example;
 
 import com.database.DatabaseManager;
+import com.database.impl.RecipesImpl;
+import com.entities.Recipes;
+
+import endpoints.RecipeController;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -9,6 +13,7 @@ public class App
     public static void main( String[] args )
     {
         DatabaseManager dbManager = new DatabaseManager();
+        RecipeController recipeController = new RecipeController(dbManager);
 
         try {
             Connection conn = DatabaseManager.getConnection();
@@ -24,6 +29,12 @@ public class App
             System.out.println("Error connecting to database: " + e.getMessage());
         
         } 
+
+
+
+
+
+        
     }
 
     
