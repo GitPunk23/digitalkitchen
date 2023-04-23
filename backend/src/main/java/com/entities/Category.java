@@ -6,9 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-
 import java.util.List;
-
 import javax.persistence.Column;
 
 
@@ -18,12 +16,12 @@ public class Category {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+    private int ID;
 
     @Column(name = "name")
     private String name;
 
-    public Long getID() {
+    public int getID() {
         return this.ID;
     }
 

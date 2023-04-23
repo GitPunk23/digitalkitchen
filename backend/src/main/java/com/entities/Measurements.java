@@ -14,12 +14,12 @@ public class Measurements {
  
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+    private int ID;
 
     @Column(name = "measurement")
     private String measurement;
 
-    public Long getID() {
+    public int getID() {
         return this.ID;
     }
 

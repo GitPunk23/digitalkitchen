@@ -64,27 +64,33 @@ public class DatabaseManager {
      * @throws SQLException
      * @returns ID of the newly created record
      */
-    public <T> Long createEntityRecord(Entity<T> entity) throws SQLException {
+    public <T> int createEntityRecord(Entity<T> entity) throws SQLException {
+        //Craft SQL statement and execute
         String sql = entity.createEntityRecordString();
-        PreparedStatement statement = connection.prepareStatement(sql);
+        PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         statement.executeUpdate();
 
         //Return ID of newly created record
         ResultSet resultSet = statement.getGeneratedKeys();
-        return resultSet.getLong(1);
+        while (resultSet.next()) {
+            return resultSet.getInt(1);
+        } 
+
+        //Return default value if record wasn't created
+        return -1;
     }
 
     /**
      * This method adds a record to an entity in the database
      * @throws SQLException
      */
-    public <T> Long deleteEntityRecord(Entity<T> entity) throws SQLException {
+    public <T> int deleteEntityRecord(Entity<T> entity) throws SQLException {
         String sql = entity.deleteEntityRecordString();
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.executeUpdate();
 
         ResultSet resultSet = statement.getGeneratedKeys();
-        return resultSet.getLong(1);
+        return resultSet.getInt(1);
     }
 
     /**

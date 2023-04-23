@@ -14,12 +14,12 @@ public class Tags {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+    private int ID;
 
     @Column(name = "tag")
     private String tag;
 
-    public Long getID() {
+    public int getID() {
         return this.ID;
     }
 

@@ -13,12 +13,12 @@ public class Ingredients {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
+    private int ID;
 
     @Column(name = "ingredient")
     private String ingredient;
 
-    public Long getID() {
+    public int getID() {
         return this.ID;
     }
 
