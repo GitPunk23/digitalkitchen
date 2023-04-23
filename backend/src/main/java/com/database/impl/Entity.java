@@ -1,8 +1,5 @@
 package com.database.impl;
 
-import java.util.List;
-
-
 public interface Entity<T> {
 
     /**
