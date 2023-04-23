@@ -76,9 +76,15 @@ public class DatabaseManager {
 
     /**
      * This method adds a record to an entity in the database
+     * @throws SQLException
      */
-    public <T> void deleteEntityRecord(Entity<T> entity) {
+    public <T> Long deleteEntityRecord(Entity<T> entity) throws SQLException {
+        String sql = entity.deleteEntityRecordString();
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.executeUpdate();
 
+        ResultSet resultSet = statement.getGeneratedKeys();
+        return resultSet.getLong(1);
     }
 
     /**
