@@ -11,7 +11,7 @@ import javax.persistence.Column;
 
 
 @Entity
-@Table(name = "category")
+@Table(name = "categories")
 public class Category {
     
     @Id
