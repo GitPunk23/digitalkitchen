@@ -1,4 +1,4 @@
-package endpoints;
+package com.api;
 
 import com.entities.*;
 import com.database.DatabaseManager;
