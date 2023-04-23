@@ -24,8 +24,8 @@ public class RecipeIngredientsImpl implements Entity<RecipeIngredients> {
     }
 
     @Override
-    public String deleteEntityRecordString(String column, String value) {
-        String sql = "DELETE FROM " + this.table + " WHERE " + column + "='" + value + "';";
+    public String deleteEntityRecordString() {
+        String sql = "DELETE FROM " + this.table + " WHERE id ='" + this.recipeIngredients.getID() + "';";
         return sql;
     }
 

@@ -24,8 +24,8 @@ public class StepsImpl implements Entity<Steps> {
     }
 
     @Override
-    public String deleteEntityRecordString(String column, String value) {
-        String sql = "DELETE FROM " + this.table + " WHERE " + column + "='" + value + "';";
+    public String deleteEntityRecordString() {
+        String sql = "DELETE FROM " + this.table + " WHERE id ='" + this.step.getID() + "';";
         return sql;
     }
 

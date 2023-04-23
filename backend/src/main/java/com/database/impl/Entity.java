@@ -25,7 +25,7 @@ public interface Entity<T> {
      * This method creates a SQL statement that removes a record from an entity in the database
      * @return A string containing a SQL statement
      */
-    public String deleteEntityRecordString(String column, String value);
+    public String deleteEntityRecordString();
 
     /**
      * This method creates a SQL statement that updates a record in an entity in the database

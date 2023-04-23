@@ -17,15 +17,15 @@ public class RecipesImpl implements Entity<Recipes> {
     }
 
     @Override
-    public String createEntityRecordString() {
+    public String createEntityRecordString() { 
         String sql = "INSERT INTO " + this.table + " (category_id, name, description, servings, calories_per_serving, notes) "
                    + "VALUES " + this.recipe.getValues() + ";";
         return sql;
     }
 
     @Override
-    public String deleteEntityRecordString(String column, String value) {
-        String sql = "DELETE FROM " + this.table + " WHERE " + column + "='" + value + "';";
+    public String deleteEntityRecordString() {
+        String sql = "DELETE FROM " + this.table + " WHERE id ='" + this.recipe.getID() + "';";
         return sql;
     }
 

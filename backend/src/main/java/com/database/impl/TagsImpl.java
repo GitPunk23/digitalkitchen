@@ -24,8 +24,8 @@ public class TagsImpl implements Entity<Tags> {
     }
 
     @Override
-    public String deleteEntityRecordString(String column, String value) {
-        String sql = "DELETE FROM " + this.table + " WHERE " + column + "='" + value + "';";
+    public String deleteEntityRecordString() {
+        String sql = "DELETE FROM " + this.table + " WHERE id ='" + this.tag.getID() + "';";
         return sql;
     }
 
