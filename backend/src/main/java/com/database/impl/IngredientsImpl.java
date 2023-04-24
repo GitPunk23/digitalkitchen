@@ -1,14 +1,22 @@
 package com.database.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import com.entities.Ingredients;
 
 public class IngredientsImpl implements Entity<Ingredients> {
 
+    private int ID;
     private String table = "ingredients";
     private Ingredients ingredient;
 
     public IngredientsImpl(Ingredients ingredient) {
         this.ingredient = ingredient;
+    }
+
+    public IngredientsImpl(int ID) {
+        this.ID = ID;
     }
 
     @Override
@@ -37,8 +45,8 @@ public class IngredientsImpl implements Entity<Ingredients> {
     }
 
     @Override
-    public String getEntityRecordString(String conditionColumn, String conditionValue) {
-        String sql = "SELECT * FROM " + this.table + " WHERE " + conditionColumn + " = " + conditionValue+";";
+    public String getEntityRecordString() {
+        String sql = "SELECT * FROM " + this.table + " WHERE id = '" + this.ID+"';";
         return sql;
     }
 
@@ -46,6 +54,22 @@ public class IngredientsImpl implements Entity<Ingredients> {
     public String getAllEntityRecordsString() {
         String sql = "SELECT * FROM " + this.table + ";";
         return sql;
+    }
+
+    @Override
+    public void createEntityRecordObject(ResultSet resultSet) throws SQLException {
+        String ingredient = null;
+
+        while(resultSet.next()) {
+            this.ID = resultSet.getInt("id");
+            ingredient = resultSet.getString("ingredient");
+        }
+        this.ingredient = new Ingredients(this.ID, ingredient);
+    }
+
+    @Override
+    public <T> T getEntityRecordObject() {
+        return (T) this.ingredient;
     }
     
 }

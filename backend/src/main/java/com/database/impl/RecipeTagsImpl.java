@@ -1,14 +1,22 @@
 package com.database.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import com.entities.RecipeTags;
 
 public class RecipeTagsImpl implements Entity<RecipeTags> {
 
+    private int ID;
     private String table = "recipe_tags";
     private RecipeTags recipeTags;
 
     public RecipeTagsImpl(RecipeTags recipeTags) {
         this.recipeTags = recipeTags;
+    }
+
+    public RecipeTagsImpl(int ID) {
+        this.ID = ID;
     }
 
     @Override
@@ -37,8 +45,8 @@ public class RecipeTagsImpl implements Entity<RecipeTags> {
     }
 
     @Override
-    public String getEntityRecordString(String conditionColumn, String conditionValue) {
-        String sql = "SELECT * FROM " + this.table + " WHERE " + conditionColumn + " = " + conditionValue+";";
+    public String getEntityRecordString() {
+        String sql = "SELECT * FROM " + this.table + " WHERE id = '" + this.ID+"';";
         return sql;
     }
 
@@ -46,6 +54,23 @@ public class RecipeTagsImpl implements Entity<RecipeTags> {
     public String getAllEntityRecordsString() {
         String sql = "SELECT * FROM " + this.table + ";";
         return sql;
+    }
+
+    @Override
+    public void createEntityRecordObject(ResultSet resultSet) throws SQLException {
+        int recipeID = 0, tagID = 0;
+
+        while(resultSet.next()) {
+            this.ID = resultSet.getInt("id");
+            recipeID = resultSet.getInt("recipe_id");
+            tagID = resultSet.getInt("tag_id");
+        }
+        this.recipeTags = new RecipeTags(this.ID, recipeID, tagID);
+    }
+
+    @Override
+    public <T> T getEntityRecordObject() {
+        return (T) this.recipeTags;
     }
     
 }

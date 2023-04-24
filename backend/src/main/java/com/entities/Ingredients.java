@@ -18,6 +18,24 @@ public class Ingredients {
     @Column(name = "ingredient")
     private String ingredient;
 
+    /**
+     * Constructor for insertion
+     * @param name
+     */
+    public Ingredients(String ingredient) {
+        this.ingredient = ingredient;
+    }
+
+    /**
+     * Constructor for retrieval
+     * @param ID
+     * @param name
+     */
+    public Ingredients(int ID, String ingredient) {
+        this.ID = ID;
+        this.ingredient = ingredient;
+    }
+
     public int getID() {
         return this.ID;
     }

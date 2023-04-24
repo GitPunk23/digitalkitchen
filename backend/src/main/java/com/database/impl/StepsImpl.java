@@ -1,14 +1,22 @@
 package com.database.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import com.entities.Steps;
 
 public class StepsImpl implements Entity<Steps> {
 
+    private int ID;
     private String table = "recipe_tags";
     private Steps step;
 
     public StepsImpl(Steps step) {
         this.step = step;
+    }
+
+    public StepsImpl(int ID) {
+        this.ID = ID;
     }
 
     @Override
@@ -37,8 +45,8 @@ public class StepsImpl implements Entity<Steps> {
     }
 
     @Override
-    public String getEntityRecordString(String conditionColumn, String conditionValue) {
-        String sql = "SELECT * FROM " + this.table + " WHERE " + conditionColumn + " = " + conditionValue+";";
+    public String getEntityRecordString() {
+        String sql = "SELECT * FROM " + this.table + " WHERE id = '" + this.ID+"';";
         return sql;
     }
 
@@ -46,6 +54,25 @@ public class StepsImpl implements Entity<Steps> {
     public String getAllEntityRecordsString() {
         String sql = "SELECT * FROM " + this.table + ";";
         return sql;
+    }
+
+    @Override
+    public void createEntityRecordObject(ResultSet resultSet) throws SQLException {
+        int recipeID = 0, stepNumber = 0;
+        String description = null;
+
+        while(resultSet.next()) {
+            this.ID = resultSet.getInt("id");
+            recipeID = resultSet.getInt("recipe_id");
+            stepNumber = resultSet.getInt("step_number");
+            description = resultSet.getString("step_description");
+        }
+        this.step = new Steps(this.ID, recipeID, stepNumber, description);
+    }
+
+    @Override
+    public <T> T getEntityRecordObject() {
+        return (T) this.step;
     }
     
 }

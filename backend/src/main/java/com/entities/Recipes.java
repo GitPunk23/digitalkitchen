@@ -10,8 +10,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
+import java.sql.SQLException;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 
@@ -70,6 +70,28 @@ public class Recipes {
         this.description = description;
         this.servings = servings;
         this.caloriesPerServing = caloriesPerServing;
+        this.notes = notes;
+    }
+
+    /**
+     * Creates recipe retrieved from the database
+     * @param ID
+     * @param categoryID
+     * @param name
+     * @param description
+     * @param servings
+     * @param caloriesPerServing
+     * @param notes
+     * @throws SQLException
+     */
+    public Recipes(int ID, int categoryID, String name, String description, int servings, 
+                   int caloriesPerServing, String notes) throws SQLException {
+        this.ID = ID;
+        this.categoryID = categoryID; 
+        this.name = name;
+        this.description = description; 
+        this.servings = servings;
+        this.caloriesPerServing = caloriesPerServing; 
         this.notes = notes;
     }
     

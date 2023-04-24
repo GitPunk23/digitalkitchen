@@ -37,6 +37,13 @@ public class Steps {
         this.description = description;
     }
 
+    public Steps(int ID, int recipeID, int stepNumber, String description) {
+        this.ID = ID;
+        this.recipeID = recipeID;
+        this.stepNumber = stepNumber;
+        this.description = description;
+    }
+
     public int getID() {
         return this.ID;
     }

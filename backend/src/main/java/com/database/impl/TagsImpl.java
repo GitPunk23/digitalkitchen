@@ -1,14 +1,22 @@
 package com.database.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import com.entities.Tags;
 
 public class TagsImpl implements Entity<Tags> {
 
+    private int ID;
     private String table = "tags";
     private Tags tag;
 
     public TagsImpl(Tags tag) {
         this.tag = tag;
+    }
+
+    public TagsImpl(int ID) {
+        this.ID = ID;
     }
 
     @Override
@@ -37,8 +45,8 @@ public class TagsImpl implements Entity<Tags> {
     }
 
     @Override
-    public String getEntityRecordString(String conditionColumn, String conditionValue) {
-        String sql = "SELECT * FROM " + this.table + " WHERE " + conditionColumn + " = " + conditionValue+";";
+    public String getEntityRecordString() {
+        String sql = "SELECT * FROM " + this.table + " WHERE id = '" + this.ID+"';";
         return sql;
     }
 
@@ -46,6 +54,22 @@ public class TagsImpl implements Entity<Tags> {
     public String getAllEntityRecordsString() {
         String sql = "SELECT * FROM " + this.table + ";";
         return sql;
+    }
+
+    @Override
+    public void createEntityRecordObject(ResultSet resultSet) throws SQLException {
+        String tag = null;
+
+        while(resultSet.next()) {
+            this.ID = resultSet.getInt("id");
+            tag = resultSet.getString("tag");
+        }
+        this.tag = new Tags(this.ID, tag);
+    }
+
+    @Override
+    public <T> T getEntityRecordObject() {
+        return (T) this.tag;
     }
     
 }

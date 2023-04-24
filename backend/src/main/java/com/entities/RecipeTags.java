@@ -34,6 +34,12 @@ public class RecipeTags {
         this.tagID = tagID;
     }
 
+    public RecipeTags(int ID, int recipeID, int tagID) {
+        this.ID = ID;
+        this.recipeID = recipeID;
+        this.tagID = tagID;
+    }
+
     public int getID() {
         return this.ID;
     }

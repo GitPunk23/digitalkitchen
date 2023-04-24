@@ -19,6 +19,15 @@ public class Tags {
     @Column(name = "tag")
     private String tag;
 
+    public Tags(String tag) {
+        this.tag = tag;
+    }
+
+    public Tags(int ID, String tag) {
+        this.ID = ID;
+        this.tag = tag;
+    }
+
     public int getID() {
         return this.ID;
     }

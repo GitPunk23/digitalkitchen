@@ -1,14 +1,30 @@
 package com.database.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import com.entities.Category;
 
 public class CategoryImpl implements Entity<Category> {
 
+    private int ID;
     private String table = "recipe_tags";
     private Category category;
 
+    /**
+     * Creates Category Implementation for insertion to the database
+     * @param category
+     */
     public CategoryImpl(Category category) {
         this.category = category;
+    }
+
+    /**
+     * Creates Category Implementation for retrieval from the database
+     * @param ID
+     */
+    public CategoryImpl(int ID) {
+        this.ID = ID;
     }
 
     @Override
@@ -37,8 +53,8 @@ public class CategoryImpl implements Entity<Category> {
     }
 
     @Override
-    public String getEntityRecordString(String conditionColumn, String conditionValue) {
-        String sql = "SELECT * FROM " + this.table + " WHERE " + conditionColumn + " = " + conditionValue+";";
+    public String getEntityRecordString() {
+        String sql = "SELECT * FROM " + this.table + " WHERE id = '" + this.ID+"';";
         return sql;
     }
 
@@ -46,6 +62,22 @@ public class CategoryImpl implements Entity<Category> {
     public String getAllEntityRecordsString() {
         String sql = "SELECT * FROM " + this.table + ";";
         return sql;
+    }
+
+    @Override
+    public void createEntityRecordObject(ResultSet resultSet) throws SQLException {
+        String name = null;
+
+        while(resultSet.next()) {
+            this.ID = resultSet.getInt("id");
+            name = resultSet.getString("name");
+        }
+        this.category = new Category(this.ID, name);
+    }
+
+    @Override
+    public <T> T getEntityRecordObject() {
+        return (T) this.category;
     }
     
 }

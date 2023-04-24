@@ -1,14 +1,30 @@
 package com.database.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import com.entities.Recipes;
 
 public class RecipesImpl implements Entity<Recipes> {
 
+    private int ID;
     private String table = "recipes";
     private Recipes recipe;
 
+    /**
+     * Creates Recipes Implementation for insertion to the database
+     * @param recipe
+     */
     public RecipesImpl(Recipes recipe) {
         this.recipe = recipe;
+    }
+
+    /**
+     * Creates Recipes Implementation for retrieval from the database
+     * @param ID
+     */
+    public RecipesImpl(int ID) {
+        this.ID = ID;
     }
 
     @Override
@@ -37,8 +53,8 @@ public class RecipesImpl implements Entity<Recipes> {
     }
 
     @Override
-    public String getEntityRecordString(String conditionColumn, String conditionValue) {
-        String sql = "SELECT * FROM " + this.table + " WHERE " + conditionColumn + " = " + conditionValue+";";
+    public String getEntityRecordString() {
+        String sql = "SELECT * FROM " + this.table + " WHERE id = '" + this.ID+"';";
         return sql;
     }
 
@@ -47,5 +63,26 @@ public class RecipesImpl implements Entity<Recipes> {
         String sql = "SELECT * FROM " + this.table + ";";
         return sql;
     }
-    
+
+    @Override
+    public void createEntityRecordObject(ResultSet resultSet) throws SQLException {
+        int cat = 0, serv = 0, cal = 0;
+        String name = null, desc = null, notes = null;
+
+        while(resultSet.next()) {
+            this.ID = resultSet.getInt("id");
+            cat = resultSet.getInt("category");
+            name = resultSet.getString("name");
+            desc = resultSet.getString("description");
+            serv = resultSet.getInt("servings");
+            cal = resultSet.getInt("calories_per_serving");
+            notes = resultSet.getString("notes");
+        }
+        this.recipe = new Recipes(this.ID, cat, name, desc, serv, cal, notes);
+    }
+
+    @Override
+    public <T> T getEntityRecordObject() {
+        return (T) this.recipe;
+    }
 }

@@ -1,14 +1,22 @@
 package com.database.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import com.entities.Measurements;
 
 public class MeasurementsImpl implements Entity<Measurements> {
 
+    private int ID;
     private String table = "measurements";
     private Measurements measurement;
 
     public MeasurementsImpl(Measurements measurement) {
         this.measurement = measurement;
+    }
+
+    public MeasurementsImpl(int ID) {
+        this.ID = ID;
     }
 
     @Override
@@ -37,8 +45,8 @@ public class MeasurementsImpl implements Entity<Measurements> {
     }
 
     @Override
-    public String getEntityRecordString(String conditionColumn, String conditionValue) {
-        String sql = "SELECT * FROM " + this.table + " WHERE " + conditionColumn + " = " + conditionValue+";";
+    public String getEntityRecordString() {
+        String sql = "SELECT * FROM " + this.table + " WHERE id = '" + this.ID+"';";
         return sql;
     }
 
@@ -46,6 +54,22 @@ public class MeasurementsImpl implements Entity<Measurements> {
     public String getAllEntityRecordsString() {
         String sql = "SELECT * FROM " + this.table + ";";
         return sql;
+    }
+
+    @Override
+    public void createEntityRecordObject(ResultSet resultSet) throws SQLException {
+        String measurement = null;
+
+        while(resultSet.next()) {
+            this.ID = resultSet.getInt("id");
+            measurement = resultSet.getString("measurement");
+        }
+        this.measurement = new Measurements(this.ID, measurement);
+    }
+
+    @Override
+    public <T> T getEntityRecordObject() {
+        return (T) this.measurement;
     }
     
 }

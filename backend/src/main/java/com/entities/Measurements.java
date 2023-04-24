@@ -19,6 +19,24 @@ public class Measurements {
     @Column(name = "measurement")
     private String measurement;
 
+    /**
+     * Constructor for insertion
+     * @param measurement
+     */
+    public Measurements(String measurement) {
+        this.measurement = measurement;
+    }
+
+    /**
+     * Constructor for retrieval
+     * @param ID
+     * @param measurement
+     */
+    public Measurements(int ID, String measurement) {
+        this.ID = ID;
+        this.measurement = measurement;
+    }
+
     public int getID() {
         return this.ID;
     }

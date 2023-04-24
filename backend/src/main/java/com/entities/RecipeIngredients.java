@@ -51,6 +51,15 @@ public class RecipeIngredients {
         this.notes = notes;
     }
 
+    public RecipeIngredients(int ID, int recipeID, int ingredientID, int measurementID, float quantity, String notes) {
+        this.ID = ID;
+        this.recipeID = recipeID;
+        this.ingredientID = ingredientID;
+        this.measurementID = measurementID;
+        this.quantity = quantity; 
+        this.notes = notes;
+    }
+
     public int getID() {
         return this.ID;
     }

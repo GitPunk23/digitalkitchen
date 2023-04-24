@@ -1,14 +1,22 @@
 package com.database.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import com.entities.RecipeIngredients;
 
 public class RecipeIngredientsImpl implements Entity<RecipeIngredients> {
 
+    private int ID;
     private String table = "recipe_ingredients";
     private RecipeIngredients recipeIngredients;
 
     public RecipeIngredientsImpl(RecipeIngredients recipeIngredients) {
         this.recipeIngredients = recipeIngredients;
+    }
+
+    public RecipeIngredientsImpl(int ID) {
+        this.ID = ID;
     }
 
     @Override
@@ -37,8 +45,8 @@ public class RecipeIngredientsImpl implements Entity<RecipeIngredients> {
     }
 
     @Override
-    public String getEntityRecordString(String conditionColumn, String conditionValue) {
-        String sql = "SELECT * FROM " + this.table + " WHERE " + conditionColumn + " = " + conditionValue+";";
+    public String getEntityRecordString() {
+        String sql = "SELECT * FROM " + this.table + " WHERE id = '" + this.ID+"';";
         return sql;
     }
 
@@ -46,6 +54,28 @@ public class RecipeIngredientsImpl implements Entity<RecipeIngredients> {
     public String getAllEntityRecordsString() {
         String sql = "SELECT * FROM " + this.table + ";";
         return sql;
+    }
+
+    @Override
+    public void createEntityRecordObject(ResultSet resultSet) throws SQLException {
+        int recipeID = 0, ingredientID = 0, measurementID = 0;
+        float quantity = 0;
+        String notes = null;
+
+        while(resultSet.next()) {
+            this.ID = resultSet.getInt("id");
+            recipeID = resultSet.getInt("recipe_id");
+            ingredientID = resultSet.getInt("ingredient_id");
+            measurementID = resultSet.getInt("measurement_id");
+            quantity = resultSet.getInt("quantity");
+            notes = resultSet.getString("notes");
+        }
+        this.recipeIngredients = new RecipeIngredients(this.ID, recipeID, ingredientID, measurementID, quantity, notes);
+    }
+
+    @Override
+    public <T> T getEntityRecordObject() {
+        return (T) this.recipeIngredients;
     }
     
 }
