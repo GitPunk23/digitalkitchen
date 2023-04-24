@@ -59,6 +59,12 @@ public interface Entity<T> {
      */
     public <T> T getEntityRecordObject();
 
+    /**
+     * This method returns a copy of the entity
+     * @return
+     */
+    public Entity<T> copy();
+
 
 
     

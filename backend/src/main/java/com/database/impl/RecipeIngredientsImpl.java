@@ -11,12 +11,20 @@ public class RecipeIngredientsImpl implements Entity<RecipeIngredients> {
     private String table = "recipe_ingredients";
     private RecipeIngredients recipeIngredients;
 
+    public RecipeIngredientsImpl() {
+
+    }
+
     public RecipeIngredientsImpl(RecipeIngredients recipeIngredients) {
         this.recipeIngredients = recipeIngredients;
     }
 
     public RecipeIngredientsImpl(int ID) {
         this.ID = ID;
+    }
+
+    public RecipeIngredientsImpl(RecipeIngredientsImpl base) {
+
     }
 
     @Override
@@ -69,6 +77,7 @@ public class RecipeIngredientsImpl implements Entity<RecipeIngredients> {
             measurementID = resultSet.getInt("measurement_id");
             quantity = resultSet.getInt("quantity");
             notes = resultSet.getString("notes");
+            break;
         }
         this.recipeIngredients = new RecipeIngredients(this.ID, recipeID, ingredientID, measurementID, quantity, notes);
     }
@@ -76,6 +85,11 @@ public class RecipeIngredientsImpl implements Entity<RecipeIngredients> {
     @Override
     public <T> T getEntityRecordObject() {
         return (T) this.recipeIngredients;
+    }
+
+    @Override
+    public Entity<RecipeIngredients> copy() {
+        return new RecipeIngredientsImpl(this);
     }
     
 }

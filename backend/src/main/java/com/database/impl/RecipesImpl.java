@@ -12,6 +12,13 @@ public class RecipesImpl implements Entity<Recipes> {
     private Recipes recipe;
 
     /**
+     * Creates a default Recipes Implementation
+     */
+    public RecipesImpl() {
+
+    }
+
+    /**
      * Creates Recipes Implementation for insertion to the database
      * @param recipe
      */
@@ -25,6 +32,13 @@ public class RecipesImpl implements Entity<Recipes> {
      */
     public RecipesImpl(int ID) {
         this.ID = ID;
+    }
+
+    /**  
+     * Creates a default copy of the Recipes Implementation
+     */
+    public RecipesImpl(RecipesImpl base) {
+        
     }
 
     @Override
@@ -77,6 +91,7 @@ public class RecipesImpl implements Entity<Recipes> {
             serv = resultSet.getInt("servings");
             cal = resultSet.getInt("calories_per_serving");
             notes = resultSet.getString("notes");
+            break;
         }
         this.recipe = new Recipes(this.ID, cat, name, desc, serv, cal, notes);
     }
@@ -84,5 +99,10 @@ public class RecipesImpl implements Entity<Recipes> {
     @Override
     public <T> T getEntityRecordObject() {
         return (T) this.recipe;
+    }
+
+    @Override
+    public RecipesImpl copy() {
+        return new RecipesImpl(this);
     }
 }

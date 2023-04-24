@@ -12,6 +12,13 @@ public class CategoryImpl implements Entity<Category> {
     private Category category;
 
     /**
+     * Creates Default Category Implementation
+     */
+    public CategoryImpl() {
+
+    }
+
+    /**
      * Creates Category Implementation for insertion to the database
      * @param category
      */
@@ -25,6 +32,14 @@ public class CategoryImpl implements Entity<Category> {
      */
     public CategoryImpl(int ID) {
         this.ID = ID;
+    }
+
+    /**
+     * Creates default copy of Category Implementation
+     * @param base
+     */
+    public CategoryImpl(CategoryImpl base) {
+
     }
 
     @Override
@@ -71,6 +86,7 @@ public class CategoryImpl implements Entity<Category> {
         while(resultSet.next()) {
             this.ID = resultSet.getInt("id");
             name = resultSet.getString("name");
+            break;
         }
         this.category = new Category(this.ID, name);
     }
@@ -78,6 +94,11 @@ public class CategoryImpl implements Entity<Category> {
     @Override
     public <T> T getEntityRecordObject() {
         return (T) this.category;
+    }
+
+    @Override
+    public Entity<Category> copy() {
+        return new CategoryImpl(this);
     }
     
 }

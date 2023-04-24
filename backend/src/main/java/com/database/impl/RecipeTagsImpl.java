@@ -11,12 +11,20 @@ public class RecipeTagsImpl implements Entity<RecipeTags> {
     private String table = "recipe_tags";
     private RecipeTags recipeTags;
 
+    public RecipeTagsImpl() {
+
+    }
+
     public RecipeTagsImpl(RecipeTags recipeTags) {
         this.recipeTags = recipeTags;
     }
 
     public RecipeTagsImpl(int ID) {
         this.ID = ID;
+    }
+
+    public RecipeTagsImpl(RecipeTagsImpl base) {
+
     }
 
     @Override
@@ -64,6 +72,7 @@ public class RecipeTagsImpl implements Entity<RecipeTags> {
             this.ID = resultSet.getInt("id");
             recipeID = resultSet.getInt("recipe_id");
             tagID = resultSet.getInt("tag_id");
+            break;
         }
         this.recipeTags = new RecipeTags(this.ID, recipeID, tagID);
     }
@@ -71,6 +80,11 @@ public class RecipeTagsImpl implements Entity<RecipeTags> {
     @Override
     public <T> T getEntityRecordObject() {
         return (T) this.recipeTags;
+    }
+
+    @Override
+    public Entity<RecipeTags> copy() {
+        return new RecipeTagsImpl(this);
     }
     
 }

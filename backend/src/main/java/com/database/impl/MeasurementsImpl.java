@@ -11,12 +11,20 @@ public class MeasurementsImpl implements Entity<Measurements> {
     private String table = "measurements";
     private Measurements measurement;
 
+    public MeasurementsImpl() {
+
+    }
+
     public MeasurementsImpl(Measurements measurement) {
         this.measurement = measurement;
     }
 
     public MeasurementsImpl(int ID) {
         this.ID = ID;
+    }
+
+    public MeasurementsImpl(MeasurementsImpl base) {
+
     }
 
     @Override
@@ -63,6 +71,7 @@ public class MeasurementsImpl implements Entity<Measurements> {
         while(resultSet.next()) {
             this.ID = resultSet.getInt("id");
             measurement = resultSet.getString("measurement");
+            break;
         }
         this.measurement = new Measurements(this.ID, measurement);
     }
@@ -70,6 +79,11 @@ public class MeasurementsImpl implements Entity<Measurements> {
     @Override
     public <T> T getEntityRecordObject() {
         return (T) this.measurement;
+    }
+
+    @Override
+    public Entity<Measurements> copy() {
+        return new MeasurementsImpl(this);
     }
     
 }

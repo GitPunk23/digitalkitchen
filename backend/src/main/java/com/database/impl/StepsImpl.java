@@ -11,12 +11,20 @@ public class StepsImpl implements Entity<Steps> {
     private String table = "recipe_tags";
     private Steps step;
 
+    public StepsImpl() {
+
+    }
+
     public StepsImpl(Steps step) {
         this.step = step;
     }
 
     public StepsImpl(int ID) {
         this.ID = ID;
+    }
+
+    public StepsImpl(StepsImpl base) {
+
     }
 
     @Override
@@ -66,6 +74,7 @@ public class StepsImpl implements Entity<Steps> {
             recipeID = resultSet.getInt("recipe_id");
             stepNumber = resultSet.getInt("step_number");
             description = resultSet.getString("step_description");
+            break;
         }
         this.step = new Steps(this.ID, recipeID, stepNumber, description);
     }
@@ -73,6 +82,11 @@ public class StepsImpl implements Entity<Steps> {
     @Override
     public <T> T getEntityRecordObject() {
         return (T) this.step;
+    }
+
+    @Override
+    public Entity<Steps> copy() {
+        return new StepsImpl(this);
     }
     
 }

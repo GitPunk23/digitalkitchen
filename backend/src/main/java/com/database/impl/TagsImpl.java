@@ -11,12 +11,20 @@ public class TagsImpl implements Entity<Tags> {
     private String table = "tags";
     private Tags tag;
 
+    public TagsImpl() {
+
+    }
+
     public TagsImpl(Tags tag) {
         this.tag = tag;
     }
 
     public TagsImpl(int ID) {
         this.ID = ID;
+    }
+
+    public TagsImpl(TagsImpl base) {
+        
     }
 
     @Override
@@ -63,6 +71,7 @@ public class TagsImpl implements Entity<Tags> {
         while(resultSet.next()) {
             this.ID = resultSet.getInt("id");
             tag = resultSet.getString("tag");
+            break;
         }
         this.tag = new Tags(this.ID, tag);
     }
@@ -70,6 +79,11 @@ public class TagsImpl implements Entity<Tags> {
     @Override
     public <T> T getEntityRecordObject() {
         return (T) this.tag;
+    }
+
+    @Override
+    public Entity<Tags> copy() {
+        return new TagsImpl(this);
     }
     
 }
