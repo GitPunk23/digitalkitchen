@@ -20,9 +20,9 @@ public class entityImplUtility {
                 return new StepsImpl(ID);
             case "tags":
                 return new TagsImpl(ID);
+            default:
+                throw new IllegalArgumentException("Unknown Entity Type");
         }
-
-
     }
 
 
