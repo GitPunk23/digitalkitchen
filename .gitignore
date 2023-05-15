@@ -1,2 +1,4 @@
 backend/target/
 .vscode/
+.env
+backend/src/main/resources/application.properties
