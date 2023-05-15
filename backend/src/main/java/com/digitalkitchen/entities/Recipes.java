@@ -63,6 +63,11 @@ public class Recipes {
             nullable = true)
     private String notes;
 
+    @Column(
+            name = "author",
+            nullable = true)    
+    private String author;
+
     @OneToMany(mappedBy = "recipe", 
                cascade = CascadeType.ALL,
                fetch = FetchType.LAZY)
@@ -120,6 +125,10 @@ public int getID() {
     public String getNotes() {
     return notes;
     }
+
+    public String getAuthor() {
+        return author;
+    }
     
     @Transactional
     public List<RecipeIngredients> getIngredients() {
@@ -158,6 +167,10 @@ public int getID() {
     
     public void setNotes(String notes) {
     this.notes = notes;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
     
     public void setIngredients(List<RecipeIngredients> ingredients) {
