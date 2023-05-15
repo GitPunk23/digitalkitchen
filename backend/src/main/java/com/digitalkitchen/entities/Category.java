@@ -3,6 +3,9 @@ package com.digitalkitchen.entities;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.GeneratedValue;
@@ -23,6 +26,7 @@ public class Category {
     private String name;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<Recipes> recipes;
 
     public int getID() {
@@ -35,6 +39,15 @@ public class Category {
 
     public List<Recipes> getRecipes() {
         return this.recipes;
+    }
+
+    @Override
+    public String toString() {
+        String out = "ID: ";
+        out += ID;
+        out += " category: ";
+        out += name;
+        return out;
     }
 
 }
