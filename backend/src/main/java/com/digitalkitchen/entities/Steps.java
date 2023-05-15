@@ -1,4 +1,4 @@
-package com.entities;
+package com.digitalkitchen.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,19 +31,45 @@ public class Steps {
     @Column(name = "step_description")
     private String description;
 
-    public Steps(int recipeID, int stepNumber, String description) {
-        this.recipeID = recipeID;
-        this.stepNumber = stepNumber;
-        this.description = description;
-    }
+    // Getters
 
     public int getID() {
         return this.ID;
     }
 
-    public String getValues() {
-        String sql = "("+ this.recipeID + ", " + this.stepNumber + ", " + this.description +")";
-        return sql;
+    public Recipes getRecipe() {
+        return recipe;
+    }
+    
+    public int getRecipeID() {
+        return recipeID;
+    }
+    
+    public int getStepNumber() {
+        return stepNumber;
+    }
+    
+    public String getDescription() {
+        return description;
+    }
+    
+    // Setters
+    
+    public void setRecipe(Recipes recipe) {
+        this.recipe = recipe;
+    }
+    
+    public void setRecipeID(int recipeID) {
+        this.recipeID = recipeID;
+    }
+    
+    public void setStepNumber(int stepNumber) {
+        this.stepNumber = stepNumber;
+    }
+    
+    public void setDescription(String description) {
+        this.description = description;
     }
 
+    
 }

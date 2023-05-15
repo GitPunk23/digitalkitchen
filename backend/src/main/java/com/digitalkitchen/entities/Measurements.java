@@ -1,4 +1,4 @@
-package com.entities;
+package com.digitalkitchen.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -9,23 +9,21 @@ import javax.persistence.Column;
 
 
 @Entity
-@Table(name = "tags")
-public class Tags {
-    
+@Table(name = "measurements")
+public class Measurements {
+ 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
 
-    @Column(name = "tag")
-    private String tag;
+    @Column(name = "measurement")
+    private String measurement;
 
     public int getID() {
         return this.ID;
     }
 
-    public String getValues() {
-        String sql = "("+ this.tag +")";
-        return sql;
+    public String getMeasurement() {
+        return this.measurement;
     }
-
 }

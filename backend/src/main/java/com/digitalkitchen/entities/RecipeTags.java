@@ -1,4 +1,4 @@
-package com.entities;
+package com.digitalkitchen.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,26 +21,27 @@ public class RecipeTags {
     @JoinColumn(name = "recipe_id", referencedColumnName = "id")
     private Recipes recipe;
 
-    private int recipeID;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tag_id", referencedColumnName = "id")
     private Tags tag;
 
-    private int tagID;
-
-    public RecipeTags(int recipeID, int tagID) {
-        this.recipeID = recipeID;
-        this.tagID = tagID;
-    }
+    // Getters
 
     public int getID() {
-        return this.ID;
+    return ID;
     }
-
-    public String getValues() {
-        String sql = "("+ this.recipeID + ", " + this.tagID  +")";
-        return sql;
+    
+    public Recipes getRecipe() {
+    return recipe;
     }
-
+    
+    public Tags getTag() {
+    return tag;
+    }
+    
+    // Setters
+    
+    public void setTag(Tags tag) {
+    this.tag = tag;
+    }
 }

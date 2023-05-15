@@ -1,4 +1,4 @@
-package com.entities;
+package com.digitalkitchen.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -23,19 +23,13 @@ public class RecipeIngredients {
     @JoinColumn(name = "recipe_id", referencedColumnName = "id")
     private Recipes recipe;
 
-    private int recipeID;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ingredient_id", referencedColumnName = "id")
     private Ingredients ingredient;
 
-    private int ingredientID;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "measurement_id", referencedColumnName = "id")
     private Measurements measurement;
-
-    private int measurementID;
 
     @Column(name = "quantity")
     private Float quantity;
@@ -43,21 +37,43 @@ public class RecipeIngredients {
     @Column(name = "notes")
     private String notes;
 
-    public RecipeIngredients(int recipeID, int ingredientID, int measurementID, float quantity, String notes) {
-        this.recipeID = recipeID;
-        this.ingredientID = ingredientID;
-        this.measurementID = measurementID;
-        this.quantity = quantity; 
+    // Getters
+
+    public Recipes getRecipe() {
+        return this.recipe;
+    }
+
+    public Ingredients getIngredient() {
+        return this.ingredient;
+    }
+
+    public Measurements getMeasurement() {
+        return this.measurement;
+    }
+
+    public Float getQuantity() {
+        return this.quantity;
+    }
+
+    public String getNotes() {
+        return this.notes;
+    }
+
+    // Setters
+
+    public void setIngredient(Ingredients ingredient) {
+        this.ingredient = ingredient;
+    }
+
+    public void setMeasurement(Measurements measurement) {
+        this.measurement = measurement;
+    }
+
+    public void setQuantity(Float quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setNotes(String notes) {
         this.notes = notes;
-    }
-
-    public int getID() {
-        return this.ID;
-    }
-
-    public String getValues() {
-        String sql = "("+ this.recipeID + ", " + this.ingredientID + ", " 
-                   + this.measurementID + ", " + this.quantity + ", " + this.notes + ")";
-        return sql;
     }
 }

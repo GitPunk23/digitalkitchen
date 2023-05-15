@@ -1,6 +1,7 @@
-package com.entities;
+package com.digitalkitchen.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -11,7 +12,7 @@ import javax.persistence.Column;
 
 
 @Entity
-@Table(name = "category")
+@Table(name = "categories")
 public class Category {
     
     @Id
@@ -21,16 +22,19 @@ public class Category {
     @Column(name = "name")
     private String name;
 
+    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+    private List<Recipes> recipes;
+
     public int getID() {
         return this.ID;
     }
 
-    @OneToMany(mappedBy = "categories")
-    private List<Recipes> recipes;
+    public String getName() {
+        return this.name;
+    }
 
-    public String getValues() {
-        String sql = "("+ this.name + ")";
-        return sql;
+    public List<Recipes> getRecipes() {
+        return this.recipes;
     }
 
 }
