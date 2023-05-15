@@ -1,5 +1,7 @@
 package com.digitalkitchen.entities;
 
+import com.digitalkitchen.util.CategoryDeserializer;
+
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,6 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.transaction.Transactional;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Entity(name = "recipes")
 @Table(name = "recipes",
@@ -35,6 +39,7 @@ public class Recipes {
                 name = "category_id", 
                 referencedColumnName = "id",
                 nullable = false)
+    @JsonDeserialize(using = CategoryDeserializer.class)
     private Category category;
 
     @Column(
