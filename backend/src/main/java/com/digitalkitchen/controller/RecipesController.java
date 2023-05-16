@@ -1,7 +1,9 @@
 package com.digitalkitchen.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -49,8 +51,10 @@ public class RecipesController {
     public ResponseEntity<?> createRecipe(@RequestBody Recipes recipe) {
         
         recipesService.addRecipe(recipe);
+        Map<String, Integer> response = new HashMap<>();
+        response.put("recipeId", recipe.getID());
+        return ResponseEntity.ok().body(response);
 
-        return ResponseEntity.ok().build();
     }
 
     @PostMapping("addSteps")
