@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './RecipeForm.css';
 import axios from 'axios';
 
 const RecipeForm = () => {
@@ -30,49 +31,54 @@ const RecipeForm = () => {
       caloriesPerServing,
       notes,
       category,
+      author
     };
-    axios.post('http://localhost:8080/digitalkitchen/recipes/createRecipe', JSON.stringify(data), {
-        headers: {
-            'Content-Type': 'application/json'
-        }
+    fetch('http://localhost:8080/digitalkitchen/recipes/createRecipe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
     })
-      .then((response) => {
-        console.log(response);
+      .then(response => response.json())
+      .then(data => {
+        console.log('Recipe ID:', data.recipeId);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch(error => {
+        console.error(error);
       });
+
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <label>
         Name:
-        <input type="text" value={name} onChange={(event) => setName(event.target.value)} />
+        <input class="name" type="text" value={name} onChange={(event) => setName(event.target.value)} />
       </label>
       <label>
         Author:
-        <input type="text" value={name} onChange={(event) => setAuthor(event.target.value)} />
+        <input class="author" type="text" value={author} onChange={(event) => setAuthor(event.target.value)} />
       </label>
-      <label>
+      <label >
         Description:
-        <input type="text" value={description} onChange={(event) => setDescription(event.target.value)} />
+        <input class="description" type="text" value={description} onChange={(event) => setDescription(event.target.value)} />
       </label>
       <label>
         Servings:
-        <input type="number" value={servings} onChange={(event) => setServings(event.target.value)} />
+        <input class="servings" type="number" value={servings} onChange={(event) => setServings(event.target.value)} />
       </label>
       <label>
         Calories per serving:
-        <input type="number" value={caloriesPerServing} onChange={(event) => setCaloriesPerServing(event.target.value)} />
+        <input class="calories" type="number" value={caloriesPerServing} onChange={(event) => setCaloriesPerServing(event.target.value)} />
       </label>
       <label>
         Notes:
-        <textarea value={notes} onChange={(event) => setNotes(event.target.value)} />
+        <textarea class="notes" value={notes} onChange={(event) => setNotes(event.target.value)} />
       </label>
       <label>
         Category:
-        <select value={category} onChange={(event) => setCategory(event.target.value)}>
+        <select class="category" value={category} onChange={(event) => setCategory(event.target.value)}>
           <option value="">--Select a category--</option>
           {categories.map((category) => (
             <option key={category.id} value={category.id}>
