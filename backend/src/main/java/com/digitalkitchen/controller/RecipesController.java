@@ -30,8 +30,6 @@ public class RecipesController {
 
     @Autowired
     private RecipesService recipesService;
-    @Autowired
-    private CategoryService categoryService;
 
     @GetMapping("/get")
     @ResponseBody
@@ -39,13 +37,6 @@ public class RecipesController {
     public String get() {
         return "HelloWorld";
     }
-
-    @CrossOrigin(origins = "http://localhost:3000")
-    @GetMapping("/categories")
-    public List<Category> getAllCategories() {
-        return categoryService.getAllCategories();
-    }
-
 
     @PostMapping("/createRecipe")
     public ResponseEntity<?> createRecipe(@RequestBody Recipes recipe) {
