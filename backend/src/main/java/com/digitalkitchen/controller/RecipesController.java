@@ -1,6 +1,5 @@
 package com.digitalkitchen.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +8,6 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.digitalkitchen.controller.request.CreateRecipeRequestWrapper;
 import com.digitalkitchen.entities.Recipes;
-import com.digitalkitchen.entities.Category;
-import com.digitalkitchen.service.CategoryService;
+import com.digitalkitchen.service.RecipesEndpointService;
 import com.digitalkitchen.service.RecipesService;
 
 @RestController
@@ -31,6 +29,9 @@ public class RecipesController {
     @Autowired
     private RecipesService recipesService;
 
+    @Autowired
+    private RecipesEndpointService endpointService;
+
     @GetMapping("/get")
     @ResponseBody
     @Transactional
@@ -39,12 +40,11 @@ public class RecipesController {
     }
 
     @PostMapping("/createRecipe")
-    public ResponseEntity<?> createRecipe(@RequestBody Recipes recipe) {
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<?> createRecipe(@RequestBody Map<String, Object> body) {
         
-        recipesService.addRecipe(recipe);
-        Map<String, Integer> response = new HashMap<>();
-        response.put("recipeId", recipe.getID());
-        return ResponseEntity.ok().body(response);
+        endpointService.initalizeRecipe(body);
+        return ResponseEntity.ok().build();
 
     }
 
