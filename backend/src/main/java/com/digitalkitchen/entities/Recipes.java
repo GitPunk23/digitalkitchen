@@ -92,13 +92,14 @@ public class Recipes {
 
     }
 
-    public Recipes(Category category, String name, String description, int servings, int caloriesPerServing, String notes) {
+    public Recipes(Category category, String name, String description, int servings, int caloriesPerServing, String notes, String author) {
         this.category = category;
         this.name = name;
         this.description = description;
         this.servings = servings;
         this.caloriesPerServing = caloriesPerServing;
         this.notes = notes;
+        this.author = author;
     }
 
     // Getters
