@@ -22,7 +22,7 @@ const MultiStepForm = () => {
     console.log('Submitted Data:', formData);
   
     // Make an HTTP request to send the form data to the backend
-    fetch('your-backend-url', {
+    fetch('http://localhost:8080/digitalkitchen/recipes/createRecipe', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
