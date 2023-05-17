@@ -2,6 +2,10 @@ package com.digitalkitchen.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import com.digitalkitchen.util.MeasurementsDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,6 +33,7 @@ public class RecipeIngredients {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "measurement_id", referencedColumnName = "id")
+    @JsonDeserialize(using = MeasurementsDeserializer.class)
     private Measurements measurement;
 
     @Column(name = "quantity")
@@ -75,5 +80,13 @@ public class RecipeIngredients {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String toString() {
+        String out = "";
+        out += quantity + " " + measurement.getMeasurement() + " ";
+        out += ingredient.toString();
+        
+        return out;
     }
 }

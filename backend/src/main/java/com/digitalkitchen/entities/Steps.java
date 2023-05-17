@@ -23,8 +23,6 @@ public class Steps {
     @JoinColumn(name = "recipe_id", referencedColumnName = "id")
     private Recipes recipe;
 
-    private int recipeID;
-
     @Column(name = "step_number")
     private int stepNumber;
 
@@ -41,10 +39,6 @@ public class Steps {
         return recipe;
     }
     
-    public int getRecipeID() {
-        return recipeID;
-    }
-    
     public int getStepNumber() {
         return stepNumber;
     }
@@ -59,16 +53,18 @@ public class Steps {
         this.recipe = recipe;
     }
     
-    public void setRecipeID(int recipeID) {
-        this.recipeID = recipeID;
-    }
-    
     public void setStepNumber(int stepNumber) {
         this.stepNumber = stepNumber;
     }
     
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String toString() {
+        String out = "";
+        out += stepNumber + " " + description;
+        return out;
     }
 
     

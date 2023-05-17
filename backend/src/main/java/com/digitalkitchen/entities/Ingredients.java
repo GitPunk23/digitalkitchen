@@ -25,4 +25,10 @@ public class Ingredients {
     public String getIngredient() {
         return ingredient;
     }
+
+    public String toString() {
+        String out = "";
+        out += getIngredient();
+        return out;
+    }
 }
