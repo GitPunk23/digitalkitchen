@@ -14,6 +14,7 @@ import org.springframework.boot.SpringApplication;
 @ComponentScan("com.digitalkitchen.service")
 @ComponentScan("com.digitalkitchen.controller")
 @ComponentScan("com.digitalkitchen.config")
+@ComponentScan("com.digitalkitchen.util")
 public class App implements CommandLineRunner
 {
 
