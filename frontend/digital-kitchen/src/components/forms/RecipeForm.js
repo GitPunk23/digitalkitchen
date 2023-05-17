@@ -31,38 +31,20 @@ const RecipeForm = ({ onNextStep, formData, setFormData }) => {
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      recipe: {
-        name,
-        description,
-        servings,
-        caloriesPerServing,
-        notes,
-        category,
-        author,
-      },
+      name,
+      description,
+      servings,
+      caloriesPerServing,
+      notes,
+      category,
+      author,
     }));
-  }, [name, description, servings, caloriesPerServing, notes, category, author]);
-    
-  
+  }, [name, description, servings, caloriesPerServing, notes, category, author, setFormData]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const updatedFormData = {
-      ...formData,
-      recipe: {
-        name,
-        description,
-        servings,
-        caloriesPerServing,
-        notes,
-        category,
-        author,
-      },
-    };
-    setFormData(updatedFormData);
-    onNextStep();
-  };  
-  
+    onNextStep(); // Navigate to the next step
+  };
 
   return (
     <form onSubmit={handleSubmit}>
