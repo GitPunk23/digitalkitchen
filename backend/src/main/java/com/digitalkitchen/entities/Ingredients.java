@@ -18,6 +18,14 @@ public class Ingredients {
     @Column(name = "ingredient")
     private String ingredient;
 
+    public Ingredients() {
+        
+    }
+
+    public Ingredients(String ingredient) {
+        this.ingredient = ingredient;
+    }
+
     public int getID() {
         return this.ID;
     }

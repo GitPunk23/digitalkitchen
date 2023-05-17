@@ -22,6 +22,14 @@ public class Tags {
     @Column(name = "hits")
     private int hits;
 
+    public Tags() {
+        
+    }
+
+    public Tags(String tag) {
+        this.tag = tag;
+    }
+
     public int getID() {
         return this.ID;
     }
