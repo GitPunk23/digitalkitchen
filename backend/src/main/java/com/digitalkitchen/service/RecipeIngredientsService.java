@@ -36,7 +36,7 @@ public class RecipeIngredientsService {
             recipeIngredient = this.addRecipeIngredient(recipeIngredients.get(i));
             newRecipeIngredients.add(recipeIngredient);
         }
-        return newRecipeIngredients;
+        return repository.saveAll(newRecipeIngredients);
     }
 
     public void updateRecipeIngredient(RecipeIngredients ingredient) {
