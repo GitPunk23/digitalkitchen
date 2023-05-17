@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import '../../styles/RecipeForm.css';
 
 const RecipeForm = ({ onNextStep, formData, setFormData }) => {
-  const [name, setName] = useState(formData && formData.name ? formData.name : '');
-  const [author, setAuthor] = useState(formData && formData.author ? formData.author : '');
-  const [description, setDescription] = useState(formData && formData.description ? formData.description : '');
-  const [servings, setServings] = useState(formData && formData.servings ? formData.servings : '');
-  const [caloriesPerServing, setCaloriesPerServing] = useState(formData && formData.caloriesPerServing ? formData.caloriesPerServing : '');
-  const [notes, setNotes] = useState(formData && formData.notes ? formData.notes : '');
-  const [category, setCategory] = useState(formData && formData.category ? formData.category : '');
+  const [name, setName] = useState(formData?.recipe?.name || '');
+  const [author, setAuthor] = useState(formData?.recipe?.author || '');
+  const [description, setDescription] = useState(formData?.recipe?.description || '');
+  const [servings, setServings] = useState(formData?.recipe?.servings || '');
+  const [caloriesPerServing, setCaloriesPerServing] = useState(formData?.recipe?.caloriesPerServing || '');
+  const [notes, setNotes] = useState(formData?.recipe?.notes || '');
+  const [category, setCategory] = useState(formData?.recipe?.category || '');
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -31,13 +31,15 @@ const RecipeForm = ({ onNextStep, formData, setFormData }) => {
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      name,
-      description,
-      servings,
-      caloriesPerServing,
-      notes,
-      category,
-      author,
+      recipe : {
+        name,
+        description,
+        servings,
+        caloriesPerServing,
+        notes,
+        category,
+        author,
+      },
     }));
   }, [name, description, servings, caloriesPerServing, notes, category, author, setFormData]);
 

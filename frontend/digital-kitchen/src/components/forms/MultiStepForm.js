@@ -9,12 +9,7 @@ const MultiStepForm = () => {
   const [formData, setFormData] = useState({ tags: [] });
 
   const handleNextStep = (data) => {
-    const updatedFormData = {
-      ...formData,
-      [`step${step}`]: data,
-    };
-  
-    setFormData(updatedFormData);
+    setFormData(formData);
     setStep((prevStep) => prevStep + 1);
   };
   
