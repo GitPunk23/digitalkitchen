@@ -1,5 +1,6 @@
 package com.digitalkitchen.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,17 @@ public class RecipeTagsService {
 
     public RecipeTags addRecipeTag(RecipeTags tag) {
         return repository.save(tag);
+    }
+
+    public List<RecipeTags> addRecipeTags(List<RecipeTags> tags) {
+        List<RecipeTags> newTags = new ArrayList();
+        RecipeTags newTag;
+
+        for (int i = 0; i < tags.size(); i++) {
+            newTag = this.addRecipeTag(tags.get(i));
+            newTags.add(newTag);
+        }
+        return newTags;
     }
 
     public void updateRecipeTag(RecipeTags tag) {

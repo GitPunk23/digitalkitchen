@@ -1,5 +1,6 @@
 package com.digitalkitchen.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,8 +24,19 @@ public class StepsService {
         return repository.findById(id);
     }
 
-    public Steps addTag(Steps tag) {
+    public Steps addStep(Steps tag) {
         return repository.save(tag);
+    }
+
+    public List<Steps> addSteps(List<Steps> steps) {
+        List<Steps> newSteps = new ArrayList();
+        Steps step;
+
+        for (int i = 0; i < steps.size(); i++) {
+            step = this.addStep(steps.get(i));
+            newSteps.add(step);
+        }
+        return newSteps;
     }
 
     public void updateStep(Steps step) {

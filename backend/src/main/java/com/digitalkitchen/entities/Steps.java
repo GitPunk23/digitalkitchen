@@ -29,8 +29,14 @@ public class Steps {
     @Column(name = "step_description")
     private String description;
 
+    // Constructor
+    public Steps(Recipes recipe, int stepNumber, String description) {
+        this.recipe = recipe;
+        this.stepNumber = stepNumber;
+        this.description = description;
+    }
+    
     // Getters
-
     public int getID() {
         return this.ID;
     }

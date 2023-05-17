@@ -42,6 +42,15 @@ public class RecipeIngredients {
     @Column(name = "notes")
     private String notes;
 
+    // Constructor
+    public RecipeIngredients(Recipes recipe, Ingredients ingredient, Measurements measurement, Float quantity, String notes) {
+        this.recipe = recipe;
+        this.ingredient = ingredient;
+        this.measurement = measurement;
+        this.quantity = quantity;
+        this.notes = notes;
+    }
+
     // Getters
 
     public Recipes getRecipe() {

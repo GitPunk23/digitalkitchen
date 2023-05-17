@@ -30,6 +30,12 @@ public class RecipeTags {
     @JsonDeserialize(using = TagsDeserializer.class)
     private Tags tag;
 
+    //Constructor
+    public RecipeTags(Recipes recipe, Tags tag) {
+        this.recipe = recipe;
+        this.tag = tag;
+    }
+
     // Getters
 
     public int getID() {
@@ -49,4 +55,10 @@ public class RecipeTags {
     public void setTag(Tags tag) {
     this.tag = tag;
     }
+
+    @Override
+    public String toString() {
+        return tag.getName();
+    }
+
 }

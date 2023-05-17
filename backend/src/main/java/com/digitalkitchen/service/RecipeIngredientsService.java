@@ -1,5 +1,6 @@
 package com.digitalkitchen.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +26,17 @@ public class RecipeIngredientsService {
 
     public RecipeIngredients addRecipeIngredient(RecipeIngredients ingredient) {
         return repository.save(ingredient);
+    }
+
+    public List<RecipeIngredients> addRecipeIngredients(List<RecipeIngredients> recipeIngredients) {
+        List<RecipeIngredients> newRecipeIngredients = new ArrayList();
+        RecipeIngredients recipeIngredient;
+
+        for (int i = 0; i < recipeIngredients.size(); i++) {
+            recipeIngredient = this.addRecipeIngredient(recipeIngredients.get(i));
+            newRecipeIngredients.add(recipeIngredient);
+        }
+        return newRecipeIngredients;
     }
 
     public void updateRecipeIngredient(RecipeIngredients ingredient) {
