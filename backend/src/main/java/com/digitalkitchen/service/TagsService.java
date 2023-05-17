@@ -23,6 +23,10 @@ public class TagsService {
         return repository.findById(id);
     }
 
+    public Optional<Tags> getTagByName(String name) {
+        return repository.findByTag(name);
+    }
+
     public Tags addTag(Tags tag) {
         return repository.save(tag);
     }
