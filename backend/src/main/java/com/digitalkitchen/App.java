@@ -13,6 +13,7 @@ import org.springframework.boot.SpringApplication;
 @EnableJpaRepositories("com.digitalkitchen.repository")
 @ComponentScan("com.digitalkitchen.service")
 @ComponentScan("com.digitalkitchen.controller")
+@ComponentScan("com.digitalkitchen.config")
 public class App implements CommandLineRunner
 {
 
