@@ -3,7 +3,7 @@ import axios from "axios";
 
 function IngredientForm({ formData, setFormData }) {
   const [ingredients, setIngredients] = useState(formData && formData.ingredients ? formData.ingredients : []);
-  const [name, setName] = useState(formData && formData.name ? formData.name : "");
+  const [ingredient, setName] = useState(formData && formData.ingredient ? formData.ingredient : "");
   const [quantity, setQuantity] = useState(formData && formData.quantity ? formData.quantity : "");
   const [measurement, setMeasurement] = useState(formData && formData.measurement ? formData.measurement : "");
   const [notes, setNotes] = useState(formData && formData.notes ? formData.notes : "");
@@ -24,7 +24,7 @@ function IngredientForm({ formData, setFormData }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const newIngredient = {
-      name,
+      ingredient,
       quantity,
       measurement,
       notes,
@@ -61,7 +61,7 @@ function IngredientForm({ formData, setFormData }) {
               <td>
                 <input
                   type="text"
-                  value={name}
+                  value={ingredient}
                   onChange={(e) => setName(e.target.value)}
                   required
                 />
@@ -85,7 +85,7 @@ function IngredientForm({ formData, setFormData }) {
                   {measurements.map((measurement) => (
                     <option
                       key={measurement.id}
-                      value={measurement.measurement}
+                      value={measurement.id}
                     >
                       {measurement.measurement}
                     </option>
@@ -110,7 +110,7 @@ function IngredientForm({ formData, setFormData }) {
           <ul>
             {ingredients.map((ingredient, index) => (
               <li key={index}>
-                {ingredient.quantity} {ingredient.measurement} {ingredient.name} - {ingredient.notes}
+                {ingredient.quantity} {ingredient.measurement} {ingredient.ingredient} - {ingredient.notes}
               </li>
             ))}
           </ul>
