@@ -22,7 +22,6 @@ function TagsForm({ formData, setFormData, onPrevStep }) {
   };
 
   const handleRemoveTag = (index) => {
-    console.log('prevFormData.tags:', prevFormData.tags);
     setFormData((prevFormData) => ({
       ...prevFormData,
       tags: prevFormData.tags.filter((_, i) => i !== index),
