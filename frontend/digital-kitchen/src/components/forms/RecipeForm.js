@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import '../../styles/RecipeForm.css';
+import Form from 'react-bootstrap/Form';
+//import '../../styles/RecipeForm.css';
 
 const RecipeForm = ({ onNextStep, formData, setFormData }) => {
   const [name, setName] = useState(formData?.recipe?.name || '');
@@ -31,7 +32,8 @@ const RecipeForm = ({ onNextStep, formData, setFormData }) => {
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      recipe : {
+      recipe: {
+        ...prevFormData.recipe,
         name,
         description,
         servings,
@@ -45,70 +47,81 @@ const RecipeForm = ({ onNextStep, formData, setFormData }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    onNextStep(); // Navigate to the next step
+    onNextStep();
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Name:
-        <input
-          className="name"
+    <Form onSubmit={handleSubmit}>
+      <Form.Group controlId="formName">
+        <Form.Label>Name:</Form.Label>
+        <Form.Control
           type="text"
           value={name}
           onChange={(event) => setName(event.target.value)}
+          maxLength={50}
+          required
         />
-      </label>
-      <label>
-        Author:
-        <input
-          className="author"
+      </Form.Group>
+      <Form.Group controlId="formAuthor">
+        <Form.Label>Author:</Form.Label>
+        <Form.Control
           type="text"
           value={author}
           onChange={(event) => setAuthor(event.target.value)}
+          maxLength={25}
+          required
         />
-      </label>
-      <label>
-        Description:
-        <textarea
-          className="description"
+      </Form.Group>
+      <Form.Group controlId="formDescription">
+        <Form.Label>Description:</Form.Label>
+        <Form.Control
+          as="textarea"
           rows={3}
           value={description}
           onChange={(event) => setDescription(event.target.value)}
+          maxLength={500}
         />
-      </label>
-      <label>
-        Servings:
-        <input
-          className="servings"
+      </Form.Group>
+      <Form.Group controlId="formServings">
+        <Form.Label>Servings:</Form.Label>
+        <Form.Control
           type="number"
           value={servings}
           onChange={(event) => setServings(event.target.value)}
+          min={0}
+          step={1}
+          pattern="[0-9]*"
+          inputMode="numeric"
         />
-      </label>
-      <label>
-        Calories per serving:
-        <input
-          className="calories"
+      </Form.Group>
+      <Form.Group controlId="formCalories">
+        <Form.Label>Calories per serving:</Form.Label>
+        <Form.Control
           type="number"
           value={caloriesPerServing}
           onChange={(event) => setCaloriesPerServing(event.target.value)}
+          min={0}
+          step={1}
+          pattern="[0-9]*"
+          inputMode="numeric"
         />
-      </label>
-      <label>
-        Notes:
-        <textarea
-          className="notes"
+      </Form.Group>
+      <Form.Group controlId="formNotes">
+        <Form.Label>Notes:</Form.Label>
+        <Form.Control
+          as="textarea"
           value={notes}
           onChange={(event) => setNotes(event.target.value)}
+          maxLength={200}
         />
-      </label>
-      <label>
-        Category:
-        <select
-          className="category"
+      </Form.Group>
+      <Form.Group controlId="formCategory">
+        <Form.Label>Category:</Form.Label>
+        <Form.Control
+          as="select"
           value={category}
           onChange={(event) => setCategory(event.target.value)}
+          required
         >
           <option value="">--Select a category--</option>
           {categories.map((category) => (
@@ -116,9 +129,9 @@ const RecipeForm = ({ onNextStep, formData, setFormData }) => {
               {category.name}
             </option>
           ))}
-        </select>
-      </label>
-    </form>
+        </Form.Control>
+      </Form.Group>
+    </Form>
   );
 };
 
