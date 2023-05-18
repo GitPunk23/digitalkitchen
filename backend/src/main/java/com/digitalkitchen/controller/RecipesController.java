@@ -27,6 +27,7 @@ public class RecipesController {
     //GET requests
 
     @GetMapping("/status")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<?> status() {
         //Return 202
         return ResponseEntity.accepted().build();
@@ -36,9 +37,12 @@ public class RecipesController {
 
     @PostMapping("/createRecipe")
     @CrossOrigin(origins = "http://localhost:3000")
-    public ResponseEntity<?> createRecipe(@RequestBody Map<String, Object> body) {
-        
-        endpointService.initalizeRecipe(body);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> createRecipe(@RequestBody Map<String, Object> body) throws Exception {
+        try {
+            return endpointService.initalizeRecipe(body);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

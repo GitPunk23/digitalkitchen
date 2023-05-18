@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.digitalkitchen.entities.Category;
@@ -38,14 +39,15 @@ public class RecipesEndpointService {
     private MeasurementsService measurements;
 
     
-    public void initalizeRecipe(Map<String, Object> body) {
+    public ResponseEntity<?> initalizeRecipe(Map<String, Object> body) throws Exception {
         //Recipe creation
         Recipes recipe = createRecipeFromMap((Map<String, Object>) body.get("recipe"));
 
         //Check if recipe is already in the database
         boolean exists = recipesService.recipeExists(recipe);
         if (exists) {
-            return;
+            System.out.println(recipe + " already exists!");
+            return ResponseEntity.badRequest().body("Recipe already exists!");
         } else {
             recipe = recipesService.addRecipe(recipe);
         }
@@ -63,28 +65,36 @@ public class RecipesEndpointService {
             List<RecipeTags> tagList = createRecipeTagsListFromMap((List<String>) body.get("tags"), recipe);
             recipeTagsService.addRecipeTags(tagList);
 
+            System.out.println("Recipe, Ingredients, Steps, and Tags created");
+            return ResponseEntity.ok("Recipe, Ingredients, Steps, and Tags created");
         } catch (Exception e) {
             e.printStackTrace();
             recipesService.deleteRecipeById(recipe.getID());
+            System.out.println("Error adding ingredients, steps, or tags");
+            return ResponseEntity.badRequest().body("Error adding ingredients, steps, or tags");
         }
 
     }
 
-    private Recipes createRecipeFromMap(Map<String, Object> recipeMap) {
-        
-        Optional<Category> tempCat = categories.getCategoryById(Integer.parseInt((String)recipeMap.get("category")));
-        Category category = tempCat.orElse(new Category());
-        String name = (String)recipeMap.get("name");
-        String desc = (String)recipeMap.get("description");
-        String servings = (String)recipeMap.get("servings");
-        int serv = (servings!="") ? Integer.parseInt(servings) : -1;
-        String calories = (String)recipeMap.get("caloriesPerServing");
-        int cals = (calories!="") ? Integer.parseInt(calories) : -1;
-        String notes = (String)recipeMap.get("notes");
-        String author = (String)recipeMap.get("author");
-        
-        return new Recipes(category, name, desc, serv, cals, notes, author);
+    private Recipes createRecipeFromMap(Map<String, Object> recipeMap) throws Exception {
+        try { 
+            Optional<Category> tempCat = categories.getCategoryById(Integer.parseInt((String)recipeMap.get("category")));
+            Category category = tempCat.orElse(new Category());
+            String name = ((String)recipeMap.get("name")).toLowerCase();
+            String author = ((String)recipeMap.get("author")).toLowerCase();
 
+            String desc = ((String)recipeMap.get("description")).toLowerCase();
+            String servings = (String)recipeMap.get("servings");
+            int serv = (servings!="") ? Integer.parseInt(servings) : -1;
+            String calories = (String)recipeMap.get("caloriesPerServing");
+            int cals = (calories!="") ? Integer.parseInt(calories) : -1;
+            String notes = ((String)recipeMap.get("notes")).toLowerCase();
+            
+            
+            return new Recipes(category, name, desc, serv, cals, notes, author);
+        } catch (Exception e) {
+            throw new Exception("recipe field(s) are missing or have errors");
+        }
     }
     private List<RecipeIngredients> createRecipeIngredientsListFromMap(List<Map<String, Object>> ingredientsMap, Recipes recipe) {
         
