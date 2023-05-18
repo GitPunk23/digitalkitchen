@@ -1,0 +1,23 @@
+.home-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+  }
+  
+  .oval-button {
+    width: 300px;
+    height: 60px;
+    border-radius: 30px;
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+  
