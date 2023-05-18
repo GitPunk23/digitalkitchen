@@ -4,7 +4,7 @@ import { Container, Row, Col, Button, OverlayTrigger, Tooltip } from 'react-boot
 import '../styles/HomePage.css';
 
 function HomePage() {
-  const [buttonsEnabled, setButtonsEnabled] = useState(true);
+  const [buttonsEnabled, setButtonsEnabled] = useState(false);
   const navigate = useNavigate();
 
   const handleCreateRecipe = () => {
