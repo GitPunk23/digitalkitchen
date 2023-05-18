@@ -3,10 +3,10 @@ import axios from "axios";
 
 function IngredientForm({ formData, setFormData }) {
   const [ingredients, setIngredients] = useState(formData && formData.ingredients ? formData.ingredients : []);
-  const [ingredient, setName] = useState(formData && formData.ingredient ? formData.ingredient : "");
-  const [quantity, setQuantity] = useState(formData && formData.quantity ? formData.quantity : "");
-  const [measurement, setMeasurement] = useState(formData && formData.measurement ? formData.measurement : "");
-  const [notes, setNotes] = useState(formData && formData.notes ? formData.notes : "");
+  const [ingredient, setIngredient] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [measurement, setMeasurement] = useState("");
+  const [notes, setNotes] = useState("");
   const [measurements, setMeasurements] = useState([]);
 
   useEffect(() => {
@@ -30,10 +30,31 @@ function IngredientForm({ formData, setFormData }) {
       notes,
     };
     setIngredients([...ingredients, newIngredient]);
-    setName("");
+    setIngredient("");
     setQuantity("");
     setMeasurement("");
     setNotes("");
+  };
+
+  const handleEditIngredient = (index) => {
+    const ingredient = ingredients[index];
+    setIngredient(ingredient.ingredient);
+    setQuantity(ingredient.quantity);
+    setMeasurement(ingredient.measurement);
+    setNotes(ingredient.notes);
+    setIngredients((prevIngredients) => {
+      const updatedIngredients = [...prevIngredients];
+      updatedIngredients.splice(index, 1);
+      return updatedIngredients;
+    });
+  };
+
+  const handleDeleteIngredient = (index) => {
+    setIngredients((prevIngredients) => {
+      const updatedIngredients = [...prevIngredients];
+      updatedIngredients.splice(index, 1);
+      return updatedIngredients;
+    });
   };
 
   useEffect(() => {
@@ -54,6 +75,7 @@ function IngredientForm({ formData, setFormData }) {
               <th>Quantity</th>
               <th>Measurement</th>
               <th>Notes</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -62,7 +84,7 @@ function IngredientForm({ formData, setFormData }) {
                 <input
                   type="text"
                   value={ingredient}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => setIngredient(e.target.value)}
                   required
                 />
               </td>
@@ -99,10 +121,14 @@ function IngredientForm({ formData, setFormData }) {
                   onChange={(e) => setNotes(e.target.value)}
                 />
               </td>
+              <td>
+                <button type="submit">
+                  {ingredient ? "Update Ingredient" : "Add Ingredient"}
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
-        <button type="submit">Add Ingredient</button>
       </form>
       <div>
         <h3>Ingredients:</h3>
@@ -111,6 +137,8 @@ function IngredientForm({ formData, setFormData }) {
             {ingredients.map((ingredient, index) => (
               <li key={index}>
                 {ingredient.quantity} {ingredient.measurement} {ingredient.ingredient} - {ingredient.notes}
+                <button onClick={() => handleEditIngredient(index)}>Edit</button>
+                <button onClick={() => handleDeleteIngredient(index)}>Delete</button>
               </li>
             ))}
           </ul>
