@@ -16,7 +16,6 @@ import com.digitalkitchen.entities.RecipeTags;
 import com.digitalkitchen.entities.Recipes;
 import com.digitalkitchen.entities.Steps;
 import com.digitalkitchen.entities.Tags;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class RecipesEndpointService {
@@ -40,31 +39,24 @@ public class RecipesEndpointService {
 
     
     public void initalizeRecipe(Map<String, Object> body) {
-        System.out.println(body);
-
         //Recipe creation
         Recipes recipe = createRecipeFromMap((Map<String, Object>) body.get("recipe"));
-        System.out.println("Recipe: " + recipe);
         recipe = recipesService.addRecipe(recipe);
-        //Check for duplicate recipe
-
+        //TODO::Check for duplicate recipe
+            //first by name, then by author, and by ingredients
         try {
-            //RecipeIngredients List (Check for new ingredients)
+            //RecipeIngredients List
             List<RecipeIngredients> recipeIngredients = createRecipeIngredientsListFromMap((List<Map<String, Object>>)body.get("ingredients"), recipe);
-            System.out.println("Ingredients: " + recipeIngredients);
             recipeIngredientsService.addRecipeIngredients(recipeIngredients);
         
             //Steps List
-            //List<Map<String, Object>> steps = (List<Map<String, Object>>) body.get("steps");
             List<Steps> steps = createStepsListFromMap((List<Map<String, Object>>) body.get("steps"), recipe);
-            System.out.println("Steps: " + steps);
             stepsService.addSteps(steps);
 
-            //Tags List (Check for new tags)
-            //List<Map<String, Object>> tags = (List<Map<String, Object>>) body.get("tags");
+            //Tags List
             List<RecipeTags> tagList = createRecipeTagsListFromMap((List<String>) body.get("tags"), recipe);
-            System.out.println("Tags: " + tagList);
             recipeTagsService.addRecipeTags(tagList);
+
         } catch (Exception e) {
             e.printStackTrace();
             recipesService.deleteRecipeById(recipe.getID());
