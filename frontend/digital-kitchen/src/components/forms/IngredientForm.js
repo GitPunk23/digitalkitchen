@@ -1,18 +1,21 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import Form from 'react-bootstrap/Form';
+import Table from 'react-bootstrap/Table';
+import Button from 'react-bootstrap/Button';
+import axios from 'axios';
 
-function IngredientForm({ formData, setFormData }) {
-  const [ingredients, setIngredients] = useState(formData && formData.ingredients ? formData.ingredients : []);
-  const [ingredient, setIngredient] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [measurement, setMeasurement] = useState("");
-  const [notes, setNotes] = useState("");
+const IngredientForm = ({ formData, setFormData }) => {
+  const [ingredients, setIngredients] = useState(formData?.ingredients || []);
+  const [ingredient, setIngredient] = useState('');
+  const [quantity, setQuantity] = useState('');
+  const [measurement, setMeasurement] = useState('');
+  const [notes, setNotes] = useState('');
   const [measurements, setMeasurements] = useState([]);
 
   useEffect(() => {
     // Fetch measurements from the backend
     axios
-      .get("http://localhost:8080/digitalkitchen/form/measurements")
+      .get('http://localhost:8080/digitalkitchen/form/measurements')
       .then((response) => {
         setMeasurements(response.data);
       })
@@ -30,10 +33,10 @@ function IngredientForm({ formData, setFormData }) {
       notes,
     };
     setIngredients([...ingredients, newIngredient]);
-    setIngredient("");
-    setQuantity("");
-    setMeasurement("");
-    setNotes("");
+    setIngredient('');
+    setQuantity('');
+    setMeasurement('');
+    setNotes('');
   };
 
   const handleEditIngredient = (index) => {
@@ -60,15 +63,15 @@ function IngredientForm({ formData, setFormData }) {
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      ingredients: ingredients,
+      ingredients,
     }));
   }, [ingredients, setFormData]);
 
   return (
     <div>
       <h2>Add Ingredients</h2>
-      <form onSubmit={handleSubmit}>
-        <table>
+      <Form onSubmit={handleSubmit}>
+        <Table>
           <thead>
             <tr>
               <th>Name</th>
@@ -81,7 +84,7 @@ function IngredientForm({ formData, setFormData }) {
           <tbody>
             <tr>
               <td>
-                <input
+                <Form.Control
                   type="text"
                   value={ingredient}
                   onChange={(e) => setIngredient(e.target.value)}
@@ -89,7 +92,7 @@ function IngredientForm({ formData, setFormData }) {
                 />
               </td>
               <td>
-                <input
+                <Form.Control
                   type="number"
                   step="0.01"
                   value={quantity}
@@ -98,38 +101,35 @@ function IngredientForm({ formData, setFormData }) {
                 />
               </td>
               <td>
-                <select
+                <Form.Select
                   value={measurement}
                   onChange={(e) => setMeasurement(e.target.value)}
                   required
                 >
                   <option value="">-- Select a measurement --</option>
                   {measurements.map((measurement) => (
-                    <option
-                      key={measurement.id}
-                      value={measurement.id}
-                    >
+                    <option key={measurement.id} value={measurement.id}>
                       {measurement.measurement}
                     </option>
                   ))}
-                </select>
+                </Form.Select>
               </td>
               <td>
-                <input
+                <Form.Control
                   type="text"
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                 />
               </td>
               <td>
-                <button type="submit">
-                  {ingredient ? "Update Ingredient" : "Add Ingredient"}
-                </button>
+                <Button type="submit">
+                  {ingredient ? 'Update Ingredient' : 'Add Ingredient'}
+                </Button>
               </td>
             </tr>
           </tbody>
-        </table>
-      </form>
+        </Table>
+      </Form>
       <div>
         <h3>Ingredients:</h3>
         {ingredients.length > 0 ? (
@@ -137,8 +137,12 @@ function IngredientForm({ formData, setFormData }) {
             {ingredients.map((ingredient, index) => (
               <li key={index}>
                 {ingredient.quantity} {ingredient.measurement} {ingredient.ingredient} - {ingredient.notes}
-                <button onClick={() => handleEditIngredient(index)}>Edit</button>
-                <button onClick={() => handleDeleteIngredient(index)}>Delete</button>
+                <Button variant="primary" size="sm" onClick={() => handleEditIngredient(index)}>
+                  Edit
+                </Button>
+                <Button variant="danger" size="sm" onClick={() => handleDeleteIngredient(index)}>
+                  Delete
+                </Button>
               </li>
             ))}
           </ul>
@@ -148,6 +152,6 @@ function IngredientForm({ formData, setFormData }) {
       </div>
     </div>
   );
-}
+};
 
 export default IngredientForm;

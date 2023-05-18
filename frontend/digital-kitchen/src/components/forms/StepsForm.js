@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
-function StepsForm({ formData, setFormData, onPrevStep }) {
-  const [description, setDescription] = useState("");
+const StepsForm = ({ formData, setFormData }) => {
+  const [description, setDescription] = useState('');
   const [editingIndex, setEditingIndex] = useState(-1);
 
   const handleSubmit = (e) => {
@@ -28,7 +30,7 @@ function StepsForm({ formData, setFormData, onPrevStep }) {
         steps: [...(prevFormData?.steps || []), newStep],
       }));
     }
-    setDescription("");
+    setDescription('');
   };
 
   const handleEditStep = (index) => {
@@ -51,33 +53,20 @@ function StepsForm({ formData, setFormData, onPrevStep }) {
   return (
     <div>
       <h2>Add Steps</h2>
-      <form onSubmit={handleSubmit}>
-        <table>
-          <thead>
-            <tr>
-              <th>Step</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  required
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <button type="submit">
-                  {editingIndex !== -1 ? "Update Step" : "Add Step"}
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </form>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="formStepDescription">
+          <Form.Label>Step</Form.Label>
+          <Form.Control
+            as="textarea"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          />
+        </Form.Group>
+        <Button type="submit">
+          {editingIndex !== -1 ? 'Update Step' : 'Add Step'}
+        </Button>
+      </Form>
       <div>
         <h3>Steps:</h3>
         {formData && formData.steps && formData.steps.length > 0 ? (
@@ -85,8 +74,12 @@ function StepsForm({ formData, setFormData, onPrevStep }) {
             {formData.steps.map((step, index) => (
               <li key={index}>
                 {step.description}
-                <button onClick={() => handleEditStep(index)}>Edit</button>
-                <button onClick={() => handleDeleteStep(index)}>Delete</button>
+                <Button variant="primary" size="sm" onClick={() => handleEditStep(index)}>
+                  Edit
+                </Button>
+                <Button variant="danger" size="sm" onClick={() => handleDeleteStep(index)}>
+                  Delete
+                </Button>
               </li>
             ))}
           </ol>
@@ -96,6 +89,6 @@ function StepsForm({ formData, setFormData, onPrevStep }) {
       </div>
     </div>
   );
-}
+};
 
 export default StepsForm;

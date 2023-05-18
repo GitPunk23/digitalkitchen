@@ -61,4 +61,14 @@
     background-color: #ccc;
     cursor: not-allowed;
   }
+
+  .multi-step-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .multi-step-buttons .btn {
+    margin: 0 5px;
+  }
   
