@@ -41,9 +41,15 @@ public class RecipesEndpointService {
     public void initalizeRecipe(Map<String, Object> body) {
         //Recipe creation
         Recipes recipe = createRecipeFromMap((Map<String, Object>) body.get("recipe"));
-        recipe = recipesService.addRecipe(recipe);
-        //TODO::Check for duplicate recipe
-            //first by name, then by author, and by ingredients
+
+        //Check if recipe is already in the database
+        boolean exists = recipesService.recipeExists(recipe);
+        if (exists) {
+            return;
+        } else {
+            recipe = recipesService.addRecipe(recipe);
+        }
+            
         try {
             //RecipeIngredients List
             List<RecipeIngredients> recipeIngredients = createRecipeIngredientsListFromMap((List<Map<String, Object>>)body.get("ingredients"), recipe);

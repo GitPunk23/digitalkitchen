@@ -25,6 +25,10 @@ public class RecipesService {
         return recipesRepository.findById(id);
     }
 
+    public Optional<Recipes> getRecipeByName(String name) {
+        return recipesRepository.findByName(name);
+    }
+
     public Recipes addRecipe(Recipes recipe) {
         return recipesRepository.save(recipe);
     }
@@ -35,6 +39,15 @@ public class RecipesService {
 
     public void deleteRecipeById(int id) {
         recipesRepository.deleteById(id);
+    }
+
+    public boolean recipeExists(Recipes recipe) {
+        Optional<Recipes> dbrecipe = recipesRepository.findByName(recipe.getName());
+        if (dbrecipe.isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     
