@@ -43,35 +43,34 @@ public class RecipesEndpointService {
         //Recipe creation
         Recipes recipe = createRecipeFromMap((Map<String, Object>) body.get("recipe"));
 
-        //Check if recipe is already in the database
-        boolean exists = recipesService.recipeExists(recipe);
-        if (exists) {
-            System.out.println(recipe + " already exists!");
-            return ResponseEntity.badRequest().body("Recipe already exists!");
-        } else {
-            recipe = recipesService.addRecipe(recipe);
-        }
-            
         try {
-            //RecipeIngredients List
-            List<RecipeIngredients> recipeIngredients = createRecipeIngredientsListFromMap((List<Map<String, Object>>)body.get("ingredients"), recipe);
+
+            //Check if recipe is already in the database
+            Optional<Recipes> optional = recipesService.getRecipeByName(recipe.getName());
+            if (optional.isPresent()) {
+                recipe = optional.get();
+                return ResponseEntity.badRequest().body(recipe + " already exists!");
+            } else {
+                recipe = recipesService.addRecipe(recipe);
+            }
+        
+            // RecipeIngredients List
+            List<RecipeIngredients> recipeIngredients = createRecipeIngredientsListFromMap((List<Map<String, Object>>) body.get("ingredients"), recipe);
             recipeIngredientsService.addRecipeIngredients(recipeIngredients);
-            
-            //Steps List
+    
+            // Steps List
             List<Steps> steps = createStepsListFromMap((List<Map<String, Object>>) body.get("steps"), recipe);
             stepsService.addSteps(steps);
-            
-            //Tags List
+    
+            // Tags List
             List<RecipeTags> tagList = createRecipeTagsListFromMap((List<String>) body.get("tags"), recipe);
             recipeTagsService.addRecipeTags(tagList);
+    
             recipe = recipesService.getExpandedRecipe(recipe);
-            System.out.println(recipe + " created");
             return ResponseEntity.ok(recipe);
         } catch (Exception e) {
-            e.printStackTrace();
             recipesService.deleteRecipeById(recipe.getID());
-            System.out.println("Error adding ingredients, steps, or tags");
-            return ResponseEntity.badRequest().body("Error adding ingredients, steps, or tags");
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
 
     }
@@ -104,7 +103,7 @@ public class RecipesEndpointService {
             Map<String, Object> currentMap = ingredientsMap.get(i);
 
             //Get Ingredient Object
-            String name = (String) currentMap.get("ingredient");
+            String name = ((String) currentMap.get("ingredient")).toLowerCase();
             Optional<Ingredients> tempIngredient = ingredientsService.getIngredientByName(name);
             Ingredients ingredient;
             if (tempIngredient.isEmpty()) {
@@ -122,7 +121,7 @@ public class RecipesEndpointService {
             float quantity = Float.parseFloat((String)currentMap.get("quantity"));
 
             //Set Notes
-            String notes = (String) currentMap.get("notes");
+            String notes = ((String) currentMap.get("notes")).toLowerCase();
 
             //Create Ingredient
             RecipeIngredients recipeIngredient = new RecipeIngredients(recipe, ingredient, measurement, quantity, notes);
@@ -144,7 +143,7 @@ public class RecipesEndpointService {
             //Number
             int stepNO = i + 1;
             //Description
-            String desc = (String) currentMap.get("description");
+            String desc = ((String) currentMap.get("description")).toLowerCase();
             //Create Step
             Steps step = new Steps(recipe, stepNO, desc);
             //Add to List
@@ -159,7 +158,7 @@ public class RecipesEndpointService {
         for (int i = 0; i < tagsMap.size(); i++) {
             
             //Find Tag
-            String name = (String) tagsMap.get(i);
+            String name = ((String) tagsMap.get(i)).toLowerCase(null);
             Optional<Tags> tempTag = tagsService.getTagByName(name);
             Tags tag;
 

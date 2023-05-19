@@ -39,10 +39,12 @@ public class RecipesController {
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<?> createRecipe(@RequestBody Map<String, Object> body) throws Exception {
         try {
-            return endpointService.initalizeRecipe(body);
+            ResponseEntity<?> response = endpointService.initalizeRecipe(body);
+            System.out.println(response);
+            return response;
         } catch(Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

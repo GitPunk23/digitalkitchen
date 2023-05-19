@@ -5,6 +5,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Table;
 
 import com.digitalkitchen.util.TagsDeserializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.persistence.Id;
@@ -22,6 +23,7 @@ public class RecipeTags {
     private int ID;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "recipe_id", referencedColumnName = "id")
     private Recipes recipe;
 

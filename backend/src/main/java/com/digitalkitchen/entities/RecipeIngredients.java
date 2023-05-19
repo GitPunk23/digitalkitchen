@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.digitalkitchen.util.MeasurementsDeserializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javax.persistence.Id;
@@ -24,6 +25,7 @@ public class RecipeIngredients {
     private int ID;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "recipe_id", referencedColumnName = "id")
     private Recipes recipe;
 

@@ -30,7 +30,10 @@ public class RecipesService {
 
     public Optional<Recipes> getRecipeById(int id) {
         return recipesRepository.findById(id);
-        
+    }
+
+    public Optional<Recipes> getRecipeByName(String name) {
+        return recipesRepository.findByName(name);
     }
 
     public Recipes getExpandedRecipe(Recipes recipe) {
