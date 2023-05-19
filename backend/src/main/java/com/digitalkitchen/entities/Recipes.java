@@ -3,6 +3,7 @@ package com.digitalkitchen.entities;
 import com.digitalkitchen.util.CategoryDeserializer;
 
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;

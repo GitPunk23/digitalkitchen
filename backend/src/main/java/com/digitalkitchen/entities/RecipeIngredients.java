@@ -43,6 +43,10 @@ public class RecipeIngredients {
     private String notes;
 
     // Constructor
+    public RecipeIngredients() {
+        
+    }
+
     public RecipeIngredients(Recipes recipe, Ingredients ingredient, Measurements measurement, Float quantity, String notes) {
         this.recipe = recipe;
         this.ingredient = ingredient;

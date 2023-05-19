@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.digitalkitchen.entities.RecipeTags;
+import com.digitalkitchen.entities.Recipes;
 import com.digitalkitchen.repository.RecipeTagsRepository;
 
 @Service
@@ -18,6 +19,10 @@ public class RecipeTagsService {
     
     public List<RecipeTags> getAllRecipeTags() {
         return repository.findAll();
+    }
+
+    public List<RecipeTags> getAllRecipeTagsByRecipe(Recipes recipe) {
+        return repository.findAllByRecipe(recipe);
     }
     
     public Optional<RecipeTags> getRecipeTagById(int id) {

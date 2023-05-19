@@ -31,6 +31,10 @@ public class RecipeTags {
     private Tags tag;
 
     //Constructor
+    public RecipeTags() {
+        
+    }
+
     public RecipeTags(Recipes recipe, Tags tag) {
         this.recipe = recipe;
         this.tag = tag;

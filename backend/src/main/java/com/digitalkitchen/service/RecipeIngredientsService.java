@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.digitalkitchen.entities.RecipeIngredients;
+import com.digitalkitchen.entities.Recipes;
 import com.digitalkitchen.repository.RecipeIngredientsRepository;
 
 @Service
@@ -18,6 +19,10 @@ public class RecipeIngredientsService {
     
     public List<RecipeIngredients> getAllRecipeIngredients() {
         return repository.findAll();
+    }
+
+    public List<RecipeIngredients> getAllRecipeIngredientsByRecipe(Recipes recipe) {
+        return repository.findByRecipe(recipe);
     }
     
     public Optional<RecipeIngredients> getRecipeIngredientById(int id) {

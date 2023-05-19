@@ -56,17 +56,17 @@ public class RecipesEndpointService {
             //RecipeIngredients List
             List<RecipeIngredients> recipeIngredients = createRecipeIngredientsListFromMap((List<Map<String, Object>>)body.get("ingredients"), recipe);
             recipeIngredientsService.addRecipeIngredients(recipeIngredients);
-        
+            
             //Steps List
             List<Steps> steps = createStepsListFromMap((List<Map<String, Object>>) body.get("steps"), recipe);
             stepsService.addSteps(steps);
-
+            
             //Tags List
             List<RecipeTags> tagList = createRecipeTagsListFromMap((List<String>) body.get("tags"), recipe);
             recipeTagsService.addRecipeTags(tagList);
-
-            System.out.println("Recipe, Ingredients, Steps, and Tags created");
-            return ResponseEntity.ok("Recipe, Ingredients, Steps, and Tags created");
+            recipe = recipesService.getExpandedRecipe(recipe);
+            System.out.println(recipe + " created");
+            return ResponseEntity.ok(recipe);
         } catch (Exception e) {
             e.printStackTrace();
             recipesService.deleteRecipeById(recipe.getID());

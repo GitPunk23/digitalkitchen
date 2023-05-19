@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.digitalkitchen.entities.Recipes;
 import com.digitalkitchen.entities.Steps;
 import com.digitalkitchen.repository.StepsRepository;
 
@@ -18,6 +19,10 @@ public class StepsService {
     
     public List<Steps> getAllSteps() {
         return repository.findAll();
+    }
+
+    public List<Steps> getAllStepsByRecipe(Recipes recipe) {
+        return repository.findAllByRecipe(recipe);
     }
     
     public Optional<Steps> getStepById(int id) {

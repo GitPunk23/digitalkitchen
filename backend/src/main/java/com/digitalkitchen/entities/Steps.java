@@ -30,6 +30,10 @@ public class Steps {
     private String description;
 
     // Constructor
+    public Steps() {
+        
+    }
+
     public Steps(Recipes recipe, int stepNumber, String description) {
         this.recipe = recipe;
         this.stepNumber = stepNumber;
