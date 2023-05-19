@@ -2,7 +2,9 @@ package com.digitalkitchen.entities;
 
 import com.digitalkitchen.util.CategoryDeserializer;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,6 +20,8 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.transaction.Transactional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Entity(name = "recipes")
@@ -208,5 +212,29 @@ public class Recipes {
             .append(", tags=").append(tags)
             .append("]");
         return sb.toString();
-    }    
+    }
+
+    public String toJson() throws JsonProcessingException {
+        final ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(this);
+    }
+    
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+    
+        map.put("id", ID);
+        map.put("category", category);
+        map.put("name", name);
+        map.put("description", description);
+        map.put("servings", servings);
+        map.put("caloriesPerServing", caloriesPerServing);
+        map.put("notes", notes);
+        map.put("author", author);
+        map.put("ingredients", ingredients);
+        map.put("steps", steps);
+        map.put("tags", tags);
+    
+        return map;
+    }
+    
 }

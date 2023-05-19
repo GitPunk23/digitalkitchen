@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.digitalkitchen.controller.request.RecipeTransferObject;
 import com.digitalkitchen.entities.Category;
 import com.digitalkitchen.entities.Ingredients;
 import com.digitalkitchen.entities.Measurements;
@@ -17,6 +18,7 @@ import com.digitalkitchen.entities.RecipeTags;
 import com.digitalkitchen.entities.Recipes;
 import com.digitalkitchen.entities.Steps;
 import com.digitalkitchen.entities.Tags;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class RecipesEndpointService {
@@ -38,6 +40,8 @@ public class RecipesEndpointService {
     @Autowired
     private MeasurementsService measurements;
 
+    ObjectMapper objectMapper = new ObjectMapper();
+
     
     public ResponseEntity<?> initalizeRecipe(Map<String, Object> body) throws Exception {
         //Recipe creation
@@ -48,8 +52,8 @@ public class RecipesEndpointService {
             //Check if recipe is already in the database
             Optional<Recipes> optional = recipesService.getRecipeByName(recipe.getName());
             if (optional.isPresent()) {
-                recipe = optional.get();
-                return ResponseEntity.badRequest().body(recipe + " already exists!");
+                recipe = recipesService.getExpandedRecipe(optional.get());
+                return ResponseEntity.badRequest().body(recipesService.createTransferObject(recipe).toString());
             } else {
                 recipe = recipesService.addRecipe(recipe);
             }
@@ -67,10 +71,11 @@ public class RecipesEndpointService {
             recipeTagsService.addRecipeTags(tagList);
     
             recipe = recipesService.getExpandedRecipe(recipe);
-            return ResponseEntity.ok(recipe);
+            return ResponseEntity.ok(new RecipeTransferObject(recipe));
         } catch (Exception e) {
             recipesService.deleteRecipeById(recipe.getID());
-            return ResponseEntity.badRequest().body(e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(e);
         }
 
     }
@@ -158,7 +163,7 @@ public class RecipesEndpointService {
         for (int i = 0; i < tagsMap.size(); i++) {
             
             //Find Tag
-            String name = ((String) tagsMap.get(i)).toLowerCase(null);
+            String name = ((String) tagsMap.get(i)).toLowerCase();
             Optional<Tags> tempTag = tagsService.getTagByName(name);
             Tags tag;
 

@@ -1,12 +1,14 @@
 package com.digitalkitchen.service;
 
+import com.digitalkitchen.controller.request.RecipeTransferObject;
 import com.digitalkitchen.entities.Recipes;
 import com.digitalkitchen.repository.RecipesRepository;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 
 @Service
@@ -37,14 +39,9 @@ public class RecipesService {
     }
 
     public Recipes getExpandedRecipe(Recipes recipe) {
-        
         recipe.setIngredients(recipeIngredientsService.getAllRecipeIngredientsByRecipe(recipe));
-        System.out.println(recipe.getIngredients());
         recipe.setSteps(stepsService.getAllStepsByRecipe(recipe));
-        System.out.println(recipe.getSteps());
         recipe.setTags(recipeTagsService.getAllRecipeTagsByRecipe(recipe));
-        System.out.println(recipe.getTags());
-
         return recipe;
     }
 
@@ -67,6 +64,9 @@ public class RecipesService {
         } else {
             return true;
         }
+    }
+    public RecipeTransferObject createTransferObject(Recipes recipe) {
+        return new RecipeTransferObject(recipe);
     }
 
     

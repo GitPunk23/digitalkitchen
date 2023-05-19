@@ -43,7 +43,7 @@ public class RecipesController {
             System.out.println(response);
             return response;
         } catch(Exception e) {
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
