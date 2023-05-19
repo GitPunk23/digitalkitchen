@@ -3,6 +3,8 @@ package com.digitalkitchen.controller;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.digitalkitchen.service.RecipesEndpointService;
 import com.digitalkitchen.service.RecipesService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/recipes")
@@ -35,15 +38,21 @@ public class RecipesController {
 
     //POST requests
 
-    @PostMapping("/createRecipe")
+    @PostMapping(value = "/createRecipe", produces = "application/json")
     @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<?> createRecipe(@RequestBody Map<String, Object> body) throws Exception {
         try {
             ResponseEntity<?> response = endpointService.initalizeRecipe(body);
             System.out.println(response);
-            return response;
+
+            // Convert the response object to JSON
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonResponse = objectMapper.writeValueAsString(response.getBody());
+            // Create a new ResponseEntity with the JSON response
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            return new ResponseEntity<>(jsonResponse, headers, response.getStatusCode());
         } catch(Exception e) {
-            //System.out.println(e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

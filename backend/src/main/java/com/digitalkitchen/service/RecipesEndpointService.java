@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +54,7 @@ public class RecipesEndpointService {
             Optional<Recipes> optional = recipesService.getRecipeByName(recipe.getName());
             if (optional.isPresent()) {
                 recipe = recipesService.getExpandedRecipe(optional.get());
-                return ResponseEntity.badRequest().body(recipesService.createTransferObject(recipe).toString());
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(recipesService.createTransferObject(recipe).toString());
             } else {
                 recipe = recipesService.addRecipe(recipe);
             }
@@ -71,7 +72,7 @@ public class RecipesEndpointService {
             recipeTagsService.addRecipeTags(tagList);
     
             recipe = recipesService.getExpandedRecipe(recipe);
-            return ResponseEntity.ok(new RecipeTransferObject(recipe));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new RecipeTransferObject(recipe));
         } catch (Exception e) {
             recipesService.deleteRecipeById(recipe.getID());
             e.printStackTrace();
