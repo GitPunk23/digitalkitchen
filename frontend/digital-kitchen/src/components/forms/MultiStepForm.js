@@ -2,17 +2,23 @@ import React, { useState } from 'react';
 import { Row, Col, Button, Form } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
 
+import RecipeDisplay from '../pages/RecipeDisplayPage';
+import DuplicateRecordAlert from '../pages/DuplicateRecordAlert';
 import RecipeForm from './RecipeForm';
 import IngredientForm from './IngredientForm';
 import StepsForm from './StepsForm';
 import TagsForm from './TagsForm';
 import '../../styles/MultiStepForm.css';
 
-const MultiStepForm = () => {
+const MultiStepForm = ({ renderRecordResponse }) => {
+  // DATA MEMBERS
+  const[showDuplicateAlert, setShowDuplicateAlert] = useState(false);
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({ tags: [] });
   let toAddMoreRecipes = false;
   const navigate = useNavigate();
+
+  // FORM BUTTONS
 
   const handleNextStep = (data) => {
     setFormData(formData);
@@ -29,31 +35,47 @@ const MultiStepForm = () => {
 
   const handleMasterSubmit = () => {
     console.log('Submitted Data:', formData);
-
+  
     fetch('http://localhost:8080/digitalkitchen/recipes/createRecipe', {
-    method: 'POST',
-    headers: {
+      method: 'POST',
+      headers: {
         'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(formData),
+      },
+      body: JSON.stringify(formData),
     })
-    .then((response) => response.json())
-    .then((data) => {
-        console.log('Response from Backend:', data);
-        // Handle the response from the backend if needed
-    })
-    .then(() => {
+      .then((response) => {
+        if (response.status === 201) {
+          console.log('record created');
+          return response.json(); 
+        } else if (response.status === 409) {
+          console.log('duplicate record!');
+          setShowDuplicateAlert(true);
+        }  
+      })
+      .then((data) => {
         if (toAddMoreRecipes) {
-        navigate("/create-recipe");
+          console.log('Navigating to create-recipe page');
+          window.location.reload();
         } else {
-            
+    
         }
-    })
-    .catch((error) => {
+      })
+      .catch((error) => {
         console.error('Error:', error);
-        // Handle errors if any
-    });
+        // Display a regular alert with the error message
+        const result = confirm(error);
+        if (result) {
+          console.log('OK button clicked');
+          // Refresh the page
+          window.location.reload();
+        } else {
+          console.log('View button clicked');
+        }
+      });
   };
+
+  // DUPLICATE RECORD ALERT
+
 
   const renderFormStep = () => {
     switch (step) {
@@ -124,9 +146,11 @@ const MultiStepForm = () => {
           Submit
         </Button>
       </Row>
+      {showDuplicateAlert && (
+        <DuplicateRecordAlert renderRecordResponse={renderRecordResponse} />
+      )}
     </Row>
   );
-  
 };
 
 export default MultiStepForm;
