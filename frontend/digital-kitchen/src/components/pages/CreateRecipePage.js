@@ -1,14 +1,20 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import MultiStepForm from './forms/MultiStepForm';
-import '../styles/CreateRecipePage.css'
+import MultiStepForm from '../forms/MultiStepForm';
+import RecipeDisplay from './RecipeDisplayPage';
+import Recipe from '../Recipe';
+import DisplayRecordPage from './DisplayRecordPage';
+//import '../styles/CreateRecipePage.css'
 
 function CreateRecipePage() {
   const navigate = useNavigate();
-
   const goHome = () => {
     navigate('/');
   };
+
+  const renderRecordResponse = (record) => {
+    console.log(record);
+  }
 
   return (
     <div>
@@ -16,7 +22,7 @@ function CreateRecipePage() {
         Home
       </button>
       <h1>Create A Recipe</h1>
-      <MultiStepForm />
+      <MultiStepForm renderRecordResponse={(renderRecordResponse)}/>
     </div>
   );
 }

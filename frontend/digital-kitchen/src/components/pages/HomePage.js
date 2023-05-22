@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import '../styles/HomePage.css';
+import '../../styles/HomePage.css';
 
 function HomePage() {
   const [buttonsEnabled, setButtonsEnabled] = useState(false);
   const navigate = useNavigate();
 
   const handleCreateRecipe = () => {
-    navigate('/create-recipe');
+    navigate('/create');
   };
 
   const handleBrowseRecipes = () => {};
