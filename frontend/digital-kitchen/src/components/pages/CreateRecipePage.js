@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MultiStepForm from '../forms/MultiStepForm';
-import RecipeDisplay from './RecipeDisplayPage';
-import Recipe from '../Recipe';
-import DisplayRecordPage from './DisplayRecordPage';
+import RecipeDisplay from './DisplayPage';
+import Recipe from '../objects/Recipe';
+import DisplayPage from './DisplayPage';
 //import '../styles/CreateRecipePage.css'
 
 function CreateRecipePage() {
@@ -12,19 +12,25 @@ function CreateRecipePage() {
     navigate('/');
   };
 
+  const [recordResponse, setRecordResponse] = useState(null);
+
   const renderRecordResponse = (record) => {
-    console.log(record);
-  }
+    setRecordResponse(record);
+  };
 
   return (
     <div>
-      <button onClick={goHome} style={{ position: 'absolute', top: 0, left: 0 }}>
-        Home
-      </button>
-      <h1>Create A Recipe</h1>
-      <MultiStepForm renderRecordResponse={(renderRecordResponse)}/>
+      <div>
+        <button onClick={goHome} style={{ position: 'absolute', top: 0, left: 0 }}>
+          Home
+        </button>
+        <h1>Create A Recipe</h1>
+        {recordResponse ? null : <MultiStepForm renderRecordResponse={renderRecordResponse} />}
+      </div>
+      {recordResponse && 
+      <DisplayPage data={recordResponse}/>}
     </div>
-  );
+  );  
 }
 
 export default CreateRecipePage;

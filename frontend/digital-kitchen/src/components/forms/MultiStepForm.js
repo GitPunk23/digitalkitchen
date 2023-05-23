@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Row, Col, Button, Form } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
 
-import RecipeDisplay from '../pages/RecipeDisplayPage';
+import RecipeDisplay from '../pages/DisplayPage';
 import DuplicateRecordAlert from '../pages/DuplicateRecordAlert';
 import RecipeForm from './RecipeForm';
 import IngredientForm from './IngredientForm';
@@ -16,7 +16,7 @@ const MultiStepForm = ({ renderRecordResponse }) => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({ tags: [] });
   let toAddMoreRecipes = false;
-  const navigate = useNavigate();
+  const [record, setRecord] = useState("");
 
   // FORM BUTTONS
 
@@ -33,49 +33,45 @@ const MultiStepForm = ({ renderRecordResponse }) => {
     toAddMoreRecipes = e.target.checked;
   }
 
-  const handleMasterSubmit = () => {
+  const handleMasterSubmit = async () => {
     console.log('Submitted Data:', formData);
   
-    fetch('http://localhost:8080/digitalkitchen/recipes/createRecipe', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => {
-        if (response.status === 201) {
-          console.log('record created');
-          return response.json(); 
-        } else if (response.status === 409) {
-          console.log('duplicate record!');
-          setShowDuplicateAlert(true);
-        }  
-      })
-      .then((data) => {
-        if (toAddMoreRecipes) {
-          console.log('Navigating to create-recipe page');
-          window.location.reload();
-        } else {
-    
-        }
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        // Display a regular alert with the error message
-        const result = confirm(error);
-        if (result) {
-          console.log('OK button clicked');
-          // Refresh the page
-          window.location.reload();
-        } else {
-          console.log('View button clicked');
-        }
+    try {
+      const response = await fetch('http://localhost:8080/digitalkitchen/recipes/createRecipe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
+      const json = await response.json();
+      setRecord(json);
+      if (response.status === 201) {
+        console.log('record created: ',json);
+  
+        if (toAddMoreRecipes) {
+          window.location.reload();
+        } else {
+          console.log(json);
+          renderRecordResponse(json);
+        }
+      } else if (response.status === 409) {
+        console.log('duplicate record: ',json);
+        setShowDuplicateAlert(true);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      // Display a regular alert with the error message
+      const result = confirm(error);
+      if (result) {
+        console.log('OK button clicked');
+        // Refresh the page
+        window.location.reload();
+      } else {
+        console.log('View button clicked');
+      }
+    }
   };
-
-  // DUPLICATE RECORD ALERT
-
 
   const renderFormStep = () => {
     switch (step) {
@@ -147,7 +143,9 @@ const MultiStepForm = ({ renderRecordResponse }) => {
         </Button>
       </Row>
       {showDuplicateAlert && (
-        <DuplicateRecordAlert renderRecordResponse={renderRecordResponse} />
+        <DuplicateRecordAlert 
+        renderRecordResponse={renderRecordResponse} 
+        record={record}/>
       )}
     </Row>
   );

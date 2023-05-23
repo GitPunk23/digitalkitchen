@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 class DuplicateRecordAlert extends React.Component {
   render() {
     const { renderRecordResponse } = this.props;
+    const { record } = this.props;
 
     const onClose = () => {
       window.location.reload();
@@ -30,7 +31,7 @@ class DuplicateRecordAlert extends React.Component {
           }}>
             <h3>Duplicate Record Found</h3>
             <div>
-              <Button variant="primary" onClick={renderRecordResponse}>
+              <Button variant="primary" onClick={renderRecordResponse(record)}>
                 View Recipe
               </Button>
               <Button variant="secondary" onClick={onClose}>
