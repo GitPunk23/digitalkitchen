@@ -11,6 +11,10 @@ class DuplicateRecordAlert extends React.Component {
       window.location.reload();
     }
 
+    const handleClick = () => {
+      renderRecordResponse(record);
+    }
+
     return (
       <>
         <Modal 
@@ -31,7 +35,7 @@ class DuplicateRecordAlert extends React.Component {
           }}>
             <h3>Duplicate Record Found</h3>
             <div>
-              <Button variant="primary" onClick={renderRecordResponse(record)}>
+              <Button variant="primary" onClick={handleClick}>
                 View Recipe
               </Button>
               <Button variant="secondary" onClick={onClose}>

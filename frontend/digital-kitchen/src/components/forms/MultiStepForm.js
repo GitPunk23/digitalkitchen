@@ -52,11 +52,10 @@ const MultiStepForm = ({ renderRecordResponse }) => {
         if (toAddMoreRecipes) {
           window.location.reload();
         } else {
-          console.log(json);
           renderRecordResponse(json);
         }
       } else if (response.status === 409) {
-        console.log('duplicate record: ',json);
+        console.log('Duplicate record: ',json);
         setShowDuplicateAlert(true);
       }
     } catch (error) {

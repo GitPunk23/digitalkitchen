@@ -1,9 +1,21 @@
 import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import Recipe from '../objects/Recipe';
+import RecipeDisplay from '../objects/RecipeDisplay';
 //import RecipeDisplay from './RecipeDisplay'; // Import the RecipeDisplay component
 
 class DisplayPage extends Component {
+  
+  displayRecipe = (record) => {
+
+    
+
+    return (
+      <div>
+        <RecipeDisplay formData={record}/>
+      </div>
+    )
+  }
 
   render() {
     const { data } = this.props;
@@ -11,8 +23,7 @@ class DisplayPage extends Component {
 
     return (
       <div>
-        <h2>Recipe Details</h2>
-        <p>{data.name}</p>
+        {this.displayRecipe(data)}
       </div>
     );
   }
