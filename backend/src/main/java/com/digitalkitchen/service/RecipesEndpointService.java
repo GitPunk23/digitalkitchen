@@ -54,7 +54,7 @@ public class RecipesEndpointService {
             Optional<Recipes> optional = recipesService.getRecipeByName(recipe.getName());
             if (optional.isPresent()) {
                 recipe = recipesService.getExpandedRecipe(optional.get());
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(recipesService.createTransferObject(recipe).toString());
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(recipesService.createTransferObject(recipe));
             } else {
                 recipe = recipesService.addRecipe(recipe);
             }
@@ -72,7 +72,7 @@ public class RecipesEndpointService {
             recipeTagsService.addRecipeTags(tagList);
     
             recipe = recipesService.getExpandedRecipe(recipe);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new RecipeTransferObject(recipe));
+            return ResponseEntity.status(HttpStatus.CREATED).body(recipesService.createTransferObject(recipe));
         } catch (Exception e) {
             recipesService.deleteRecipeById(recipe.getID());
             e.printStackTrace();
