@@ -76,9 +76,10 @@ public class Steps {
     }
 
     public String toString() {
-        String out = "";
-        out += stepNumber + " " + description;
-        return out;
+        StringBuilder sb = new StringBuilder();
+        sb.append("step=").append(stepNumber)
+            .append(", description=").append(description);
+        return sb.toString();
     }
 
     
