@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, ListGroup } from 'react-bootstrap';
 
 class RecipeDisplay extends Component {
   constructor(props) {
@@ -103,34 +103,103 @@ class RecipeDisplay extends Component {
               />
             </Form.Group>
 
+            <Form.Group controlId="recipeIngredients">
+              <Form.Label>Ingredients</Form.Label>
+              <ListGroup>
+                {formData.ingredients.map((ingredient, index) => (
+                  <ListGroup.Item key={index}>
+                    <strong>Ingredient:</strong> {ingredient.ingredient}
+                    <br />
+                    <strong>Measurement:</strong> {ingredient.measurement}
+                    <br />
+                    <strong>Quantity:</strong> {ingredient.quantity}
+                    <br />
+                    <strong>Notes:</strong> {ingredient.notes}
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            </Form.Group>
+
+            <Form.Group controlId="recipeTags">
+              <Form.Label>Tags</Form.Label>
+              <ListGroup>
+                {formData.tags.map((tag, index) => (
+                  <ListGroup.Item key={index}>{tag}</ListGroup.Item>
+                ))}
+              </ListGroup>
+            </Form.Group>
+
+            <Form.Group controlId="recipeSteps">
+              <Form.Label>Steps</Form.Label>
+              <ListGroup>
+                {formData.steps.map((step, index) => (
+                  <ListGroup.Item key={index}>
+                    <strong>Step Number:</strong> {step.stepNumber}
+                    <br />
+                    <strong>Description:</strong> {step.description}
+                  </ListGroup.Item>
+                ))}
+              </ListGroup>
+            </Form.Group>
+
             <Button variant="primary" type="submit">
               Save
             </Button>
           </Form>
         ) : (
           <div>
-            <p>
-              <strong>Name:</strong> {formData.name}
-            </p>
-            <p>
-              <strong>Description:</strong> {formData.description}
-            </p>
-            <p>
-              <strong>Servings:</strong> {formData.servings}
-            </p>
-            <p>
-              <strong>Calories per Serving:</strong> 
-              <>{formData.caloriesPerServing}</>
-            </p>
-            <p>
-              <strong>Notes:</strong> {formData.notes}
-            </p>
-            <p>
-              <strong>Author:</strong> {formData.author}
-            </p>
-          </div>
-        )}
+          <p>
+            <strong>Name:</strong> {formData.name}
+          </p>
+          <p>
+            <strong>Description:</strong> {formData.description}
+          </p>
+          <p>
+            <strong>Servings:</strong> {formData.servings}
+          </p>
+          <p>
+            <strong>Calories per Serving:</strong> {formData.caloriesPerServing}
+          </p>
+          <p>
+            <strong>Notes:</strong> {formData.notes}
+          </p>
+          <p>
+            <strong>Author:</strong> {formData.author}
+          </p>
 
+          <div>
+            <strong>Ingredients:</strong>
+            <ul>
+              {formData.ingredients.map((ingredient, index) => (
+                <li key={index}>
+                  {`${ingredient.ingredient}, ${ingredient.quantity} ${ingredient.measurement} (${ingredient.notes})`}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <strong>Steps:</strong>
+            <ol>
+              {formData.steps.map((step, index) => (
+                <li key={index}>
+                  {`${step.description}`}
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <div>
+            <strong>Tags:</strong>
+            <ul>
+              {formData.tags.map((tag, index) => (
+                <li key={index}>{tag}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+          
         {!isEditing && (
           <Button variant="secondary" onClick={this.handleEdit}>
             Edit
