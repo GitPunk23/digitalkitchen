@@ -1,4 +1,4 @@
-package com.digitalkitchen.controller.request;
+package com.digitalkitchen.controller.request.transferobjects;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +14,10 @@ public class RecipeTransferObject {
     private String category;
     private int caloriesPerServing;
     private String description;
-    private List<String> ingredients = new ArrayList<>();
+    private List<RecipeIngredientsTransferObject> ingredients = new ArrayList<>();
     private int servings;
     private List<String> tags = new ArrayList<>();
-    private List<String> steps = new ArrayList<>();
+    private List<StepTransferObject> steps = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -67,11 +67,11 @@ public class RecipeTransferObject {
         this.description = description;
     }
 
-    public List<String> getIngredients() {
+    public List<RecipeIngredientsTransferObject> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<String> ingredients) {
+    public void setIngredients(List<RecipeIngredientsTransferObject> ingredients) {
         this.ingredients = ingredients;
     }
 
@@ -91,11 +91,11 @@ public class RecipeTransferObject {
         this.tags = tags;
     }
 
-    public List<String> getSteps() {
+    public List<StepTransferObject> getSteps() {
         return steps;
     }
 
-    public void setSteps(List<String> steps) {
+    public void setSteps(List<StepTransferObject> steps) {
         this.steps = steps;
     }
 
@@ -109,10 +109,10 @@ public class RecipeTransferObject {
         this.servings = recipe.getServings();
 
         for (int i = 0; i < recipe.getIngredients().size(); i++) {
-            this.ingredients.add(recipe.getIngredients().get(i).toString());
+            this.ingredients.add(new RecipeIngredientsTransferObject(recipe.getIngredients().get(i)));
         }
         for (int i = 0; i < recipe.getSteps().size(); i++) {
-            this.steps.add(recipe.getSteps().get(i).toString());
+            this.steps.add(new StepTransferObject(recipe.getSteps().get(i)));
         }
         for (int i = 0; i < recipe.getTags().size(); i++) {
             this.tags.add(recipe.getTags().get(i).toString());
