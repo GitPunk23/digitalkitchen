@@ -3,6 +3,11 @@ package com.digitalkitchen.entities;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Table;
+
+import com.digitalkitchen.util.TagsDeserializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -18,12 +23,24 @@ public class RecipeTags {
     private int ID;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "recipe_id", referencedColumnName = "id")
     private Recipes recipe;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tag_id", referencedColumnName = "id")
+    @JsonDeserialize(using = TagsDeserializer.class)
     private Tags tag;
+
+    //Constructor
+    public RecipeTags() {
+        
+    }
+
+    public RecipeTags(Recipes recipe, Tags tag) {
+        this.recipe = recipe;
+        this.tag = tag;
+    }
 
     // Getters
 
@@ -44,4 +61,10 @@ public class RecipeTags {
     public void setTag(Tags tag) {
     this.tag = tag;
     }
+
+    @Override
+    public String toString() {
+        return tag.getName();
+    }
+
 }

@@ -1,6 +1,11 @@
 package com.digitalkitchen.entities;
 
+import com.digitalkitchen.util.CategoryDeserializer;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +19,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.transaction.Transactional;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Entity(name = "recipes")
 @Table(name = "recipes",
@@ -35,6 +44,7 @@ public class Recipes {
                 name = "category_id", 
                 referencedColumnName = "id",
                 nullable = false)
+    @JsonDeserialize(using = CategoryDeserializer.class)
     private Category category;
 
     @Column(
@@ -63,6 +73,11 @@ public class Recipes {
             nullable = true)
     private String notes;
 
+    @Column(
+            name = "author",
+            nullable = true)    
+    private String author;
+
     @OneToMany(mappedBy = "recipe", 
                cascade = CascadeType.ALL,
                fetch = FetchType.LAZY)
@@ -82,18 +97,19 @@ public class Recipes {
 
     }
 
-    public Recipes(Category category, String name, String description, int servings, int caloriesPerServing, String notes) {
+    public Recipes(Category category, String name, String description, int servings, int caloriesPerServing, String notes, String author) {
         this.category = category;
         this.name = name;
         this.description = description;
         this.servings = servings;
         this.caloriesPerServing = caloriesPerServing;
         this.notes = notes;
+        this.author = author;
     }
 
     // Getters
 
-public int getID() {
+    public int getID() {
     return ID;
     }
     
@@ -119,6 +135,10 @@ public int getID() {
     
     public String getNotes() {
     return notes;
+    }
+
+    public String getAuthor() {
+        return author;
     }
     
     @Transactional
@@ -159,6 +179,10 @@ public int getID() {
     public void setNotes(String notes) {
     this.notes = notes;
     }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
     
     public void setIngredients(List<RecipeIngredients> ingredients) {
     this.ingredients = ingredients;
@@ -188,5 +212,29 @@ public int getID() {
             .append(", tags=").append(tags)
             .append("]");
         return sb.toString();
-    }    
+    }
+
+    public String toJson() throws JsonProcessingException {
+        final ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(this);
+    }
+    
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+    
+        map.put("id", ID);
+        map.put("category", category);
+        map.put("name", name);
+        map.put("description", description);
+        map.put("servings", servings);
+        map.put("caloriesPerServing", caloriesPerServing);
+        map.put("notes", notes);
+        map.put("author", author);
+        map.put("ingredients", ingredients);
+        map.put("steps", steps);
+        map.put("tags", tags);
+    
+        return map;
+    }
+    
 }

@@ -16,7 +16,7 @@ public class Measurements {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ID;
 
-    @Column(name = "measurement")
+    @Column(name = "measurements")
     private String measurement;
 
     public int getID() {
@@ -25,5 +25,14 @@ public class Measurements {
 
     public String getMeasurement() {
         return this.measurement;
+    }
+
+    @Override
+    public String toString() {
+        String out = "ID: ";
+        out += ID;
+        out += " measurement: ";
+        out += measurement;
+        return out;
     }
 }

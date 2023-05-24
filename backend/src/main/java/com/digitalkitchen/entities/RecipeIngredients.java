@@ -2,6 +2,11 @@ package com.digitalkitchen.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import com.digitalkitchen.util.MeasurementsDeserializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +25,7 @@ public class RecipeIngredients {
     private int ID;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "recipe_id", referencedColumnName = "id")
     private Recipes recipe;
 
@@ -29,6 +35,7 @@ public class RecipeIngredients {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "measurement_id", referencedColumnName = "id")
+    @JsonDeserialize(using = MeasurementsDeserializer.class)
     private Measurements measurement;
 
     @Column(name = "quantity")
@@ -36,6 +43,19 @@ public class RecipeIngredients {
 
     @Column(name = "notes")
     private String notes;
+
+    // Constructor
+    public RecipeIngredients() {
+        
+    }
+
+    public RecipeIngredients(Recipes recipe, Ingredients ingredient, Measurements measurement, Float quantity, String notes) {
+        this.recipe = recipe;
+        this.ingredient = ingredient;
+        this.measurement = measurement;
+        this.quantity = quantity;
+        this.notes = notes;
+    }
 
     // Getters
 
@@ -75,5 +95,14 @@ public class RecipeIngredients {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ingredient=").append(ingredient.getIngredient()).append('\'')
+            .append(", measurement=").append(measurement.getMeasurement()).append('\'')
+            .append(", quantity=").append(quantity).append('\'')
+            .append(", notes=").append(notes).append('\'');
+        return sb.toString();
     }
 }

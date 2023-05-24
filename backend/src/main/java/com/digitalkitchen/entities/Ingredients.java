@@ -18,11 +18,25 @@ public class Ingredients {
     @Column(name = "ingredient")
     private String ingredient;
 
+    public Ingredients() {
+        
+    }
+
+    public Ingredients(String ingredient) {
+        this.ingredient = ingredient;
+    }
+
     public int getID() {
         return this.ID;
     }
 
     public String getIngredient() {
         return ingredient;
+    }
+
+    public String toString() {
+        String out = "";
+        out += getIngredient();
+        return out;
     }
 }
