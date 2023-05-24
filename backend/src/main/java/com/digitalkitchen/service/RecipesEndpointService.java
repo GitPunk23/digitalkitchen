@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.digitalkitchen.controller.request.RecipeTransferObject;
+import com.digitalkitchen.controller.request.transferobjects.RecipeTransferObject;
 import com.digitalkitchen.entities.Category;
 import com.digitalkitchen.entities.Ingredients;
 import com.digitalkitchen.entities.Measurements;

@@ -1,6 +1,6 @@
 package com.digitalkitchen.service;
 
-import com.digitalkitchen.controller.request.RecipeTransferObject;
+import com.digitalkitchen.controller.request.transferobjects.RecipeTransferObject;
 import com.digitalkitchen.entities.Recipes;
 import com.digitalkitchen.repository.RecipesRepository;
 import java.util.List;
