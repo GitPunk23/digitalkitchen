@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Row, Col, Button, Form } from "react-bootstrap";
-import { useNavigate } from 'react-router-dom';
 
-import RecipeDisplay from '../pages/DisplayPage';
 import DuplicateRecordAlert from '../pages/DuplicateRecordAlert';
 import RecipeForm from './RecipeForm';
 import IngredientForm from './IngredientForm';
@@ -10,28 +8,55 @@ import StepsForm from './StepsForm';
 import TagsForm from './TagsForm';
 import '../../styles/MultiStepForm.css';
 
+
 const MultiStepForm = ({ renderRecordResponse }) => {
   // DATA MEMBERS
   const[showDuplicateAlert, setShowDuplicateAlert] = useState(false);
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({ tags: [] });
+  const [formData, setFormData] = useState({ 
+    ingredients : [],
+    steps : [], 
+    tags: [] });
   let toAddMoreRecipes = false;
   const [record, setRecord] = useState("");
+  const [isFormValid, setIsFormValid] = useState(false);
 
   // FORM BUTTONS
 
   const handleNextStep = (data) => {
     setFormData(formData);
     setStep((prevStep) => prevStep + 1);
+    validateForm();
   };
 
   const handlePrevStep = () => {
     setStep((prevStep) => prevStep - 1);
+    validateForm();
   };
 
   const handleCheckboxChange = (e) => {
     toAddMoreRecipes = e.target.checked;
   }
+
+  const validateForm = () => {
+    const isValid =
+      formData.recipe.name !== null  && 
+      formData.recipe.name !== undefined && 
+      formData.recipe.name !== '' &&
+      formData.recipe.author !== null && 
+      formData.recipe.author !== undefined && 
+      formData.recipe.author !== '' &&
+      formData.recipe.category !== null && 
+      formData.recipe.category !== undefined && 
+      formData.recipe.category !== '' &&
+      formData.ingredients !== undefined &&
+      formData.ingredients.length > 0 &&
+      formData.steps !== undefined &&
+      formData.steps.length > 0;
+    setIsFormValid(isValid);
+    console.log(isValid);
+    console.log(formData)
+  };
 
   const handleMasterSubmit = async () => {
     console.log('Submitted Data:', formData);
@@ -60,15 +85,7 @@ const MultiStepForm = ({ renderRecordResponse }) => {
       }
     } catch (error) {
       console.error('Error:', error);
-      // Display a regular alert with the error message
-      const result = confirm(error);
-      if (result) {
-        console.log('OK button clicked');
-        // Refresh the page
-        window.location.reload();
-      } else {
-        console.log('View button clicked');
-      }
+      const result = confirm(error); 
     }
   };
 
@@ -118,7 +135,10 @@ const MultiStepForm = ({ renderRecordResponse }) => {
       {renderFormStep()}
       <Row md={12}>
         {step > 1 && (
-          <Button variant="primary" className="mr-2" onClick={handlePrevStep}>
+          <Button 
+          variant="primary" 
+          className="mr-2" 
+          onClick={handlePrevStep}>
             Previous
           </Button>
         )}
@@ -137,7 +157,11 @@ const MultiStepForm = ({ renderRecordResponse }) => {
             onClick={() => handleCheckboxChange(event)}
           />
         </Form.Group>
-        <Button variant="primary" size="lg" onClick={handleMasterSubmit}>
+        <Button 
+        variant="primary" 
+        size="lg" 
+        disabled={!isFormValid}
+        onClick={handleMasterSubmit}>
           Submit
         </Button>
       </Row>
