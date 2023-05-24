@@ -21,9 +21,6 @@ function CreateRecipePage() {
   return (
     <div>
       <div>
-        <button onClick={goHome} style={{ position: 'absolute', top: 0, left: 0 }}>
-          Home
-        </button>
         <h1>Create A Recipe</h1>
         {recordResponse ? null : <MultiStepForm renderRecordResponse={renderRecordResponse} />}
       </div>
