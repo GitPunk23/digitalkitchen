@@ -57,10 +57,14 @@ public class SearchController {
             }
 
             //Servings
-            searchDict.put("servings", body.get("servings")); 
+            if (body.get("servings") != "") {
+                searchDict.put("servings", (int) body.get("servings"));
+            } 
 
             //Calories
-            searchDict.put("calories", body.get("calories"));
+            if (body.get("calories") != "") {
+                searchDict.put("calories", (int) body.get("calories"));
+            }
 
             //Categories
             if (body.get("categories") != null) {
@@ -68,7 +72,7 @@ public class SearchController {
                 for (String category : categories) {
                     Optional<Category> optCat = categoryService.getCategoryByName(category);
                     if (optCat.isPresent()) {
-                        searchDict.put("categories", optCat.get());
+                        searchDict.put("categories", category);
                     } else {
                         throw new Exception();
                     }
@@ -98,7 +102,6 @@ public class SearchController {
                     } else {
                         throw new Exception(tag + " not found in database!");
                     }
-                    searchDict.put("tags", tag);
                 }
             }
 

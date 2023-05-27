@@ -3,8 +3,6 @@ package com.digitalkitchen.service;
 import com.digitalkitchen.controller.request.transferobjects.RecipeTransferObject;
 import com.digitalkitchen.entities.Category;
 import com.digitalkitchen.entities.Ingredients;
-import com.digitalkitchen.entities.RecipeIngredients;
-import com.digitalkitchen.entities.RecipeTags;
 import com.digitalkitchen.entities.Recipes;
 import com.digitalkitchen.entities.Tags;
 import com.digitalkitchen.repository.RecipesRepository;
@@ -15,19 +13,15 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.swing.text.html.parser.Entity;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 
 @Service
@@ -116,25 +110,34 @@ public class RecipesService {
         if (searchParams.containsKey("name")) {
             predicates.add(builder.like(root.get("name"), "%" + searchParams.get("name") + "%"));
 
-        } else if (searchParams.containsKey("categories")) {
+        } 
+        
+        if (searchParams.containsKey("categories")) {
             Join<Recipes, Category> join = root.join("category");
             predicates.add(builder.equal(join.get("name"), searchParams.get("categories")));
             
-        } else if (searchParams.containsKey("authors")) {
+        }
+        
+        if (searchParams.containsKey("authors")) {
             predicates.add(builder.equal(root.get("author"), searchParams.get("authors")));
 
-        } else if (searchParams.containsKey("tags")) {
+        }
+        if (searchParams.containsKey("tags")) {
             Join<Recipes, Tags> join = root.join("tags");
-            predicates.add(builder.equal(join.get("tagName"), searchParams.get("tags")));
+            predicates.add(builder.equal(join.get("tag"), searchParams.get("tags")));
 
-        } else if (searchParams.containsKey("ingredients")) {
+        }
+        
+        if (searchParams.containsKey("ingredients")) {
             Join<Recipes, Ingredients> join = root.join("ingredients");
-            predicates.add(builder.equal(join.get("ingredientName"), searchParams.get("ingredients")));
+            predicates.add(builder.equal(join.get("ingredient"), searchParams.get("ingredients")));
+        }
 
-        } else if (searchParams.containsKey("servings")) {
+        if (searchParams.containsKey("servings") && searchParams.get("servings") != "") {
             predicates.add(builder.equal(root.get("servings"), searchParams.get("servings")));
 
-        } else if (searchParams.containsKey("calories")) {
+        }
+        if (searchParams.containsKey("calories") && searchParams.get("calories") != "") {
             predicates.add(builder.equal(root.get("caloriesPerServing"), searchParams.get("calories")));
         }
         
