@@ -29,8 +29,8 @@ public class RecipeIngredientsService {
         return repository.findById(id);
     }
 
-    public Optional<RecipeIngredients> getRecipeIngredientByName(String name) {
-        return repository.findByName(name);
+    public Optional<RecipeIngredients> getRecipeIngredientByName(String ingredient) {
+        return repository.findByIngredient(ingredient);
     }
 
     public RecipeIngredients addRecipeIngredient(RecipeIngredients ingredient) {

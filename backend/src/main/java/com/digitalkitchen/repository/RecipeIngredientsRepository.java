@@ -15,7 +15,8 @@ public interface RecipeIngredientsRepository extends JpaRepository<RecipeIngredi
 
     public List<RecipeIngredients> findByRecipe(Recipes recipe);
 
-    public Optional<RecipeIngredients> findByName(String name);
+    public Optional<RecipeIngredients> findByIngredient(String ingredient);
+
         
     
     
