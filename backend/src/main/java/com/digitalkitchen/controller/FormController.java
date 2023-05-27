@@ -41,6 +41,5 @@ public class FormController {
     @GetMapping("/measurements")
     public List<Measurements> getAllMeasurements() {
         return measurementsService.getAllMeasurements();
-    }
-
+    }    
 }
