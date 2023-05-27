@@ -1,6 +1,7 @@
 package com.digitalkitchen.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,6 +14,8 @@ import com.digitalkitchen.entities.Recipes;
 public interface RecipeIngredientsRepository extends JpaRepository<RecipeIngredients, Integer> {
 
     public List<RecipeIngredients> findByRecipe(Recipes recipe);
+
+    public Optional<RecipeIngredients> findByName(String name);
         
     
     
