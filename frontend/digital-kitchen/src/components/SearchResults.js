@@ -2,6 +2,7 @@ import Table from 'react-bootstrap/Table';
 import React, { useState, useEffect } from 'react';
 import DisplayPage from './pages/DisplayPage';
 import SearchResultsDisplay from './SearchResultsDisplay';
+import { Button } from 'react-bootstrap';
 
 const SearchResults = ({ results, switchDisplayView }) => {
   const [recipes, setRecipes] = useState([]);
@@ -18,20 +19,25 @@ const SearchResults = ({ results, switchDisplayView }) => {
   }
 
   const handleBackToTable = () => {
+    console.log("hi")
     setCurrentRecipe(null);
     setUseTableView(true);
   }
 
   const renderDisplay = () => {
     return (
-      <SearchResultsDisplay recipes={recipes} currentRecipe={currentRecipe}/>
+      <>
+        <Button onClick={handleBackToTable}>back</Button>
+        <SearchResultsDisplay 
+          recipes={recipes} 
+          currentRecipeID={recipes.findIndex((recipe) => recipe.id === currentRecipe.id)}/>
+      </>
     )
   }
 
-  return (
-    <>
-      {recipes.length > 0 && useTableView && (
-        <Table striped bordered hover variant="dark">
+  const renderTable = () => {
+    return (
+      <Table striped bordered hover variant="dark">
           <thead>
             <tr>
               <th>Recipe</th>
@@ -49,7 +55,12 @@ const SearchResults = ({ results, switchDisplayView }) => {
             ))}
           </tbody>
         </Table>
-      )}
+    )
+  }
+
+  return (
+    <>
+      {recipes.length > 0 && useTableView && renderTable()}
       {!useTableView && renderDisplay()}
     </>
   );
