@@ -170,7 +170,7 @@ class RecipeDisplay extends Component {
           <div>
             <strong>Ingredients:</strong>
             <ul>
-              {formData.ingredients.map((ingredient, index) => (
+              {(formData.ingredients || []).map((ingredient, index) => (
                 <li key={index}>
                   {`${ingredient.ingredient}, ${ingredient.quantity} ${ingredient.measurement} (${ingredient.notes})`}
                 </li>
@@ -181,7 +181,7 @@ class RecipeDisplay extends Component {
           <div>
             <strong>Steps:</strong>
             <ol>
-              {formData.steps.map((step, index) => (
+              {(formData.steps || []).map((step, index) => (
                 <li key={index}>
                   {`${step.description}`}
                 </li>
@@ -192,7 +192,7 @@ class RecipeDisplay extends Component {
           <div>
             <strong>Tags:</strong>
             <ul>
-              {formData.tags.map((tag, index) => (
+              {(formData.tags || []).map((tag, index) => (
                 <li key={index}>{tag}</li>
               ))}
             </ul>
