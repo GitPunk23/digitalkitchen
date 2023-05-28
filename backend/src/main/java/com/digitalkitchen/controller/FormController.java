@@ -90,7 +90,7 @@ public class FormController {
     public List<String> getAllTags() {
         List<String> list = new ArrayList<>();
         for (Tags tag : tagsService.getAllTags()) {
-            list.add(tag.toString());
+            list.add(tag.getName());
         }
         return list;
     }
