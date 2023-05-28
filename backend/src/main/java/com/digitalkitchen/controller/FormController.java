@@ -1,6 +1,7 @@
 package com.digitalkitchen.controller;
 
 import java.beans.Expression;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -15,10 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.digitalkitchen.entities.Category;
+import com.digitalkitchen.entities.Ingredients;
 import com.digitalkitchen.entities.Measurements;
 import com.digitalkitchen.entities.Recipes;
+import com.digitalkitchen.entities.Tags;
 import com.digitalkitchen.service.CategoryService;
+import com.digitalkitchen.service.IngredientsService;
 import com.digitalkitchen.service.MeasurementsService;
+import com.digitalkitchen.service.TagsService;
 
 @RestController
 @RequestMapping("/form")
@@ -29,6 +34,10 @@ public class FormController {
     private CategoryService categoryService;
     @Autowired
     private MeasurementsService measurementsService;
+    @Autowired
+    private TagsService tagsService;
+    @Autowired
+    private IngredientsService ingredientsService;
     @Autowired
     private EntityManager entityManager;
     
@@ -70,5 +79,33 @@ public class FormController {
         List<String> authors = entityManager.createQuery(query).getResultList();
     
         return authors;
+    }
+
+    /**
+     * This returns the list of all the tags in the database
+     * @return list of all tags in the database
+     */
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/tags")
+    public List<String> getAllTags() {
+        List<String> list = new ArrayList<>();
+        for (Tags tag : tagsService.getAllTags()) {
+            list.add(tag.toString());
+        }
+        return list;
+    }
+
+    /**
+     * This returns the list of all the ingredients in the database
+     * @return list of all ingredients in the database
+     */
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/ingredients")
+    public List<String> getAllIngredients() {
+        List<String> list = new ArrayList<>();
+        for (Ingredients ingredient : ingredientsService.getAllIngredients()) {
+            list.add(ingredient.getIngredient());
+        }
+        return list;
     }
 }
