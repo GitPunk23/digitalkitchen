@@ -12,13 +12,18 @@ const SearchBar = ({ setResults }) => {
   const [isFiltering, setIsFiltering] = useState(false);
   const [categorySuggestions, setCategorySuggestions] = useState([]);
   const [authorSuggestions, setAuthorSuggestions] = useState([]);
+  const [ingredientsList, setIngredientsList] = useState([]);
+  const [tagsList, setTagsList] = useState([]);
   const [ingredientSuggestions, setIngredientSuggestions] = useState([]);
   const [tagsSuggestions, setTagsSuggestions] = useState([]);
+  const [showingIngredientsDropdown, setShowingIngredientsDropdown] = useState(false);
+  const [showingTagsDropdown, setShowingTagsDropdown] = useState(false);
 
   const handleNameChange = (event) => {
     setName(event.target.value);
   };
 
+  //Category List
   useEffect(() => {
     fetch('http://localhost:8080/digitalkitchen/form/categories')
       .then((response) => {
@@ -36,6 +41,7 @@ const SearchBar = ({ setResults }) => {
       });
   }, []);
 
+  //Author List
   useEffect(() => {
     fetch('http://localhost:8080/digitalkitchen/form/authors')
       .then((response) => {
@@ -52,6 +58,43 @@ const SearchBar = ({ setResults }) => {
         console.log(error);
       });
   }, []);
+
+  //Tag suggestions
+  useEffect(() => {
+    fetch('http://localhost:8080/digitalkitchen/form/tags')
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Error retrieving tags');
+        }
+      })
+      .then((data) => {
+        setTagsList(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+  
+  //Ingredients suggestions
+  useEffect(() => {
+    fetch('http://localhost:8080/digitalkitchen/form/ingredients')
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Error retrieving ingredients');
+        }
+      })
+      .then((data) => {
+        setIngredientsList(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+  
 
   // FILTERS
   const handleInputKeyDown = (event) => {
@@ -70,6 +113,16 @@ const SearchBar = ({ setResults }) => {
       event.target.value = ''; // Clear the input value after adding the tag
     }
   };  
+
+  const handleIngredientInputChange = async (event) => {
+    const value = event.target.value;
+    setIngredientSuggestions(ingredientsList.filter((ingredient) => 
+      ingredient.startsWith(value)))
+  }
+
+  const handleSelectIngredientSuggestion = (suggestion) => {
+    setIngredients([...ingredients, suggestion])
+  }
 
   const handleRemoveIngredient = (removed) => {
     let newIngredients = ingredients.filter((ingredient) => ingredient !== removed);
@@ -108,6 +161,16 @@ const SearchBar = ({ setResults }) => {
 
   const handleCaloriesAdd = (event) => {
     setCalories(event.target.value);
+  }
+
+  const handleSelectTagSuggestion = (suggestion) => {
+    setTags([...tags, suggestion]);
+  };
+
+  const handleTagInputChange = async (event) => {
+    const value = event.target.value;
+    setTagsSuggestions(tagsList.filter((tag) => 
+      tag.startsWith(value)))
   }
 
   const handleRemoveTag = (removed) => {
@@ -184,15 +247,29 @@ const SearchBar = ({ setResults }) => {
         {/*INGREDIENTS*/}
         <Form.Group className="ingredients">
           <label>Ingredients:</label>
-          <Form.Control 
-            name="ingredients"
-            type="text" 
-            className="form-control" 
-            placeholder="Press enter after each"
-            onKeyDown={(event) => 
-            handleInputKeyDown(event)}
-          />
-        </Form.Group >
+            <Form.Control 
+              name="ingredients"
+              type="Select" 
+              className="form-control" 
+              placeholder="Press enter after each"
+              onFocus={() => setShowingIngredientsDropdown(true)}
+              onBlur={() => setShowingIngredientsDropdown(false)}
+              onKeyDown={(event) => 
+              handleInputKeyDown(event)}
+              onChange={(event) => 
+                handleIngredientInputChange(event)}
+              />
+              {(ingredientSuggestions.length > 0) && (showingIngredientsDropdown) && (
+                <ul className="suggestions-dropdown">
+                  {ingredientSuggestions.slice(0, 5).map((suggestion, index) => (
+                    <li key={index} onClick={() => handleSelectIngredientSuggestion(suggestion)}>
+                      {suggestion}
+                    </li>
+                  ))}
+                </ul>
+              )}
+          </Form.Group>
+
 
         <div>
           {ingredients.length > 0 && (
@@ -269,7 +346,7 @@ const SearchBar = ({ setResults }) => {
         </Form.Group>
 
         <div>
-          {categories.length > 0 && (
+          {(categories.length > 0) && (
           <div>
             {categories.map((category, index) => (
             <span key={category.name} className="category">
@@ -315,12 +392,25 @@ const SearchBar = ({ setResults }) => {
           <label>Tags</label>
           <Form.Control
             name="tags"
-            type="text" 
+            type="select" 
             className="form-control" 
             placeholder="Press enter after each"
+            onFocus={() => setShowingTagsDropdown(true)}
+            onBlur={() => setShowingTagsDropdown(false)}
             onKeyDown={(event) => 
               handleInputKeyDown(event)}
+            onChange={(event) => 
+              handleTagInputChange(event)}
           />
+          {(tagsSuggestions.length > 0) && (showingTagsDropdown) && (
+            <ul className="suggestions-dropdown">
+              {tagsSuggestions.slice(0, 5).map((suggestion, index) => (
+                <li key={index} onClick={() => handleSelectTagSuggestion(suggestion)}>
+                  {suggestion}
+                </li>
+              ))}
+            </ul>
+          )}
         </Form.Group>
 
         <div>
