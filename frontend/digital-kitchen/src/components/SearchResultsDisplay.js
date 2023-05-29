@@ -18,15 +18,20 @@ class SearchResultsDisplay extends React.Component {
   }
 
   handlePrevClick = () => {
-    this.setState((prevState) => ({
-      currentRecipeID: prevState.currentRecipeID - 1,
-    }));
+    console.log(this.state.currentRecipeID)
+    if (this.state.currentRecipeID > 0) {
+      this.setState((prevState) => ({
+        currentRecipeID: prevState.currentRecipeID - 1,
+      }));
+    }
   };
 
   handleNextClick = () => {
-    this.setState((prevState) => ({
-      currentRecipeID: prevState.currentRecipeID + 1,
-    }));
+    if (this.state.currentRecipeID < this.state.recipes.length - 1) {
+      this.setState((prevState) => ({
+        currentRecipeID: prevState.currentRecipeID + 1,
+      }));
+    }
   };
 
   render() {
