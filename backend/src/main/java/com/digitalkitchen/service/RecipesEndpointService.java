@@ -37,12 +37,119 @@ public class RecipesEndpointService {
     @Autowired 
     private TagsService tagsService;
     @Autowired
-    private CategoryService categories;
+    private CategoryService categoriesService;
     @Autowired
-    private MeasurementsService measurements;
+    private MeasurementsService measurementsService;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
+    public ResponseEntity<?> updateRecipe(Map<String, Object> body) throws Exception {
+        try {
+        //Get recipe
+        Recipes recipe = recipesService.getRecipeById((int) body.get("id")).get();
+        
+        //Name
+        if( (String) body.get("name") != recipe.getName() && body.get("name") != null) {
+            recipe.setName(((String) body.get("name")).toLowerCase());
+        }
+        //Author
+        if( (String) body.get("author") != recipe.getAuthor() && body.get("author") != null) {
+            recipe.setAuthor(((String) body.get("author")).toLowerCase());
+        }
+        //Category
+        if( (String) body.get("category") != recipe.getCategory().getName() && body.get("category") != null) {
+            recipe.setCategory(categoriesService.getCategoryByName(((String) body.get("category")).toLowerCase()).get());
+        }
+        //Description
+        if( (String) body.get("description") != recipe.getDescription() && body.get("description") != null) {
+            recipe.setDescription(((String) body.get("description")).toLowerCase());
+        }
+        //Servings
+        if( (int) body.get("servings") != recipe.getServings() && body.get("servings") != null) {
+            recipe.setServings((int) body.get("servings"));
+        }
+        //Calories
+        if( (int) body.get("caloriesPerServing") != recipe.getCaloriesPerServing() && body.get("caloriesPerServing") != null) {
+            recipe.setCaloriesPerServing((int) body.get("caloriesPerServing"));
+        }
+        //Notes
+        if( (String) body.get("notes") != recipe.getNotes() && body.get("notes") != null) {
+            recipe.setNotes(((String) body.get("notes")).toLowerCase());
+        }
+
+        recipe = recipesService.updateRecipe(recipe);
+
+        //Ingredients
+        List<Map<String, Object>> ingredientStrings = (List<Map<String, Object>>) body.get("ingredients");
+        List<RecipeIngredients> currentIngredients = recipeIngredientsService.getAllRecipeIngredientsByRecipe(recipe);
+
+        for (int i = 0; i < currentIngredients.size(); i++) {
+            RecipeIngredients currentIngredient = currentIngredients.get(i);
+            Map<String, Object> ingredientMap = (Map<String, Object>) ingredientStrings.get((i));
+        
+            // Retrieve updated values from ingredientMap
+            String updatedName = (String) ingredientMap.get("ingredient");
+            String updatedMeasurement = (String) ingredientMap.get("measurement");
+            float updatedQuantity = Float.parseFloat(((Object) ingredientMap.get("quantity")).toString());
+            String updatedNotes = (String) ingredientMap.get("notes");
+        
+            // Check for difference
+            if (currentIngredient.getIngredient().getIngredient() != updatedName) {
+                currentIngredient.setIngredient((ingredientsService.getIngredientByName(updatedName)).get());
+            }
+            if (currentIngredient.getMeasurement().getMeasurement() != updatedMeasurement) {
+                currentIngredient.setMeasurement((measurementsService.getMeasurementByName(updatedMeasurement)).get());
+            }; 
+            if (currentIngredient.getQuantity() != updatedQuantity) {
+                currentIngredient.setQuantity(updatedQuantity);
+            }
+            if (currentIngredient.getNotes() != updatedNotes) {
+                currentIngredient.setNotes(updatedNotes);
+            };
+        }
+           
+        //Steps
+        List<Map<String, Object>> updatedStepList = (List<Map<String, Object>>) body.get("steps");
+        List<Steps> currentSteps = stepsService.getAllStepsByRecipe(recipe);
+
+        for (int i = 0; i < currentSteps.size(); i++) {
+            Steps currentStep = currentSteps.get(i);
+            Map<String, Object> stepMap = (Map<String, Object>) updatedStepList.get((0));
+        
+            // Retrieve updated values from ingredientMap
+            int updatedNumber = (int) stepMap.get("stepNumber");
+            String updatedDescription = (String) stepMap.get("description");
+        
+            // Check for difference
+            if (currentStep.getStepNumber() != updatedNumber) {
+                currentStep.setStepNumber(updatedNumber);
+            }
+            if (currentStep.getDescription() != updatedDescription) {
+                currentStep.setDescription(updatedDescription);
+            }; 
+        }
+
+        //Tags
+        List<String> updatedTagsList = (List<String>) body.get("tags");
+        List<RecipeTags> currentTags = recipeTagsService.getAllRecipeTagsByRecipe(recipe);
+
+        for (int i = 0; i < currentTags.size(); i++) {
+            RecipeTags currentTag = currentTags.get(i);
+        
+            String updatedTag = updatedTagsList.get(i);
+            
+            // Check for difference
+            if (currentTag.getTag().getName() != updatedTag) {
+                currentTag.setTag((tagsService.getTagByName(updatedTag)).get());
+            }
+        }
+
+        return ResponseEntity.ok().body(recipesService.createTransferObject(recipe));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
     
     public ResponseEntity<?> initalizeRecipe(Map<String, Object> body) throws Exception {
         //Recipe creation
@@ -83,7 +190,7 @@ public class RecipesEndpointService {
 
     private Recipes createRecipeFromMap(Map<String, Object> recipeMap) throws Exception {
         try { 
-            Optional<Category> tempCat = categories.getCategoryById(Integer.parseInt((String)recipeMap.get("category")));
+            Optional<Category> tempCat = categoriesService.getCategoryById(Integer.parseInt((String)recipeMap.get("category")));
             Category category = tempCat.orElse(new Category());
             String name = ((String)recipeMap.get("name")).toLowerCase();
             String author = ((String)recipeMap.get("author")).toLowerCase();
@@ -120,7 +227,7 @@ public class RecipesEndpointService {
 
             //Get Measurement Object
             int msmt = Integer.parseInt((String)currentMap.get("measurement"));
-            Optional<Measurements> tempmsmt = measurements.getMeasurementById(msmt);
+            Optional<Measurements> tempmsmt = measurementsService.getMeasurementById(msmt);
             Measurements measurement = tempmsmt.orElse(new Measurements());
 
             //Set Quantity

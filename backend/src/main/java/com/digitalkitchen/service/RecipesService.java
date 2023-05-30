@@ -64,8 +64,8 @@ public class RecipesService {
         return recipesRepository.save(recipe);
     }
 
-    public void updateRecipe(Recipes recipe) {
-        recipesRepository.save(recipe);
+    public Recipes updateRecipe(Recipes recipe) {
+        return recipesRepository.save(recipe);
     }
 
     public void deleteRecipeById(int id) {
