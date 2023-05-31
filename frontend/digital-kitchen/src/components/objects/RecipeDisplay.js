@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, ListGroup } from 'react-bootstrap';
+import { Form, Button, ListGroup, Table } from 'react-bootstrap';
 
 class RecipeDisplay extends Component {
   constructor(props) {
@@ -15,14 +15,32 @@ class RecipeDisplay extends Component {
     this.setState({ isEditing: true });
   };
 
-  handleSubmit = (e) => {
+  handleSubmit = async (e) => {
     e.preventDefault();
     const { formData } = this.state;
-    // Perform form submission to update the recipe details
-    // You can use the formData object to send the updated data to the backend
-    console.log(formData);
-    // Reset the editing state
     this.setState({ isEditing: false });
+    console.log("Submitted updated data:",formData);
+
+    try {
+      const response = await fetch('http://localhost:8080/digitalkitchen/recipes/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const json = await response.json();
+
+      if (response.status === 200) {
+        console.log(json);
+      }
+      
+  
+    } catch (error) {
+      console.log(error)
+    }
+
   };
 
   handleChange = (e) => {
@@ -49,6 +67,16 @@ class RecipeDisplay extends Component {
                 type="text"
                 name="name"
                 value={formData.name}
+                onChange={this.handleChange}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="recipeAuthor">
+              <Form.Label>Author</Form.Label>
+              <Form.Control
+                type="text"
+                name="author"
+                value={formData.author}
                 onChange={this.handleChange}
               />
             </Form.Group>
@@ -93,51 +121,86 @@ class RecipeDisplay extends Component {
               />
             </Form.Group>
 
-            <Form.Group controlId="recipeAuthor">
-              <Form.Label>Author</Form.Label>
-              <Form.Control
-                type="text"
-                name="author"
-                value={formData.author}
-                onChange={this.handleChange}
-              />
+            <Form.Group controlId="recipeIngredients">
+              <Form.Label><strong>Ingredients</strong></Form.Label>
+              <Table striped bordered>
+                <thead>
+                  <tr>
+                    <th>Ingredient</th>
+                    <th>Measurement</th>
+                    <th>Quantity</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {formData.ingredients.map((ingredient, index) => (
+                    <tr key={index}>
+                      <td>
+                        <Form.Control
+                        type="text"
+                        name="ingredient"
+                        value={ingredient.ingredient}
+                        onChange={this.handleChange}
+                        />
+                        </td>
+                      <td>
+                        <Form.Control
+                          type="text"
+                          name="measurement"
+                          value={ingredient.measurement}
+                          onChange={this.handleChange}
+                        />
+                      </td>
+                      <td>
+                        <Form.Control
+                          type="number"
+                          name="quantity"
+                          value={ingredient.quantity}
+                          onChange={this.handleChange}
+                        />
+                      </td>
+                      <td>
+                        <Form.Control
+                          type="text"
+                          name="notes"
+                          value={ingredient.notes}
+                          onChange={this.handleChange}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
             </Form.Group>
 
-            <Form.Group controlId="recipeIngredients">
-              <Form.Label>Ingredients</Form.Label>
+            <Form.Group controlId="recipeSteps">
+              <Form.Label><strong>Steps</strong></Form.Label>
               <ListGroup>
-                {formData.ingredients.map((ingredient, index) => (
+                {formData.steps.map((step, index) => (
                   <ListGroup.Item key={index}>
-                    <strong>Ingredient:</strong> {ingredient.ingredient}
-                    <br />
-                    <strong>Measurement:</strong> {ingredient.measurement}
-                    <br />
-                    <strong>Quantity:</strong> {ingredient.quantity}
-                    <br />
-                    <strong>Notes:</strong> {ingredient.notes}
+                    {step.stepNumber}. 
+                    <Form.Control
+                      type="text"
+                      name="caloriesPerServing"
+                      value={step.description}
+                      onChange={this.handleChange}/>
                   </ListGroup.Item>
                 ))}
               </ListGroup>
             </Form.Group>
 
             <Form.Group controlId="recipeTags">
-              <Form.Label>Tags</Form.Label>
+              <Form.Label><strong>Tags</strong></Form.Label>
               <ListGroup>
                 {formData.tags.map((tag, index) => (
-                  <ListGroup.Item key={index}>{tag}</ListGroup.Item>
-                ))}
-              </ListGroup>
-            </Form.Group>
-
-            <Form.Group controlId="recipeSteps">
-              <Form.Label>Steps</Form.Label>
-              <ListGroup>
-                {formData.steps.map((step, index) => (
                   <ListGroup.Item key={index}>
-                    <strong>Step Number:</strong> {step.stepNumber}
-                    <br />
-                    <strong>Description:</strong> {step.description}
-                  </ListGroup.Item>
+                    {tag}
+                    <Form.Control
+                    type="text"
+                    name="tags"
+                    value={tag}
+                    onChange={this.handleChange}/>
+                    </ListGroup.Item>
                 ))}
               </ListGroup>
             </Form.Group>
@@ -152,6 +215,12 @@ class RecipeDisplay extends Component {
             <strong>Name:</strong> {formData.name}
           </p>
           <p>
+            <strong>Author:</strong> {formData.author}
+          </p>
+          <p>
+            <strong>Category:</strong> {formData.category}
+          </p>
+          <p>
             <strong>Description:</strong> {formData.description}
           </p>
           <p>
@@ -163,25 +232,35 @@ class RecipeDisplay extends Component {
           <p>
             <strong>Notes:</strong> {formData.notes}
           </p>
-          <p>
-            <strong>Author:</strong> {formData.author}
-          </p>
 
           <div>
             <strong>Ingredients:</strong>
-            <ul>
-              {formData.ingredients.map((ingredient, index) => (
-                <li key={index}>
-                  {`${ingredient.ingredient}, ${ingredient.quantity} ${ingredient.measurement} (${ingredient.notes})`}
-                </li>
-              ))}
-            </ul>
+            <Table striped bordered>
+              <thead>
+                <tr>
+                  <th>Ingredient</th>
+                  <th>Quantity</th>
+                  <th>Measurement</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(formData.ingredients || []).map((ingredient, index) => (
+                  <tr key={index}>
+                    <td>{ingredient.ingredient}</td>
+                    <td>{ingredient.quantity}</td>
+                    <td>{ingredient.measurement}</td>
+                    <td>{ingredient.notes}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
           </div>
 
           <div>
             <strong>Steps:</strong>
             <ol>
-              {formData.steps.map((step, index) => (
+              {(formData.steps || []).map((step, index) => (
                 <li key={index}>
                   {`${step.description}`}
                 </li>
@@ -192,7 +271,7 @@ class RecipeDisplay extends Component {
           <div>
             <strong>Tags:</strong>
             <ul>
-              {formData.tags.map((tag, index) => (
+              {(formData.tags || []).map((tag, index) => (
                 <li key={index}>{tag}</li>
               ))}
             </ul>

@@ -99,10 +99,10 @@ public class RecipeIngredients {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("ingredient=").append(ingredient.getIngredient()).append('\'')
-            .append(", measurement=").append(measurement.getMeasurement()).append('\'')
-            .append(", quantity=").append(quantity).append('\'')
-            .append(", notes=").append(notes).append('\'');
+        sb.append("ingredient=").append(ingredient.getIngredient())
+            .append(", measurement=").append(measurement.getMeasurement())
+            .append(", quantity=").append(quantity)
+            .append(", notes=").append(notes);
         return sb.toString();
     }
 }

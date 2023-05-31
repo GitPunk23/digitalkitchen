@@ -11,6 +11,7 @@ const RecipeForm = ({ onNextStep, formData, setFormData }) => {
   const [notes, setNotes] = useState(formData?.recipe?.notes || '');
   const [category, setCategory] = useState(formData?.recipe?.category || '');
   const [categories, setCategories] = useState([]);
+  const [authorSuggestions, setAuthorSuggestions] = useState([]);
 
   useEffect(() => {
     fetch('http://localhost:8080/digitalkitchen/form/categories')
@@ -23,6 +24,24 @@ const RecipeForm = ({ onNextStep, formData, setFormData }) => {
       })
       .then((data) => {
         setCategories(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  //Author List
+  useEffect(() => {
+    fetch('http://localhost:8080/digitalkitchen/form/authors')
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Error retrieving authors');
+        }
+      })
+      .then((data) => {
+        setAuthorSuggestions(data);
       })
       .catch((error) => {
         console.log(error);
@@ -65,13 +84,20 @@ const RecipeForm = ({ onNextStep, formData, setFormData }) => {
       <Form.Group controlId="formAuthor">
         <Form.Label>Author:</Form.Label>
         <Form.Control
-          type="text"
+          as="input"
+          list="authorSuggestions"
           value={author}
           onChange={(event) => setAuthor(event.target.value)}
-          maxLength={25}
           required
         />
+        <datalist id="authorSuggestions">
+          {authorSuggestions.map((author) => (
+            <option key={author} value={author} />
+          ))}
+        </datalist>
       </Form.Group>
+
+
       <Form.Group controlId="formDescription">
         <Form.Label>Description:</Form.Label>
         <Form.Control

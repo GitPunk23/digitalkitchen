@@ -11,7 +11,9 @@ function HomePage() {
     navigate('/create');
   };
 
-  const handleBrowseRecipes = () => {};
+  const handleBrowseRecipes = () => {
+    navigate('/search');
+  };
 
   const handleMealPlanner = () => {};
 
@@ -81,9 +83,9 @@ function HomePage() {
                 size="lg"
                 className={`${buttonClassName} browse-recipes-button`}
                 onClick={handleBrowseRecipes}
-                disabled={true}
+                disabled={buttonsEnabled}
               >
-                Browse Recipes<br></br>(coming soon)
+                Browse Recipes
               </Button>
           </Col>
         </Row>

@@ -35,5 +35,9 @@ public class MeasurementsService {
         repository.deleteById(id);
     }
 
+    public Optional<Measurements> getMeasurementByName(String updatedName) {
+        return repository.findByMeasurement(updatedName);
+    }
+
 }
 

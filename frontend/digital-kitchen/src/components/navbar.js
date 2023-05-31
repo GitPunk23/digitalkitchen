@@ -21,6 +21,9 @@ const Navbar = () => {
         <Link className="navbar-brand" to="/create">
           Create
         </Link>
+        <Link className="navbar-brand" to="/search">
+          Search
+        </Link>
       </div>
     </nav>
   );

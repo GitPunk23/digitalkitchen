@@ -2,6 +2,7 @@ package com.digitalkitchen.controller;
 
 import java.util.Map;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -53,6 +54,25 @@ public class RecipesController {
             headers.setContentType(MediaType.APPLICATION_JSON);
             return new ResponseEntity<>(jsonResponse, headers, response.getStatusCode());
         } catch(Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/update", produces = "application/json")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<?> updateRecipe(@RequestBody Map<String, Object> body) throws Exception {
+        try {
+            ResponseEntity<?> response = endpointService.updateRecipe(body);
+            System.out.println(response);
+
+            // Convert the response object to JSON
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonResponse = objectMapper.writeValueAsString(response.getBody());
+            // Create a new ResponseEntity with the JSON response
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            return new ResponseEntity<>(jsonResponse, headers, response.getStatusCode());
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

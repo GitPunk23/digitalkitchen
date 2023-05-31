@@ -29,6 +29,10 @@ public class RecipeTagsService {
         return repository.findById(id);
     }
 
+    public Optional<RecipeTags> getRecipeTagByName(String tag) {
+        return repository.getByTag(tag);
+    }
+
     public RecipeTags addRecipeTag(RecipeTags tag) {
         return repository.save(tag);
     }
