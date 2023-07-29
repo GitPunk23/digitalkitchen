@@ -1,8 +1,10 @@
-FROM adoptopenjdk/openjdk17:alpine-jre
+FROM openjdk:17-jdk
 
 WORKDIR /app
 
-COPY digitalkitchen.jar /app
+# Copy all JAR files to /app directory and rename them to app.jar
+COPY app.jar .
 
-CMD ["java", "-jar", "digitalkitchen.jar"]
+# Set app.jar as the CMD to be executed
+CMD ["java", "-jar", "app.jar"]
 
