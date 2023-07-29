@@ -2,4 +2,5 @@ backend/target/
 .vscode/
 .env
 backend/src/main/resources/application.properties
-backend/build/
+backend/archive/
+backend/*.jar
