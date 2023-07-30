@@ -10,3 +10,7 @@ services:
     ports:
       - "8000:80"  # Map host port 8000 to container port 80
 
+  networks:
+    my_network:
+      driver: bridge
+
