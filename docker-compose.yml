@@ -6,7 +6,7 @@ services:
       - "8080:3000"  # Map host port 8080 to container port 3000
 
   backend:
-    image: ./backend/
+    build: ./backend/
     ports:
       - "8000:80"  # Map host port 8000 to container port 80
 
