@@ -209,7 +209,7 @@ const SearchBar = ({ setResults }) => {
     console.log("Searching for: ",searchCriteria);
 
     try {
-        const response = await fetch('http://localhost:8080/digitalkitchen/search', {
+        const response = await fetch('http://digitalkitchen-backend:8080/digitalkitchen/search', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

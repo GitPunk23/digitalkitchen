@@ -62,7 +62,7 @@ const MultiStepForm = ({ renderRecordResponse }) => {
     console.log('Submitted Data:', formData);
   
     try {
-      const response = await fetch('http://localhost:8080/digitalkitchen/recipes/createRecipe', {
+      const response = await fetch('http://digitalkitchen-backend:8080/digitalkitchen/recipes/createRecipe', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

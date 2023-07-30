@@ -22,7 +22,7 @@ class RecipeDisplay extends Component {
     console.log("Submitted updated data:",formData);
 
     try {
-      const response = await fetch('http://localhost:8080/digitalkitchen/recipes/update', {
+      const response = await fetch('http://digitalkitchen-backend:8080/digitalkitchen/recipes/update', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
