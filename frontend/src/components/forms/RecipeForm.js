@@ -32,7 +32,7 @@ const RecipeForm = ({ onNextStep, formData, setFormData }) => {
 
   //Author List
   useEffect(() => {
-    fetch('http://backend:80/digitalkitchen/form/authors')
+    fetch('http://backend/digitalkitchen/form/authors')
       .then((response) => {
         if (response.ok) {
           return response.json();
