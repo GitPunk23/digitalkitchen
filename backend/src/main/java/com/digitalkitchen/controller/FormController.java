@@ -27,7 +27,7 @@ import com.digitalkitchen.service.TagsService;
 
 @RestController
 @RequestMapping("/form")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:8080")
 public class FormController {
 
     @Autowired
@@ -45,7 +45,7 @@ public class FormController {
      * This returns the list of all the categories in the database
      * @return list of all categories in the database
      */
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/categories")
     public List<Category> getAllCategories() {
         return categoryService.getAllCategories();
@@ -55,7 +55,7 @@ public class FormController {
      * This returns the list of all the measurements in the database
      * @return list of all measurements in the database
      */
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/measurements")
     public List<Measurements> getAllMeasurements() {
         return measurementsService.getAllMeasurements();
@@ -65,7 +65,7 @@ public class FormController {
      * This returns the list of all the authors in the database
      * @return list of all authors in the database
      */
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/authors")
     public List<String> getAllAuthors() {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -85,7 +85,7 @@ public class FormController {
      * This returns the list of all the tags in the database
      * @return list of all tags in the database
      */
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/tags")
     public List<String> getAllTags() {
         List<String> list = new ArrayList<>();
@@ -99,7 +99,7 @@ public class FormController {
      * This returns the list of all the ingredients in the database
      * @return list of all ingredients in the database
      */
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/ingredients")
     public List<String> getAllIngredients() {
         List<String> list = new ArrayList<>();
