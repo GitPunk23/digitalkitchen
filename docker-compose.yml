@@ -15,9 +15,9 @@ services:
       - digitalkitchen-network  # Attach frontend service to the custom network
 
 networks:
-  digitalkitchen_network:
+  digitalkitchen-network:
     driver: bridge
-      driver_opts:
+    driver_opts:
       com.docker.network.enable_ipv6: "false"  # Disable IPv6 to use only IPv4
     ipam:
       config:
