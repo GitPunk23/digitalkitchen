@@ -14,7 +14,7 @@ const RecipeForm = ({ onNextStep, formData, setFormData }) => {
   const [authorSuggestions, setAuthorSuggestions] = useState([]);
 
   useEffect(() => {
-    fetch('http://backend:80/digitalkitchen/form/categories')
+    fetch('http://digitalkitchen-backend:80/digitalkitchen/form/categories')
       .then((response) => {
         if (response.ok) {
           return response.json();
