@@ -5,3 +5,4 @@ backend/src/main/resources/application.properties
 backend/build/
 backend/archive/
 backend/*.jar
+frontend/digital-kitchen/*
