@@ -21,7 +21,7 @@ function HomePage() {
 
   const getServerStatus = async () => {
     try {
-      const response = await fetch('http://digitalkitchen-backend:8080/recipes/status/');
+      const response = await fetch('http://192.168.1.136:8000/recipes/status/');
       const status = response.status;
       return status === 202;
     } catch (error) {
