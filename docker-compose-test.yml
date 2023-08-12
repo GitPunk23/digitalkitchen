@@ -1,7 +1,7 @@
 version: '3'
 services:
   frontend:
-    build: ./frontend/
+    build: ./frontend/Dockerfile.test
     ports:
       - "0.0.0.0:4040:8080"  # Map host port 8080 to container port 3000
     networks:
@@ -9,7 +9,7 @@ services:
     container_name: digitalkitchen-frontend-test
 
   backend:
-    build: ./backend/
+    build: ./backend/Dockerfile.test
     ports:
       - "4000:8000"  # Map host port 8000 to container port 80
     networks:
@@ -17,7 +17,7 @@ services:
     container_name: digitalkitchen-backend-test
 
 networks:
-  digitalkitchen-network:
+  digitalkitchen-network-test:
     driver: bridge
     driver_opts:
       com.docker.network.enable_ipv6: "false"  # Disable IPv6 to use only IPv4
