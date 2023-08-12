@@ -7,6 +7,7 @@ services:
     networks:
       - digitalkitchen-network  # Attach frontend service to the custom network
     container_name: digitalkitchen-frontend
+    image: digitalkitchen-frontend
 
   backend:
     build: ./backend/
@@ -15,6 +16,7 @@ services:
     networks:
       - digitalkitchen-network  # Attach frontend service to the custom network
     container_name: digitalkitchen-backend
+    image: digitalkitchen-backend
 
 networks:
   digitalkitchen-network:

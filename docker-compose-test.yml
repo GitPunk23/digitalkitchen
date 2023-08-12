@@ -1,22 +1,22 @@
 version: '3'
 services:
-  frontend:
+  frontend-test:
     build:
       context: ./frontend
       dockerfile: Dockerfile.test  
     ports:
-      - "0.0.0.0:4040:8080"  # Map host port 8080 to container port 3000
+      - "0.0.0.0:4040:4040"  # Map host port 8080 to container port 3000
     networks:
       - digitalkitchen-network-test  # Attach frontend service to the custom network
     container_name: digitalkitchen-frontend-test
     image: digitalkitchen-frontend-test
 
-  backend:
+  backend-test:
     build: 
       context: ./backend
       dockerfile: Dockerfile.test
     ports:
-      - "4000:8000"  # Map host port 8000 to container port 80
+      - "4000:4000"  # Map host port 8000 to container port 80
     networks:
       - digitalkitchen-network-test  # Attach frontend service to the custom network
     container_name: digitalkitchen-backend-test

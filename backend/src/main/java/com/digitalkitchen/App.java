@@ -18,6 +18,7 @@ public class App implements CommandLineRunner
     public static void main( String[] args )
     {
         SpringApplication.run(App.class, args);
+	System.out.println("Loaded properties: " + System.getProperty("spring.config.location"));
     }
 
     @Override
