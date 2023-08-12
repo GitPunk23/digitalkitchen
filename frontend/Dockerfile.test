@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Build the application for production
-RUN npm run test
+RUN npm run build:test
 
 # Install a production-ready server (e.g., Nginx)
 # For simplicity, we'll use a basic HTTP server provided by http-server
