@@ -9,6 +9,7 @@ services:
     networks:
       - digitalkitchen-network-test  # Attach frontend service to the custom network
     container_name: digitalkitchen-frontend-test
+    image: digitalkitchen-frontend-test
 
   backend:
     build: 
@@ -19,6 +20,7 @@ services:
     networks:
       - digitalkitchen-network-test  # Attach frontend service to the custom network
     container_name: digitalkitchen-backend-test
+    image: digitalkitchen-backend-test
 
 networks:
   digitalkitchen-network-test:
