@@ -15,6 +15,25 @@ class RecipeDisplay extends Component {
     this.setState({ isEditing: true });
   };
 
+  handleDelete = async (e) => {
+	e.preventDefault();
+	const { formData } = this.state;
+	
+	try {
+		const response = await fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/recipes/delete`, {
+		  method: 'POST',
+		  headers: {
+			'Content-Type': 'application/json',
+		  },
+		  body: JSON.stringify(formData.id),
+		});
+	
+	  } catch (error) {
+		console.log(error)
+	  }
+	window.location.reload(true);
+  };
+
   handleSubmit = async (e) => {
     e.preventDefault();
     const { formData } = this.state;
@@ -211,72 +230,72 @@ class RecipeDisplay extends Component {
           </Form>
         ) : (
           <div>
-          <p>
-            <strong>Name:</strong> {formData.name}
-          </p>
-          <p>
-            <strong>Author:</strong> {formData.author}
-          </p>
-          <p>
-            <strong>Category:</strong> {formData.category}
-          </p>
-          <p>
-            <strong>Description:</strong> {formData.description}
-          </p>
-          <p>
-            <strong>Servings:</strong> {formData.servings}
-          </p>
-          <p>
-            <strong>Calories per Serving:</strong> {formData.caloriesPerServing}
-          </p>
-          <p>
-            <strong>Notes:</strong> {formData.notes}
-          </p>
+            <p>
+              <strong>Name:</strong> {formData.name}
+            </p>
+            <p>
+              <strong>Author:</strong> {formData.author}
+            </p>
+            <p>
+              <strong>Category:</strong> {formData.category}
+            </p>
+            <p>
+              <strong>Description:</strong> {formData.description}
+            </p>
+            <p>
+              <strong>Servings:</strong> {formData.servings}
+            </p>
+            <p>
+              <strong>Calories per Serving:</strong> {formData.caloriesPerServing}
+            </p>
+            <p>
+              <strong>Notes:</strong> {formData.notes}
+            </p>
 
-          <div>
-            <strong>Ingredients:</strong>
-            <Table striped bordered>
-              <thead>
-                <tr>
-                  <th>Ingredient</th>
-                  <th>Quantity</th>
-                  <th>Measurement</th>
-                  <th>Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(formData.ingredients || []).map((ingredient, index) => (
-                  <tr key={index}>
-                    <td>{ingredient.ingredient}</td>
-                    <td>{ingredient.quantity}</td>
-                    <td>{ingredient.measurement}</td>
-                    <td>{ingredient.notes}</td>
+            <div>
+              <strong>Ingredients:</strong>
+              <Table striped bordered>
+                <thead>
+                  <tr>
+                    <th>Ingredient</th>
+                    <th>Quantity</th>
+                    <th>Measurement</th>
+                    <th>Notes</th>
                   </tr>
+                </thead>
+                <tbody>
+                  {(formData.ingredients || []).map((ingredient, index) => (
+                    <tr key={index}>
+                      <td>{ingredient.ingredient}</td>
+                      <td>{ingredient.quantity}</td>
+                      <td>{ingredient.measurement}</td>
+                      <td>{ingredient.notes}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </div>
+
+            <div>
+              <strong>Steps:</strong>
+              <ol>
+                {(formData.steps || []).map((step, index) => (
+                  <li key={index}>
+                    {`${step.description}`}
+                  </li>
                 ))}
-              </tbody>
-            </Table>
-          </div>
+              </ol>
+            </div>
 
-          <div>
-            <strong>Steps:</strong>
-            <ol>
-              {(formData.steps || []).map((step, index) => (
-                <li key={index}>
-                  {`${step.description}`}
-                </li>
-              ))}
-            </ol>
+            <div>
+              <strong>Tags:</strong>
+              <ul>
+                {(formData.tags || []).map((tag, index) => (
+                  <li key={index}>{tag}</li>
+                ))}
+              </ul>
           </div>
-
-          <div>
-            <strong>Tags:</strong>
-            <ul>
-              {(formData.tags || []).map((tag, index) => (
-                <li key={index}>{tag}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
+      </div>
       )}
           
         {!isEditing && (
@@ -284,6 +303,10 @@ class RecipeDisplay extends Component {
             Edit
           </Button>
         )}
+        <Button variant="secondary" onClick={this.handleDelete}>
+          Delete
+        </Button>
+
       </div>
     );
   }
