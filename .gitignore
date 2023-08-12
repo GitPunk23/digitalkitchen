@@ -7,4 +7,6 @@ backend/archive/
 backend/*.jar
 backend/certs/
 build/
+frontend/node_modules/
+frontend/.env*
 
