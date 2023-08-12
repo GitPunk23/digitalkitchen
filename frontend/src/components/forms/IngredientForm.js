@@ -15,7 +15,7 @@ const IngredientForm = ({ formData, setFormData }) => {
   useEffect(() => {
     // Fetch measurements from the backend
     axios
-      .get(`http://192.168.1.136:8000/digitalkitchen/form/measurements`)
+      .get(`${process.env.REACT_APP_BACKEND}/digitalkitchen/form/measurements`)
       .then((response) => {
         setMeasurements(response.data);
       })
