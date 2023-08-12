@@ -25,7 +25,7 @@ const SearchBar = ({ setResults }) => {
 
   //Category List
   useEffect(() => {
-    fetch('http://localhost:8080/digitalkitchen/form/categories')
+    fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/form/categories`)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -43,7 +43,7 @@ const SearchBar = ({ setResults }) => {
 
   //Author List
   useEffect(() => {
-    fetch('http://localhost:8080/digitalkitchen/form/authors')
+    fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/form/authors`)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -61,7 +61,7 @@ const SearchBar = ({ setResults }) => {
 
   //Tag suggestions
   useEffect(() => {
-    fetch('http://localhost:8080/digitalkitchen/form/tags')
+    fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/form/tags`)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -79,7 +79,7 @@ const SearchBar = ({ setResults }) => {
   
   //Ingredients suggestions
   useEffect(() => {
-    fetch('http://localhost:8080/digitalkitchen/form/ingredients')
+    fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/form/ingredients`)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -209,7 +209,7 @@ const SearchBar = ({ setResults }) => {
     console.log("Searching for: ",searchCriteria);
 
     try {
-        const response = await fetch('http://digitalkitchen-backend:8080/digitalkitchen/search', {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/search`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
