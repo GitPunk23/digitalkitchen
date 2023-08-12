@@ -14,7 +14,7 @@ const RecipeForm = ({ onNextStep, formData, setFormData }) => {
   const [authorSuggestions, setAuthorSuggestions] = useState([]);
 
   useEffect(() => {
-    fetch(`http://192.168.1.136:8000/digitalkitchen/form/categories`)
+    fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/form/categories`)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -32,7 +32,7 @@ const RecipeForm = ({ onNextStep, formData, setFormData }) => {
 
   //Author List
   useEffect(() => {
-    fetch(`http://192.168.1.136:8000/digitalkitchen/form/authors`)
+    fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/form/authors`)
       .then((response) => {
         if (response.ok) {
           return response.json();
