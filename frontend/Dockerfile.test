@@ -14,15 +14,15 @@ RUN npm install
 COPY . .
 
 # Build the application for production
-RUN npm run build
+RUN npm run build:test
 
 # Install a production-ready server (e.g., Nginx)
 # For simplicity, we'll use a basic HTTP server provided by http-server
 RUN npm install -g http-server
 
 # Expose port 8080 (or any other port you wish to use)
-EXPOSE 8080
+EXPOSE 4040
 
-# Start the application using the production-ready server
-CMD ["http-server", "build", "-a", "0.0.0.0"]
+CMD ["http-server", "build", "-a", "0.0.0.0", "-p", "4040"]
+
 
