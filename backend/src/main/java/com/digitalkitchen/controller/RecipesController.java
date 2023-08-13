@@ -1,8 +1,6 @@
 package com.digitalkitchen.controller;
 
 import java.util.Map;
-
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.digitalkitchen.service.RecipesEndpointService;
 import com.digitalkitchen.service.RecipesService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -72,6 +69,17 @@ public class RecipesController {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             return new ResponseEntity<>(jsonResponse, headers, response.getStatusCode());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "/delete", produces = "application/json")
+    public ResponseEntity<?> deleteRecipe(@RequestBody int recipeID) throws Exception {
+        try {
+            recipesService.deleteRecipeById(recipeID);
+            System.out.println("Successfully removed recipe " + recipeID);
+            return ResponseEntity.ok().body("Successfully removed recipe " + recipeID);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
