@@ -16,7 +16,7 @@ const MultiStepForm = ({ renderRecordResponse }) => {
 	ingredients : [],
 	steps : [], 
 	tags: [] });
-	let toAddMoreRecipes = false;
+	const [toAddMoreRecipes, setMoreRecipes] = useState(false);
 	const [record, setRecord] = useState("");
 	const [isFormValid, setIsFormValid] = useState(false);
 
@@ -31,7 +31,9 @@ const MultiStepForm = ({ renderRecordResponse }) => {
 		validateForm();
 	};
 
-	const handleCheckboxChange = (e) => { toAddMoreRecipes = e.target.checked; }
+	const handleCheckboxChange = (e) => { 
+		setMoreRecipes(e.target.checked); 
+		console.log(toAddMoreRecipes)}
 
 	const validateForm = () => {
 		const isValid =
@@ -69,7 +71,7 @@ const MultiStepForm = ({ renderRecordResponse }) => {
 			if (response.status === 201) {
 				console.log('record created: ',json);
 				if (toAddMoreRecipes) {
-					window.location.reload();
+					window.location.reload(true);
 				} else {
 					renderRecordResponse(json);
 				}
@@ -147,7 +149,7 @@ const MultiStepForm = ({ renderRecordResponse }) => {
 					type="checkbox"
 					id="moreRecipesCheckbox"
 					label="I have more recipes"
-					onClick={() => handleCheckboxChange(event)}
+					onClick={(event) => handleCheckboxChange(event)}
 					/>
 				</Form.Group>
 				<Button 
