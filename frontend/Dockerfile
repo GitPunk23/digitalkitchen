@@ -24,5 +24,4 @@ RUN npm install -g http-server
 EXPOSE 8080
 
 # Start the application using the production-ready server
-CMD ["http-server", "build", "-a", "0.0.0.0"]
-
+CMD ["http-server", "build", "-a", "0.0.0.0", "--proxy", "http://localhost:8080?"]
