@@ -23,6 +23,6 @@ RUN npm install -g http-server
 # Expose port 8080 (or any other port you wish to use)
 EXPOSE 4040
 
-CMD ["http-server", "build", "-a", "0.0.0.0", "-p", "4040"]
+CMD ["http-server", "build", "-a", "0.0.0.0", "-p", "4040", "-s", "--proxy", "http://localhost:4040?"]
 
 
