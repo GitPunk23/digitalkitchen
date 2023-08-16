@@ -7,7 +7,7 @@ import Navbar from './components/navbar'
 
 function App() {
   return (
-    <Router basename="/digitalkitchen">
+    <Router>
       <Navbar/>
       <Routes>
         <Route path="/" >
