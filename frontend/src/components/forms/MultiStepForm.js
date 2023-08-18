@@ -51,8 +51,6 @@ const MultiStepForm = ({ renderRecordResponse }) => {
 			formData.steps !== undefined &&
 			formData.steps.length > 0;
 		setIsFormValid(isValid);
-		console.log(isValid);
-		console.log(formData)
 	};
 
 	const handleMasterSubmit = async () => {

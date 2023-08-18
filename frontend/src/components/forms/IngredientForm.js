@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
-import axios from 'axios';
+import AutosuggestTextBox from './form-components/AutosuggestTextBox';
 
 const IngredientForm = ({ formData, setFormData }) => {
 	const [ingredients, setIngredients] = useState(formData?.ingredients || []);
@@ -11,6 +11,27 @@ const IngredientForm = ({ formData, setFormData }) => {
 	const [measurement, setMeasurement] = useState('');
 	const [notes, setNotes] = useState('');
 	const [measurements, setMeasurements] = useState([]);
+	const [ingredientsSuggestionsList, setIngredientsSuggestionsList] = useState([]);
+	const [ingredientSuggestionsLoaded, setIngredientSuggestionsLoaded] = useState(false);
+	const [measurementsLoaded, setmeasurementsLoaded] = useState(false);
+	const [backendDataLoaded, setBackendDataLoaded] = useState(false);	
+
+	useEffect(() => {
+		fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/form/ingredients`)
+		.then((response) => {
+			if (response.ok) {
+				return response.json();
+			} else {
+				throw new Error('Error retrieving ingredients');
+			}
+		})
+		.then((data) => {
+			setIngredientsSuggestionsList(data);
+		})
+		.catch((error) => {
+			console.log(error);
+		});
+	}, []);
 
 	useEffect(() => {
 		fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/form/measurements`)
@@ -22,6 +43,20 @@ const IngredientForm = ({ formData, setFormData }) => {
 		.then((data) => { setMeasurements(data);})
 		.catch((error) => { console.error('Fetch error:', error); });
 	}, []);
+
+	useEffect(() => {
+		setIngredientSuggestionsLoaded(ingredientsSuggestionsList.length > 0);
+		setmeasurementsLoaded(measurements.length > 0);
+	})
+
+	useEffect(() => {
+		setBackendDataLoaded(ingredientSuggestionsLoaded && 
+							measurementsLoaded);
+	})
+
+	const handleKeyDown_Ingredient = (newString) => {
+		setIngredient(newString)
+	}
 		
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -83,12 +118,17 @@ const IngredientForm = ({ formData, setFormData }) => {
 					<tbody>
 						<tr>
 							<td>
-								<Form.Control
-									type="text"
-									value={ingredient}
-									onChange={(e) => setIngredient(e.target.value)}
-									required
-								/>
+								{/*<Form.Control
+									//type="text"
+									//value={ingredient}
+									//onChange={(e) => setIngredient(e.target.value)}
+									//required
+								/>*/}
+								{ingredientsSuggestionsList.length > 0 &&
+									backendDataLoaded &&
+									<AutosuggestTextBox 
+										data={ingredientsSuggestionsList} 
+										onValueChange={handleKeyDown_Ingredient}/>}
 							</td>
 							<td>
 								<Form.Control
