@@ -18,16 +18,12 @@ const TagsForm = ({ formData, setFormData }) => {
 			})
 	}, []);
 
-	const onClick = (e) => {
+	const returnSuggestion = (suggestion) => {
 		setFormData((prevFormData) => ({
 			...prevFormData,
-			tags: [...prevFormData.tags, e],
+			tags: [...prevFormData.tags, suggestion],
 		}));
 		setInputValue('');
-	}
-
-	const returnSuggestion = (suggestion) => {
-		console.log(suggestion);
 	}
 
     const handleInputChange = (e) => {
@@ -60,13 +56,6 @@ const TagsForm = ({ formData, setFormData }) => {
 			<h2>Add Tags</h2>
 			<Form>
 				<Form.Group className="mb-3">
-					{/*<Form.Control
-					type="text"
-					placeholder="Enter tags separated by commas"
-					value={inputValue}
-					onChange={handleInputChange}
-					onKeyDown={handleSubmitKeyDown}
-	/>*/}
 					{tagsSuggestions.length > 0 &&
 						<AutosuggestTextBox 
 							data={tagsSuggestions} 
@@ -74,7 +63,7 @@ const TagsForm = ({ formData, setFormData }) => {
 							setValue={setInputValue}
 							onValueChange={setInputValue}
 							onKeyDown={handleSubmitKeyDown}
-							returnSuggestion={onClick}
+							returnSuggestion={returnSuggestion}
 							placeholder={"Enter tags separated by commas"}/>}
 				</Form.Group>
 			</Form>

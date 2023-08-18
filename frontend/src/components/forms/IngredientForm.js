@@ -48,11 +48,11 @@ const IngredientForm = ({ formData, setFormData }) => {
 			ingredients,
 		}));
 	}, [ingredients, setFormData]);
-
-	const handleKeyDown_Ingredient = (newString) => {
-		setIngredient(newString)
-	}
 		
+	const returnSuggestion = (suggestion) => {
+		setIngredient(suggestion);
+	}
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const newIngredient = {
@@ -106,17 +106,14 @@ const IngredientForm = ({ formData, setFormData }) => {
 					<tbody>
 						<tr>
 							<td>
-								{/*<Form.Control
-									//type="text"
-									//value={ingredient}
-									//onChange={(e) => setIngredient(e.target.value)}
-									//required
-								/>*/}
 								{ingredientsSuggestionsList.length > 0 &&
 									backendDataLoaded &&
 									<AutosuggestTextBox 
 										data={ingredientsSuggestionsList} 
-										onValueChange={handleKeyDown_Ingredient}/>}
+										value={ingredient}
+										setValue={setIngredient}
+										returnSuggestion={returnSuggestion}
+									/>}
 							</td>
 							<td>
 								<Form.Control
