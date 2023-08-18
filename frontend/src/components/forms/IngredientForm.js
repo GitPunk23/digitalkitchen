@@ -3,6 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import AutosuggestTextBox from './form-components/AutosuggestTextBox';
+import FetchManager from '../util/FetchManager';
 
 const IngredientForm = ({ formData, setFormData }) => {
 	const [ingredients, setIngredients] = useState(formData?.ingredients || []);
@@ -17,42 +18,36 @@ const IngredientForm = ({ formData, setFormData }) => {
 	const [backendDataLoaded, setBackendDataLoaded] = useState(false);	
 
 	useEffect(() => {
-		fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/form/ingredients`)
-		.then((response) => {
-			if (response.ok) {
-				return response.json();
-			} else {
-				throw new Error('Error retrieving ingredients');
-			}
-		})
-		.then((data) => {
-			setIngredientsSuggestionsList(data);
-		})
-		.catch((error) => {
-			console.log(error);
-		});
-	}, []);
+		FetchManager.fetchFormIngredientsList()
+			.then((data) => {
+				setIngredientsSuggestionsList(data);
+			})
+			.catch((error) => {
+				console.log(error);
+			})
 
-	useEffect(() => {
-		fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/form/measurements`)
-		.then((response) => {
-			if (!response.ok) {
-				throw new Error('Network response was not ok');
-			}
-			return response.json(); })
-		.then((data) => { setMeasurements(data);})
-		.catch((error) => { console.error('Fetch error:', error); });
+		FetchManager.fetchFormMeasurementsList()
+			.then((data) => {
+				setMeasurements(data)
+			})
+			.catch((error) => {
+				console.log(error);
+			})
 	}, []);
 
 	useEffect(() => {
 		setIngredientSuggestionsLoaded(ingredientsSuggestionsList.length > 0);
 		setmeasurementsLoaded(measurements.length > 0);
-	})
-
-	useEffect(() => {
 		setBackendDataLoaded(ingredientSuggestionsLoaded && 
 							measurementsLoaded);
-	})
+	});
+
+	useEffect(() => {
+		setFormData((prevFormData) => ({
+			...prevFormData,
+			ingredients,
+		}));
+	}, [ingredients, setFormData]);
 
 	const handleKeyDown_Ingredient = (newString) => {
 		setIngredient(newString)
@@ -93,13 +88,6 @@ const IngredientForm = ({ formData, setFormData }) => {
 			return updatedIngredients;
 		});
 	};
-
-	useEffect(() => {
-		setFormData((prevFormData) => ({
-			...prevFormData,
-			ingredients,
-		}));
-	}, [ingredients, setFormData]);
 
 	return (
 		<div>
