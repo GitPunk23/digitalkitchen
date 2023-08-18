@@ -17,7 +17,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/recipes")
-@CrossOrigin(origins = "http://localhost:3000")
 public class RecipesController {
 
     @Autowired
@@ -28,7 +27,6 @@ public class RecipesController {
     //GET requests
 
     @GetMapping("/status")
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<?> status() {
         //Return 202
         return ResponseEntity.accepted().build();
@@ -37,7 +35,6 @@ public class RecipesController {
     //POST requests
 
     @PostMapping(value = "/createRecipe", produces = "application/json")
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<?> createRecipe(@RequestBody Map<String, Object> body) throws Exception {
         try {
             ResponseEntity<?> response = endpointService.initalizeRecipe(body);
@@ -56,7 +53,6 @@ public class RecipesController {
     }
 
     @PostMapping(value = "/update", produces = "application/json")
-    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<?> updateRecipe(@RequestBody Map<String, Object> body) throws Exception {
         try {
             ResponseEntity<?> response = endpointService.updateRecipe(body);

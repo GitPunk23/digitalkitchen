@@ -13,7 +13,7 @@ function HomePage() {
   	const handleGroceryList = () => {};
   	const getServerStatus = async () => {
 		try {
-			const response = await fetch(`${process.env.REACT_APP_BACKEND}/recipes/status/`);
+			const response = await fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/recipes/status`);
 			const status = response.status;
 			return status === 202;
 		} catch (error) {
@@ -24,15 +24,23 @@ function HomePage() {
   	const enableButtons = () => { setButtonsEnabled(true); };
   	const disableButtons = () => { setButtonsEnabled(false); };
 
-	// For checking server status
+	useEffect(() => {
+		const checkServerStatus = async () => {
+			try {
+				setButtonsEnabled(await getServerStatus());
+			} catch (error) {
+				console.error(error);
+				disableButtons();
+			}
+		};
+
+		checkServerStatus();
+	}, []);
+
+	// For checking server status 
 	useEffect(() => {
 		const intervalId = setInterval(async () => {
-			const isServerOnline = await getServerStatus();
-			if (!isServerOnline && buttonsEnabled) {
-				disableButtons();
-			} else if (isServerOnline && !buttonsEnabled) {
-				enableButtons();
-			}
+			setButtonsEnabled(await getServerStatus());
 		}, 60000);
 
 		// Clear the interval when the component unmounts
@@ -45,6 +53,7 @@ function HomePage() {
 	return (
 		<div className="home-page">
 			<h1 className="title">Digital Kitchen</h1>
+			{!buttonsEnabled && renderTooltip()}
 			<Container className="button-container">
 				<Row>
 					<Col>
@@ -53,7 +62,7 @@ function HomePage() {
 							size="lg"
 							className={`${buttonClassName} create-recipe-button`}
 							onClick={handleCreateRecipe}
-							disabled={buttonsEnabled}
+							disabled={!buttonsEnabled}
 						>
 							Create a Recipe
 						</Button>
@@ -66,7 +75,7 @@ function HomePage() {
 							size="lg"
 							className={`${buttonClassName} browse-recipes-button`}
 							onClick={handleBrowseRecipes}
-							disabled={buttonsEnabled}
+							disabled={!buttonsEnabled}
 						>
 							Browse Recipes
 						</Button>
