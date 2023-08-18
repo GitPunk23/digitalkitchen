@@ -1,11 +1,11 @@
 import { useState } from "react";
 
-const AutosuggestTextBox = ({ data, onValueChange }) => {
+const AutosuggestTextBox = ({ data, value, setValue, onValueChange, onKeyDown, placeholder, returnSuggestion }) => {
     
 	const [suggestions, setSuggestions] = useState([]);
 	const [suggestionIndex, setSuggestionIndex] = useState(0);
 	const [suggestionsActive, setSuggestionsActive] = useState(false);
-	const [value, setValue] = useState("");
+	//const [value, setValue] = useState("");
 
 	const handleChange = (e) => {
 		const query = e.target.value.toLowerCase();
@@ -30,6 +30,7 @@ const AutosuggestTextBox = ({ data, onValueChange }) => {
 		setSuggestions([]);
 		setValue(e.target.innerText);
 		setSuggestionsActive(false);
+		returnSuggestion(e.target.innerText);
 	};
 
 	const handleKeyDown = (e) => {
@@ -53,23 +54,27 @@ const AutosuggestTextBox = ({ data, onValueChange }) => {
 		setSuggestionIndex(0);
 		setSuggestionsActive(false);
 		}
+		// PROPS
+		else if (onKeyDown) {
+			onKeyDown(e);
+		}
 	};
 
 	const Suggestions = () => {
 		return (
-		<ul className="suggestions">
-			{suggestions.map((suggestion, index) => {
-			return (
-				<li
-				className={index === suggestionIndex ? "active" : ""}
-				key={index}
-				onClick={handleClick}
-				>
-				{suggestion}
-				</li>
-			);
-			})}
-		</ul>
+			<ul className="suggestions">
+				{suggestions.map((suggestion, index) => {
+					return (
+						<li
+							className={index === suggestionIndex ? "active" : ""}
+							key={index}
+							onClick={handleClick}
+						>
+							{suggestion}
+						</li>
+					);
+				})}
+			</ul>
 		);
 	};
 
@@ -80,6 +85,7 @@ const AutosuggestTextBox = ({ data, onValueChange }) => {
 			value={value}
 			onChange={handleChange}
 			onKeyDown={handleKeyDown}
+			placeholder={placeholder}
 		/>
 		{suggestionsActive && <Suggestions />}
 		</div>
