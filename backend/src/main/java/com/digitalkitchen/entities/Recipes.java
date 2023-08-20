@@ -49,8 +49,7 @@ public class Recipes {
 
     @Column(
             name = "name",
-            nullable = false,
-            unique = true)
+            nullable = false)
     private String name;
 
     @Column(

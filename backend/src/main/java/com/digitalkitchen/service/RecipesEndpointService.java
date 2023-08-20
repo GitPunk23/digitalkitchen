@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.digitalkitchen.controller.request.transferobjects.RecipeTransferObject;
 import com.digitalkitchen.entities.Category;
 import com.digitalkitchen.entities.Ingredients;
 import com.digitalkitchen.entities.Measurements;
@@ -151,20 +150,18 @@ public class RecipesEndpointService {
         }
     }
     
-    public ResponseEntity<?> initalizeRecipe(Map<String, Object> body) throws Exception {
+    public ResponseEntity<?> initalizeRecipe(Map<String, Object> body, boolean force) throws Exception {
         //Recipe creation
         Recipes recipe = createRecipeFromMap((Map<String, Object>) body.get("recipe"));
 
         try {
-
             //Check if recipe is already in the database
             Optional<Recipes> optional = recipesService.getRecipeByName(recipe.getName());
-            if (optional.isPresent()) {
+            if (optional.isPresent() && force) {
                 recipe = recipesService.getExpandedRecipe(optional.get());
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(recipesService.createTransferObject(recipe));
-            } else {
-                recipe = recipesService.addRecipe(recipe);
-            }
+            } 
+            recipe = recipesService.addRecipe(recipe);
         
             // RecipeIngredients List
             List<RecipeIngredients> recipeIngredients = createRecipeIngredientsListFromMap((List<Map<String, Object>>) body.get("ingredients"), recipe);

@@ -35,6 +35,10 @@ const MultiStepForm = ({ renderRecordResponse }) => {
 		setMoreRecipes(e.target.checked); 
 		console.log(toAddMoreRecipes)}
 
+	const closeAlert = () => {
+		setShowDuplicateAlert(false);
+	}
+
 	const validateForm = () => {
 		const isValid =
 			formData.recipe.name !== null  && 
@@ -160,7 +164,10 @@ const MultiStepForm = ({ renderRecordResponse }) => {
 			</Row>
 			{showDuplicateAlert && (<DuplicateRecordAlert 
 				renderRecordResponse={renderRecordResponse} 
+				submit={handleMasterSubmit}
+				close={closeAlert}
 				record={record}/> )}
+				
 		</Row>
 	);
 };
