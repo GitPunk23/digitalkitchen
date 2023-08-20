@@ -1,6 +1,6 @@
 {
-  "name": "digital-kitchen",
-  "version": "0.1.0",
+  "name": "digitalkitchen-frontend",
+  "version": "0.5.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
@@ -11,6 +11,7 @@
     "eslint-plugin-react": "^7.32.2",
     "path-browserify": "^1.0.1",
     "react": "^18.2.0",
+    "react-autosuggest": "^10.1.0",
     "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.11.1",
