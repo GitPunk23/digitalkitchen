@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
-import axios from 'axios';
+import AutosuggestTextBox from './form-components/AutosuggestTextBox';
+import FetchManager from '../util/FetchManager';
 
 const IngredientForm = ({ formData, setFormData }) => {
 	const [ingredients, setIngredients] = useState(formData?.ingredients || []);
@@ -11,18 +12,47 @@ const IngredientForm = ({ formData, setFormData }) => {
 	const [measurement, setMeasurement] = useState('');
 	const [notes, setNotes] = useState('');
 	const [measurements, setMeasurements] = useState([]);
+	const [ingredientsSuggestionsList, setIngredientsSuggestionsList] = useState([]);
+	const [ingredientSuggestionsLoaded, setIngredientSuggestionsLoaded] = useState(false);
+	const [measurementsLoaded, setmeasurementsLoaded] = useState(false);
+	const [backendDataLoaded, setBackendDataLoaded] = useState(false);	
 
 	useEffect(() => {
-		fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/form/measurements`)
-		.then((response) => {
-			if (!response.ok) {
-				throw new Error('Network response was not ok');
-			}
-			return response.json(); })
-		.then((data) => { setMeasurements(data);})
-		.catch((error) => { console.error('Fetch error:', error); });
+		FetchManager.fetchFormIngredientsList()
+			.then((data) => {
+				setIngredientsSuggestionsList(data);
+			})
+			.catch((error) => {
+				console.log(error);
+			})
+
+		FetchManager.fetchFormMeasurementsList()
+			.then((data) => {
+				setMeasurements(data)
+			})
+			.catch((error) => {
+				console.log(error);
+			})
 	}, []);
+
+	useEffect(() => {
+		setIngredientSuggestionsLoaded(ingredientsSuggestionsList.length > 0);
+		setmeasurementsLoaded(measurements.length > 0);
+		setBackendDataLoaded(ingredientSuggestionsLoaded && 
+							measurementsLoaded);
+	});
+
+	useEffect(() => {
+		setFormData((prevFormData) => ({
+			...prevFormData,
+			ingredients,
+		}));
+	}, [ingredients, setFormData]);
 		
+	const returnSuggestion = (suggestion) => {
+		setIngredient(suggestion);
+	}
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const newIngredient = {
@@ -59,13 +89,6 @@ const IngredientForm = ({ formData, setFormData }) => {
 		});
 	};
 
-	useEffect(() => {
-		setFormData((prevFormData) => ({
-			...prevFormData,
-			ingredients,
-		}));
-	}, [ingredients, setFormData]);
-
 	return (
 		<div>
 			<h2>Add Ingredients</h2>
@@ -83,12 +106,14 @@ const IngredientForm = ({ formData, setFormData }) => {
 					<tbody>
 						<tr>
 							<td>
-								<Form.Control
-									type="text"
-									value={ingredient}
-									onChange={(e) => setIngredient(e.target.value)}
-									required
-								/>
+								{ingredientsSuggestionsList.length > 0 &&
+									backendDataLoaded &&
+									<AutosuggestTextBox 
+										data={ingredientsSuggestionsList} 
+										value={ingredient}
+										setValue={setIngredient}
+										returnSuggestion={returnSuggestion}
+									/>}
 							</td>
 							<td>
 								<Form.Control

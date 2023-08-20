@@ -1,15 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import FetchManager from '../util/FetchManager';
+import AutosuggestTextBox from './form-components/AutosuggestTextBox';
 
 const TagsForm = ({ formData, setFormData }) => {
     const [inputValue, setInputValue] = useState('');
+	const [tagsSuggestions, setTagsSuggestions] = useState([]);
+
+	useEffect(() => {
+		FetchManager.fetchFormTagsList()
+			.then((data) => {
+				setTagsSuggestions(data);
+			})
+			.catch((error) => {
+				console.log(error);
+			})
+	}, []);
+
+	const returnSuggestion = (suggestion) => {
+		setFormData((prevFormData) => ({
+			...prevFormData,
+			tags: [...prevFormData.tags, suggestion],
+		}));
+		setInputValue('');
+	}
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
     };
 
-    const handleInputKeyDown = (e) => {
+    const handleSubmitKeyDown = (e) => {
     	if (e.key === 'Enter' || e.key === ',') {
       		e.preventDefault();
       		const tag = inputValue.trim();
@@ -19,6 +40,7 @@ const TagsForm = ({ formData, setFormData }) => {
           		tags: [...prevFormData.tags, tag],
         		}));
         		setInputValue('');
+				return true //for autosuggest text box
       		}
    		}
   	};
@@ -35,13 +57,15 @@ const TagsForm = ({ formData, setFormData }) => {
 			<h2>Add Tags</h2>
 			<Form>
 				<Form.Group className="mb-3">
-					<Form.Control
-					type="text"
-					placeholder="Enter tags separated by commas"
-					value={inputValue}
-					onChange={handleInputChange}
-					onKeyDown={handleInputKeyDown}
-					/>
+					{tagsSuggestions.length > 0 &&
+						<AutosuggestTextBox 
+							data={tagsSuggestions} 
+							value={inputValue}
+							setValue={setInputValue}
+							onValueChange={setInputValue}
+							onSubmitKeyDown={handleSubmitKeyDown}
+							returnSuggestion={returnSuggestion}
+							placeholder={"Enter tags separated by commas"}/>}
 				</Form.Group>
 			</Form>
 			<div>

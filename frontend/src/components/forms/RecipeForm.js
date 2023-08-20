@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 //import '../../styles/RecipeForm.css';
+import FetchManager from '../util/FetchManager';
 
 const RecipeForm = ({ onNextStep, formData, setFormData }) => {
     const [name, setName] = useState(formData?.recipe?.name || '');
@@ -14,29 +15,21 @@ const RecipeForm = ({ onNextStep, formData, setFormData }) => {
     const [authorSuggestions, setAuthorSuggestions] = useState([]);
 
   	useEffect(() => {
-		fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/form/categories`)
-		.then((response) => {
-			if (response.ok) {
-				return response.json();
-			} else {
-				throw new Error('Error retrieving categories');
-			}})
-		.then((data) => { setCategories(data); })
-		.catch((error) => { console.log(error); });
-    }, []);
+		FetchManager.fetchFormCategoriesList()
+			.then((data) => {
+				setCategories(data);
+			})
+			.catch((error) => {
+				console.log(error);
+			})
 
-    useEffect(() => {
-      	fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/form/authors`)
-        .then((response) => {
-          	if (response.ok) {
-            	return response.json();
-          	} else {
-           	 	throw new Error('Error retrieving authors');
-          	}})
-        .then((data) => {
-          	setAuthorSuggestions(data); })
-        .catch((error) => {
-          	console.log(error); });
+		FetchManager.fetchFormAuthorsList()
+			.then((data) => {
+				setAuthorSuggestions(data);
+			})
+			.catch((error) => {
+				console.log(error);
+			})
     }, []);
 
     useEffect(() => {
