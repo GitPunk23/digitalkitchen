@@ -40,6 +40,7 @@ const TagsForm = ({ formData, setFormData }) => {
           		tags: [...prevFormData.tags, tag],
         		}));
         		setInputValue('');
+				return true //for autosuggest text box
       		}
    		}
   	};
@@ -62,7 +63,7 @@ const TagsForm = ({ formData, setFormData }) => {
 							value={inputValue}
 							setValue={setInputValue}
 							onValueChange={setInputValue}
-							onKeyDown={handleSubmitKeyDown}
+							onSubmitKeyDown={handleSubmitKeyDown}
 							returnSuggestion={returnSuggestion}
 							placeholder={"Enter tags separated by commas"}/>}
 				</Form.Group>

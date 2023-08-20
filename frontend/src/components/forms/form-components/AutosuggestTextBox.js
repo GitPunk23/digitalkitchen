@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const AutosuggestTextBox = ({ data, value, setValue, onValueChange, onKeyDown, placeholder, returnSuggestion }) => {
+const AutosuggestTextBox = ({ data, value, setValue, onValueChange, onKeyDown, onSubmitKeyDown, placeholder, returnSuggestion }) => {
     
 	const [suggestions, setSuggestions] = useState([]);
 	const [suggestionIndex, setSuggestionIndex] = useState(0);
@@ -57,6 +57,11 @@ const AutosuggestTextBox = ({ data, value, setValue, onValueChange, onKeyDown, p
 		// PROPS
 		else if (onKeyDown) {
 			onKeyDown(e);
+		} else if (onSubmitKeyDown) {
+			if (onSubmitKeyDown(e)) {
+				setSuggestionIndex(0);
+				setSuggestionsActive(false);
+			}
 		}
 	};
 
