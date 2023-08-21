@@ -155,10 +155,10 @@ public class RecipesEndpointService {
         Recipes recipe = createRecipeFromMap((Map<String, Object>) body.get("recipe"));
 
         try {
-            //Check if recipe is already in the database
-            Optional<Recipes> optional = recipesService.getRecipeByName(recipe.getName());
-            if (optional.isPresent() && force) {
-                recipe = recipesService.getExpandedRecipe(optional.get());
+            if (!force) {
+                //Check if recipe is already in the database
+                List<Recipes> duplicates = recipesService.getRecipeByNameAndAuthor(recipe.getName(), recipe.getAuthor());
+                recipe = recipesService.getExpandedRecipe(duplicates.get(0)); //TODO: The frontend needs to be configured to take a list
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(recipesService.createTransferObject(recipe));
             } 
             recipe = recipesService.addRecipe(recipe);
