@@ -39,8 +39,8 @@ class SearchResultsDisplay extends React.Component {
 		return (
 			<div key={currentRecipeID}>
 				<Button onClick={this.handlePrevClick}>{'<'}</Button>
-				<DisplayPage data={recipes[currentRecipeID]} />
 				<Button onClick={this.handleNextClick}>{'>'}</Button>
+				<DisplayPage data={recipes[currentRecipeID]} />
 			</div>
 		);
 	}

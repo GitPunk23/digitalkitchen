@@ -15,6 +15,34 @@ class RecipeDisplay extends Component {
     	this.setState({ isEditing: true });
   	};
 
+	handleAddIngredient = () => {
+
+	}
+
+	handleDeleteIngredient = () => {
+
+	}
+
+	handleAddStep = () => {
+
+	}
+
+	handleMoveStep = () => {
+
+	}
+
+	handleDeleteStep = () => {
+		
+	}
+
+	handleAddTag = () => {
+
+	}
+
+	handleDeleteTag = () => {
+		
+	} 
+
   	handleDelete = async (e) => {
 		e.preventDefault();
 		const { formData } = this.state;
@@ -56,6 +84,10 @@ class RecipeDisplay extends Component {
       		console.log(error)
     	}
   	};
+
+	handleReset = (e) => {
+		this.isEditing = false;
+	}
 
   	handleChange = (e) => {
     	const { name, value } = e.target;
@@ -213,6 +245,9 @@ class RecipeDisplay extends Component {
 					<Button variant="primary" type="submit">
 						Save
 					</Button>
+					<Button variant="primary" onClick={this.handleReset}>
+						Cancel
+					</Button>
 				</Form>
 				) : (
 				<div>
@@ -288,7 +323,7 @@ class RecipeDisplay extends Component {
 					</Button>
 				)}
 				<Button variant="secondary" onClick={this.handleDelete}>
-					Delete
+					Delete Recipe
 				</Button>
       		</div>
     	);
