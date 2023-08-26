@@ -66,17 +66,16 @@ const MultiStepForm = ({ renderRecordResponse }) => {
 				},
 				body: JSON.stringify(formData),
 			});
+			console.log(response);
 			const json = await response.json();
 			setRecord(json);
 			if (response.status === 201) {
-				console.log('record created: ',json);
 				if (toAddMoreRecipes) {
 					window.location.reload(true);
 				} else {
 					renderRecordResponse(json);
 				}
 			} else if (response.status === 409) {
-				console.log('Duplicate record: ',json);
 				setShowDuplicateAlert(true);
 			}
 		} catch (error) {

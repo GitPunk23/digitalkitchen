@@ -17,7 +17,6 @@ const SearchResults = ({ results, switchDisplayView }) => {
 	}
 
 	const handleBackToTable = () => {
-		console.log("hi")
 		setCurrentRecipe(null);
 		setUseTableView(true);
 	}
