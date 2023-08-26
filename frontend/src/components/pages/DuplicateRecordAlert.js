@@ -7,15 +7,19 @@ class DuplicateRecordAlert extends React.Component {
 
 		const { renderRecordResponse } = this.props;
 		const { record } = this.props;
+		const { submit } = this.props;
+		const { close } = this.props;
 
-		const onClose = () => { window.location.reload(); }
-		const handleClick = () => { renderRecordResponse(record); }
+		const handleClick_ViewRecipe = () => { renderRecordResponse(record); }
+		const handleClick_SubmitAnyway = () => { submit() }
+		const handleClick_ResetForm = () => { window.location.reload(); }
+		const handleClick_Close = () => { close() }
 
 		return (
 			<>
 				<Modal 
 					show={true} 
-					onHide={onClose}
+					onHide={handleClick_Close}
 					backdrop="static"
 					style={{ zIndex:10000}}
 				>
@@ -31,10 +35,16 @@ class DuplicateRecordAlert extends React.Component {
 					}}>
 						<h3>Duplicate Record Found</h3>
 						<div>
-							<Button variant="primary" onClick={handleClick}>
+							<Button variant="primary" onClick={handleClick_ViewRecipe}>
 								View Recipe
 							</Button>
-							<Button variant="secondary" onClick={onClose}>
+							<Button variant="primary" onClick={handleClick_SubmitAnyway}>
+								Submit Anyway
+							</Button>
+							<Button variant="secondary" onClick={handleClick_ResetForm}>
+								Reset Form
+							</Button>
+							<Button variant="secondary" onClick={handleClick_Close}>
 								Close
 							</Button>
 						</div>

@@ -35,6 +35,10 @@ const MultiStepForm = ({ renderRecordResponse }) => {
 		setMoreRecipes(e.target.checked); 
 		console.log(toAddMoreRecipes)}
 
+	const closeAlert = () => {
+		setShowDuplicateAlert(false);
+	}
+
 	const validateForm = () => {
 		const isValid =
 			formData.recipe.name !== null  && 
@@ -54,8 +58,6 @@ const MultiStepForm = ({ renderRecordResponse }) => {
 	};
 
 	const handleMasterSubmit = async () => {
-		console.log('Submitted Data:', formData);
-
 		try {
 			const response = await fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/recipes/createRecipe`, {
 				method: 'POST',
@@ -77,6 +79,31 @@ const MultiStepForm = ({ renderRecordResponse }) => {
 				console.log('Duplicate record: ',json);
 				setShowDuplicateAlert(true);
 			}
+		} catch (error) {
+			console.error('Error:', error);
+			const result = confirm(error); 
+		}
+	};
+
+	const submitDuplicate = async () => {
+		try {
+			const response = await fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/recipes/createRecipe?bypass=true`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(formData),
+			});
+			const json = await response.json();
+			setRecord(json);
+			if (response.status === 201) {
+				console.log('record created: ',json);
+				if (toAddMoreRecipes) {
+					window.location.reload(true);
+				} else {
+					renderRecordResponse(json);
+				}
+			} 
 		} catch (error) {
 			console.error('Error:', error);
 			const result = confirm(error); 
@@ -160,7 +187,10 @@ const MultiStepForm = ({ renderRecordResponse }) => {
 			</Row>
 			{showDuplicateAlert && (<DuplicateRecordAlert 
 				renderRecordResponse={renderRecordResponse} 
+				submit={submitDuplicate}
+				close={closeAlert}
 				record={record}/> )}
+				
 		</Row>
 	);
 };
