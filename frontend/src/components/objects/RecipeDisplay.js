@@ -94,14 +94,14 @@ function RecipeDisplay(props) {
     	<div>
       		<h2>Recipe Details</h2>
 			{isEditing ? (
-			<Form onSubmit={this.handleSubmit}>
+			<Form onSubmit={handleSubmit}>
 				<Form.Group controlId="recipeName">
 					<Form.Label>Name</Form.Label>
 					<Form.Control
 						type="text"
 						name="name"
 						value={formData.name}
-						onChange={this.handleChange}
+						onChange={handleChange}
 					/>
 				</Form.Group>
 				<Form.Group controlId="recipeAuthor">
@@ -110,7 +110,7 @@ function RecipeDisplay(props) {
 						type="text"
 						name="author"
 						value={formData.author}
-						onChange={this.handleChange}
+						onChange={handleChange}
 					/>
 				</Form.Group>
 				<Form.Group controlId="recipeDescription">
@@ -119,7 +119,7 @@ function RecipeDisplay(props) {
 						as="textarea"
 						name="description"
 						value={formData.description}
-						onChange={this.handleChange}
+						onChange={handleChange}
 					/>
 				</Form.Group>
 				<Form.Group controlId="recipeServings">
@@ -128,7 +128,7 @@ function RecipeDisplay(props) {
 						type="number"
 						name="servings"
 						value={formData.servings}
-						onChange={this.handleChange}
+						onChange={handleChange}
 					/>
 				</Form.Group>
 				<Form.Group controlId="recipeCaloriesPerServing">
@@ -137,7 +137,7 @@ function RecipeDisplay(props) {
 						type="number"
 						name="caloriesPerServing"
 						value={formData.caloriesPerServing}
-						onChange={this.handleChange}
+						onChange={handleChange}
 					/>
 				</Form.Group>
 				<Form.Group controlId="recipeNotes">
@@ -146,7 +146,7 @@ function RecipeDisplay(props) {
 						as="textarea"
 						name="notes"
 						value={formData.notes}
-						onChange={this.handleChange}
+						onChange={handleChange}
 					/>
 				</Form.Group>
 				<Form.Group controlId="recipeIngredients">
@@ -168,7 +168,7 @@ function RecipeDisplay(props) {
 										type="text"
 										name="ingredient"
 										value={ingredient.ingredient}
-										onChange={this.handleChange}
+										onChange={handleChange}
 									/>
 								</td>
 								<td>
@@ -176,7 +176,7 @@ function RecipeDisplay(props) {
 										type="text"
 										name="measurement"
 										value={ingredient.measurement}
-										onChange={this.handleChange}
+										onChange={handleChange}
 									/>
 								</td>
 								<td>
@@ -184,7 +184,7 @@ function RecipeDisplay(props) {
 										type="number"
 										name="quantity"
 										value={ingredient.quantity}
-										onChange={this.handleChange}
+										onChange={handleChange}
 									/>
 								</td>
 								<td>
@@ -192,7 +192,7 @@ function RecipeDisplay(props) {
 										type="text"
 										name="notes"
 										value={ingredient.notes}
-										onChange={this.handleChange}
+										onChange={handleChange}
 									/>
 								</td>
 							</tr>
@@ -210,7 +210,7 @@ function RecipeDisplay(props) {
 							type="text"
 							name="caloriesPerServing"
 							value={step.description}
-							onChange={this.handleChange}/>
+							onChange={handleChange}/>
 						</ListGroup.Item>
 						))}
 					</ListGroup>
@@ -225,7 +225,7 @@ function RecipeDisplay(props) {
 								type="text"
 								name="tags"
 								value={tag}
-								onChange={this.handleChange}/>
+								onChange={handleChange}/>
 							</ListGroup.Item>
 						))}
 					</ListGroup>
@@ -233,7 +233,7 @@ function RecipeDisplay(props) {
 				<Button variant="primary" type="submit">
 					Save
 				</Button>
-				<Button variant="primary" onClick={this.handleReset}>
+				<Button variant="primary" onClick={handleReset}>
 					Cancel
 				</Button>
 			</Form>
@@ -306,11 +306,11 @@ function RecipeDisplay(props) {
 			</div>
 			)}
 			{!isEditing && (
-				<Button variant="secondary" onClick={this.handleEdit}>
+				<Button variant="secondary" onClick={handleEdit}>
 					Edit
 				</Button>
 			)}
-			<Button variant="secondary" onClick={this.handleDelete}>
+			<Button variant="secondary" onClick={handleDelete}>
 				Delete Recipe
 			</Button>
 		</div>
