@@ -4,19 +4,29 @@ import { Form, Button, ListGroup, Table } from 'react-bootstrap';
 function RecipeDisplay(props) {
 	const [isEditing, setIsEditing] = useState(false);
 	const [formData, setFormData] = useState({ ...props.formData });
-	const [editedFormData, setEditedFormData] = useState( {...props.formData });
-
-
+	const [editedFormData, setEditedFormData] = useState( [] );
+	
 	const handleEdit = () => {
 		setIsEditing(true);
+		setEditedFormData(formData);
 	};
 
 	const handleAddIngredient = () => {
 
 	};
 
-	const handleDeleteIngredient = () => {
-
+	const handleDeleteIngredient = (index) => {
+		if (editedFormData.ingredients.length < 2) {
+			console.error("Recipes must have at least one ingredient");
+			return;
+		}
+		const updatedIngredients = [...formData.ingredients];
+		updatedIngredients.splice(index, 1);
+		
+		setEditedFormData(prevFormData => ({
+			...prevFormData,
+			ingredients: updatedIngredients,
+		}));
 	};
 
 	const handleAddStep = () => {
@@ -81,7 +91,7 @@ function RecipeDisplay(props) {
 		setEditedFormData(formData);
 	};
 
-  const handleChange = (e) => {
+  	const handleChange = (e) => {
 		const { name, value } = e.target;
 		setEditedFormData(prevData => ({
 			...prevData,
@@ -193,6 +203,11 @@ function RecipeDisplay(props) {
 										value={ingredient.notes}
 										onChange={handleChange}
 									/>
+								</td>
+								<td>
+									<Button variant="danger" onClick={() => handleDeleteIngredient(index)} > 	
+										X
+									</Button>
 								</td>
 							</tr>
 							))}
