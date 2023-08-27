@@ -30,15 +30,8 @@ const MultiStepForm = ({ renderRecordResponse }) => {
 		setStep((prevStep) => prevStep - 1);
 		validateForm();
 	};
-
-	const handleCheckboxChange = (e) => { 
-		setMoreRecipes(e.target.checked); 
-		console.log(toAddMoreRecipes)}
-
-	const closeAlert = () => {
-		setShowDuplicateAlert(false);
-	}
-
+	const handleCheckboxChange = (e) => { setMoreRecipes(e.target.checked); }
+	const closeAlert = () => { setShowDuplicateAlert(false); }
 	const validateForm = () => {
 		const isValid =
 			formData.recipe.name !== null  && 
@@ -79,8 +72,8 @@ const MultiStepForm = ({ renderRecordResponse }) => {
 				setShowDuplicateAlert(true);
 			}
 		} catch (error) {
-			const result = confirm(error); 
-			console.error('Error:', result);
+			const result = confirm(error.message);
+			console.error('Error:', error.message); 
 		}
 	};
 
