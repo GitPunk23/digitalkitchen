@@ -11,7 +11,6 @@ function DisplayPage(props) {
   	};
 
   	const { data } = props;
-  		console.log("Displaying: ", data);
 
   	return (
     	<div>

@@ -41,9 +41,8 @@ public class RecipesController {
         @RequestParam(name = "bypass", defaultValue = "false") Boolean bypassFlag,
         @RequestBody Map<String, Object> body
     ) throws Exception {
-        boolean force = bypassFlag;
         try {
-            ResponseEntity<?> response = endpointService.initalizeRecipe(body, force);
+            ResponseEntity<?> response = endpointService.initalizeRecipe(body, bypassFlag);
             System.out.println(response);
             return response;
         } catch (Exception e) {

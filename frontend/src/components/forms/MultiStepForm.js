@@ -59,7 +59,6 @@ const MultiStepForm = ({ renderRecordResponse }) => {
 				},
 				body: JSON.stringify(formData),
 			});
-			console.log(response);
 			const json = await response.json();
 			setRecord(json);
 			if (response.status === 201) {
@@ -72,7 +71,6 @@ const MultiStepForm = ({ renderRecordResponse }) => {
 				setShowDuplicateAlert(true);
 			}
 		} catch (error) {
-			const result = confirm(error);
 			console.error('Error:', error); 
 		}
 	};
@@ -89,7 +87,6 @@ const MultiStepForm = ({ renderRecordResponse }) => {
 			const json = await response.json();
 			setRecord(json);
 			if (response.status === 201) {
-				console.log('record created: ',json);
 				if (toAddMoreRecipes) {
 					window.location.reload(true);
 				} else {
