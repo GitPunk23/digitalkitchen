@@ -47,7 +47,8 @@ public class RecipesController {
             System.out.println(response);
             return response;
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            System.err.println(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

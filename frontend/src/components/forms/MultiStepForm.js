@@ -72,8 +72,8 @@ const MultiStepForm = ({ renderRecordResponse }) => {
 				setShowDuplicateAlert(true);
 			}
 		} catch (error) {
-			const result = confirm(error.message);
-			console.error('Error:', error.message); 
+			const result = confirm(error);
+			console.error('Error:', error); 
 		}
 	};
 
