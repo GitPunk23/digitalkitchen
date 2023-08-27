@@ -4,6 +4,8 @@ import { Form, Button, ListGroup, Table } from 'react-bootstrap';
 function RecipeDisplay(props) {
 	const [isEditing, setIsEditing] = useState(false);
 	const [formData, setFormData] = useState({ ...props.formData });
+	const [editedFormData, setEditedFormData] = useState( {...props.formData });
+
 
 	const handleEdit = () => {
 		setIsEditing(true);
@@ -59,8 +61,7 @@ function RecipeDisplay(props) {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setIsEditing(false);
-		console.log("Submitted updated data:", formData);
-
+		setFormData(editedFormData);
 		try {
 			const response = await fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/recipes/update`, {
 				method: 'POST',
@@ -69,10 +70,7 @@ function RecipeDisplay(props) {
 				},
 				body: JSON.stringify(formData),
 		});
-		const json = await response.json();
-		if (response.status === 200) {
-			console.log(json);
-		}
+
 		} catch (error) {
 			console.log(error);
 		}
@@ -80,11 +78,12 @@ function RecipeDisplay(props) {
 
 	const handleReset = (e) => {
 		setIsEditing(false);
+		setEditedFormData(formData);
 	};
 
   const handleChange = (e) => {
 		const { name, value } = e.target;
-		setFormData(prevData => ({
+		setEditedFormData(prevData => ({
 			...prevData,
 			[name]: value,
 		}));
@@ -100,7 +99,7 @@ function RecipeDisplay(props) {
 					<Form.Control
 						type="text"
 						name="name"
-						value={formData.name}
+						value={editedFormData.name}
 						onChange={handleChange}
 					/>
 				</Form.Group>
@@ -109,7 +108,7 @@ function RecipeDisplay(props) {
 					<Form.Control
 						type="text"
 						name="author"
-						value={formData.author}
+						value={editedFormData.author}
 						onChange={handleChange}
 					/>
 				</Form.Group>
@@ -118,7 +117,7 @@ function RecipeDisplay(props) {
 					<Form.Control
 						as="textarea"
 						name="description"
-						value={formData.description}
+						value={editedFormData.description}
 						onChange={handleChange}
 					/>
 				</Form.Group>
@@ -127,7 +126,7 @@ function RecipeDisplay(props) {
 					<Form.Control
 						type="number"
 						name="servings"
-						value={formData.servings}
+						value={editedFormData.servings}
 						onChange={handleChange}
 					/>
 				</Form.Group>
@@ -136,7 +135,7 @@ function RecipeDisplay(props) {
 					<Form.Control
 						type="number"
 						name="caloriesPerServing"
-						value={formData.caloriesPerServing}
+						value={editedFormData.caloriesPerServing}
 						onChange={handleChange}
 					/>
 				</Form.Group>
@@ -145,7 +144,7 @@ function RecipeDisplay(props) {
 					<Form.Control
 						as="textarea"
 						name="notes"
-						value={formData.notes}
+						value={editedFormData.notes}
 						onChange={handleChange}
 					/>
 				</Form.Group>
@@ -161,7 +160,7 @@ function RecipeDisplay(props) {
 							</tr>
 						</thead>
 						<tbody>
-							{formData.ingredients.map((ingredient, index) => (
+							{editedFormData.ingredients.map((ingredient, index) => (
 							<tr key={index}>
 								<td>
 									<Form.Control
@@ -203,7 +202,7 @@ function RecipeDisplay(props) {
 				<Form.Group controlId="recipeSteps">
 					<Form.Label><strong>Steps</strong></Form.Label>
 					<ListGroup>
-						{formData.steps.map((step, index) => (
+						{editedFormData.steps.map((step, index) => (
 						<ListGroup.Item key={index}>
 							{step.stepNumber}. 
 							<Form.Control
@@ -218,7 +217,7 @@ function RecipeDisplay(props) {
 				<Form.Group controlId="recipeTags">
 					<Form.Label><strong>Tags</strong></Form.Label>
 					<ListGroup>
-						{formData.tags.map((tag, index) => (
+						{editedFormData.tags.map((tag, index) => (
 							<ListGroup.Item key={index}>
 								{tag}
 								<Form.Control
