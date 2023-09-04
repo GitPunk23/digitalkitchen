@@ -68,12 +68,36 @@ const fetchFormCategoriesList = async() => {
     }
 }
 
+const updateRecipeData = async(recipeData) => {
+    try {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/recipes/update`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(recipeData),
+        })
+        if (response.ok) {
+            const updatedRecipe = await response.json();
+            return updatedRecipe;
+        } else {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+    } catch (error) {
+        console.error('Update error:', error);
+        throw error;
+    }
+    
+}
+
 const FetchManager = {
     fetchFormIngredientsList,
     fetchFormMeasurementsList,
     fetchFormTagsList,
     fetchFormAuthorsList,
-    fetchFormCategoriesList
+    fetchFormCategoriesList,
+    updateRecipeData
 };
 
 export default FetchManager;

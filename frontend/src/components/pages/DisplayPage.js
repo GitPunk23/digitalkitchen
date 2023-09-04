@@ -2,6 +2,7 @@ import React from 'react';
 import RecipeDisplay from '../objects/RecipeDisplay';
 
 function DisplayPage(props) {
+	
   	const displayRecipe = (record) => {
     	return (
       		<div>

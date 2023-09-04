@@ -39,4 +39,11 @@ public class Ingredients {
         out += getIngredient();
         return out;
     }
+
+    public boolean equals(Ingredients i) {
+        if (this.ingredient == i.getIngredient()) 
+            return true;
+        else 
+            return false;
+    }
 }

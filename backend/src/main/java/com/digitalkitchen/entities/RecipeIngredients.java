@@ -59,6 +59,10 @@ public class RecipeIngredients {
 
     // Getters
 
+    public int getID() {
+        return this.ID;
+    }
+
     public Recipes getRecipe() {
         return this.recipe;
     }
