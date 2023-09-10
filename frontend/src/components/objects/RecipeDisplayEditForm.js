@@ -134,8 +134,20 @@ const RecipeDisplayEditForm = ({ recipeForm, handleSubmit, handleReset }) => {
 		}));
 	  };
 
-	const handleDeleteTag = () => {
+	const handleDeleteTag = (e) => {
+		/*const updatedSteps = [...editedFormData.steps];
+		updatedSteps.splice(index, 1);
 
+		for (let i = index; i < updatedSteps.length; i++) {
+			updatedSteps[i].stepNumber = i + 1; 
+		}
+		
+		setEditedFormData(prevFormData => ({
+			...prevFormData,
+			steps: updatedSteps,
+		}));*/
+
+		console.log(editedFormData.tags);
 	};
 
 	const submitForm = () => {

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.digitalkitchen.entities.RecipeTags;
 import com.digitalkitchen.entities.Recipes;
 import com.digitalkitchen.entities.Steps;
+import com.digitalkitchen.entities.Tags;
 import com.digitalkitchen.repository.RecipeTagsRepository;
 
 @Service
@@ -85,7 +86,12 @@ public class RecipeTagsService {
         ArrayList<RecipeTags> tagsList = new ArrayList<>();
         
         for (String value : list) {
-            tagsList.add(new RecipeTags(recipe, tagsService.getTagByName(value).get()));
+            Optional<Tags> tag = tagsService.getTagByName(value);
+            if (tag.isEmpty()) {
+                tagsList.add(new RecipeTags(recipe, tagsService.addTag(new Tags(value))));
+            } else {
+                tagsList.add(new RecipeTags(recipe, tag.get()));
+            }
         }
             
         
