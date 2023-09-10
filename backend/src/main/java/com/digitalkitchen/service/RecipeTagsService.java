@@ -75,11 +75,20 @@ public class RecipeTagsService {
                     repository.save(newTag);
                 }
             }
+
+            for (int i = tagsList.size(); i < currentTags.size(); i++) {
+                RecipeTags tagToDelete = currentTags.get(i);
+                repository.delete(tagToDelete);
+            }
         }
     }
 
     public void deleteRecipeTagById(int id) {
         repository.deleteById(id);
+    }
+
+    public void delete(RecipeTags tag) {
+        repository.delete(tag);
     }
 
     public List<RecipeTags> getRecipeTagsFromJSON(Recipes recipe, List<String> list) {
@@ -93,8 +102,6 @@ public class RecipeTagsService {
                 tagsList.add(new RecipeTags(recipe, tag.get()));
             }
         }
-            
-        
         return tagsList;
     }
     
