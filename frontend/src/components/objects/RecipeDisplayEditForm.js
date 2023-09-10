@@ -26,6 +26,14 @@ const RecipeDisplayEditForm = ({ recipeForm, handleSubmit, handleReset }) => {
 			.catch((error) => {
 				console.log(error);
 			})
+
+		FetchManager.fetchFormTagsList()
+			.then((data) => {
+			  setTagsSuggestionsList(data);
+			})
+			.catch((error) => {
+			  console.log(error);
+			});
     }, []);
 
     const handleChange = (e) => {
@@ -137,7 +145,7 @@ const RecipeDisplayEditForm = ({ recipeForm, handleSubmit, handleReset }) => {
 	const handleDeleteTag = (index) => {
 		const updatedTags = [...editedFormData.tags];
 		updatedTags.splice(index, 1);
-		
+
 		setEditedFormData(prevFormData => ({
 			...prevFormData,
 			tags: updatedTags,
