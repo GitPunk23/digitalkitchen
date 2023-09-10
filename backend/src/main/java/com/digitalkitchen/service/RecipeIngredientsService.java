@@ -103,7 +103,6 @@ public class RecipeIngredientsService {
             .noneMatch(newIngredient -> newIngredient.getIngredient().equals(currentRecipeIngredient.getIngredient())))
             .collect(Collectors.toList());
 
-        System.out.println(recipeIngredientsToDelete);
         for (RecipeIngredients toDelete : recipeIngredientsToDelete) {
             repository.delete(toDelete);
         }

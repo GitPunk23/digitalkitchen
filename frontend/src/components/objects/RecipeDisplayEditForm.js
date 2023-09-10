@@ -6,6 +6,7 @@ import FetchManager from '../util/FetchManager';
 const RecipeDisplayEditForm = ({ recipeForm, handleSubmit, handleReset }) => {
     const [editedFormData, setEditedFormData] = useState(recipeForm)
     const [ingredientsSuggestionsList, setIngredientsSuggestionsList] = useState( [] );
+	const [tagsSuggestionsList, setTagsSuggestionsList] = useState( [] );
 	const [measurementsList, setMeasurementsList] = useState( [] );
 
     useEffect(() => {
@@ -51,15 +52,16 @@ const RecipeDisplayEditForm = ({ recipeForm, handleSubmit, handleReset }) => {
 			]
 		}));
 	};	
-
+	
     const handleIngredientChange = (index, property, value) => {
         const updatedIngredients = [...editedFormData.ingredients];
         updatedIngredients[index][property] = value;
+
         setEditedFormData(prevData => ({
 			...prevData,
 			ingredients: updatedIngredients,
 		}));
-      };
+    };
 
 	const handleDeleteIngredient = (index) => {
 		if (editedFormData.ingredients.length < 2) {
@@ -76,20 +78,61 @@ const RecipeDisplayEditForm = ({ recipeForm, handleSubmit, handleReset }) => {
 	};
 
 	const handleAddStep = () => {
-
+		const lastIndex = editedFormData.steps.length - 1;
+		const lastStep = editedFormData.steps[lastIndex];
+		if( lastStep.description == '') {
+			console.error("Enter missing fields in step", lastIndex);
+			return;
+		}
+		setEditedFormData(prevData => ({
+			...prevData,
+			steps: [
+				...prevData.steps,
+				{ stepNumber: editedFormData.steps.length + 1, description: ''}
+			]
+		}));
 	};
 
-	const handleMoveStep = () => {
+	const handleStepChange = (index, value) => {
+        const updatedSteps = [...editedFormData.steps];
+        updatedSteps[index].description = value;
 
+        setEditedFormData(prevData => ({
+			...prevData,
+			steps: updatedSteps,
+		}));
+    };
+
+	const handleDeleteStep = (index) => {
+		if (editedFormData.steps.length < 2) {
+			console.error("Recipes must have at least one ingredient");
+			return;
+		}
+		
+		const updatedSteps = [...editedFormData.steps];
+		updatedSteps.splice(index, 1);
+
+		for (let i = index; i < updatedSteps.length; i++) {
+			updatedSteps[i].stepNumber = i + 1; 
+		}
+		
+		setEditedFormData(prevFormData => ({
+			...prevFormData,
+			steps: updatedSteps,
+		}));
+
+		console.log(editedFormData.steps);
 	};
 
-	const handleDeleteStep = () => {
-
-	};
-
-	const handleAddTag = () => {
-
-	};
+	const handleAddTag = (tag) => {
+		if (tag === '') {
+		  	return;
+		}
+		setEditedFormData((prevData) => ({
+		  	...prevData,
+		  	tags: [...prevData.tags, tag], // Add the new tag to the existing array
+		}));
+	  };
 
 	const handleDeleteTag = () => {
 
@@ -174,6 +217,7 @@ const RecipeDisplayEditForm = ({ recipeForm, handleSubmit, handleReset }) => {
 										data={ingredientsSuggestionsList} 
 										value={ingredient.ingredient}
 										setValue={(value) => handleIngredientChange(index,'ingredient', value)}
+										onValueChange={(value) => handleIngredientChange(index,'ingredient', value)}
                                         returnSuggestion={(value) => handleIngredientChange(index,'ingredient', value)}
 									>
 									</AutosuggestTextBox>
@@ -232,28 +276,41 @@ const RecipeDisplayEditForm = ({ recipeForm, handleSubmit, handleReset }) => {
 						<ListGroup.Item key={index}>
 							{step.stepNumber}. 
 							<Form.Control
-							type="text"
-							name="caloriesPerServing"
-							value={step.description}
-							onChange={handleChange}/>
+								type="text"
+								name={`steps[${index}].description`}
+								value={step.description}
+								onChange={(event) => handleStepChange(index, event.target.value)}/>
+							<Button variant="danger" onClick={() => handleDeleteStep(index)}>
+                				X
+              				</Button>
 						</ListGroup.Item>
 						))}
 					</ListGroup>
+					<Button variant="primary" onClick={handleAddStep}>+</Button>
 				</Form.Group>
 				<Form.Group controlId="recipeTags">
 					<Form.Label><strong>Tags</strong></Form.Label>
-					<ListGroup>
+					<div className="tag-container">
+						<AutosuggestTextBox
+							data={tagsSuggestionsList} 
+							setValue={(value) => handleAddTag(value)}
+							returnSuggestion={(value) => handleAddTag(value)}
+							placeholder={"Enter tag name..."}
+							clearInputOnSubmit={true}
+						></AutosuggestTextBox>
 						{editedFormData.tags.map((tag, index) => (
-							<ListGroup.Item key={index}>
-								{tag}
-								<Form.Control
-								type="text"
-								name="tags"
-								value={tag}
-								onChange={handleChange}/>
-							</ListGroup.Item>
+							<div key={index} className="tag">
+								<span>{tag}</span>
+								<Button
+									variant="danger"
+									size="sm"
+									onClick={() => handleDeleteTag(index)}
+								>
+									X
+								</Button>
+							</div>
 						))}
-					</ListGroup>
+					</div>
 				</Form.Group>
 				<Button variant="primary" onClick={submitForm}>
 					Save

@@ -41,7 +41,7 @@ public class RecipesEndpointService {
     private MeasurementsService measurementsService;
 
     ObjectMapper objectMapper = new ObjectMapper();
-
+    //TODO:: EDIT VALIDATIONS CHECK FOR DUPLICATES
     public ResponseEntity<?> updateRecipe(Map<String, Object> body) throws Exception {
         try {
         //Get recipe
@@ -77,47 +77,20 @@ public class RecipesEndpointService {
         }
         recipe = recipesService.updateRecipe(recipe);
 
-        //Ingredients
         recipeIngredientsService.updateAllRecipeIngredients(
             recipeIngredientsService.getRecipeIngredientsFromJSON(
                 recipe, 
                 (List<Map<String, Object>>) body.get("ingredients")));
            
-        //Steps
-        List<Map<String, Object>> updatedStepList = (List<Map<String, Object>>) body.get("steps");
-        List<Steps> currentSteps = stepsService.getAllStepsByRecipe(recipe);
-
-        for (int i = 0; i < currentSteps.size(); i++) {
-            Steps currentStep = currentSteps.get(i);
-            Map<String, Object> stepMap = (Map<String, Object>) updatedStepList.get((0));
+        stepsService.updateAllSteps(
+            stepsService.getStepsFromJSON(
+                recipe, 
+                (List<Map<String, Object>>) body.get("steps")));
         
-            // Retrieve updated values from ingredientMap
-            int updatedNumber = (int) stepMap.get("stepNumber");
-            String updatedDescription = (String) stepMap.get("description");
-        
-            // Check for difference
-            if (currentStep.getStepNumber() != updatedNumber) {
-                currentStep.setStepNumber(updatedNumber);
-            }
-            if (currentStep.getDescription() != updatedDescription) {
-                currentStep.setDescription(updatedDescription);
-            }; 
-        }
-
-        //Tags
-        List<String> updatedTagsList = (List<String>) body.get("tags");
-        List<RecipeTags> currentTags = recipeTagsService.getAllRecipeTagsByRecipe(recipe);
-
-        for (int i = 0; i < currentTags.size(); i++) {
-            RecipeTags currentTag = currentTags.get(i);
-        
-            String updatedTag = updatedTagsList.get(i);
-            
-            // Check for difference
-            if (currentTag.getTag().getName() != updatedTag) {
-                currentTag.setTag((tagsService.getTagByName(updatedTag)).get());
-            }
-        }
+        recipeTagsService.updateAllRecipeTags(
+            recipeTagsService.getRecipeTagsFromJSON(
+                recipe,
+                (List<String>) body.get("tags")));
 
         return ResponseEntity.ok().body(recipesService.createTransferObject(recipe));
         } catch (Exception e) {

@@ -1,24 +1,24 @@
 import { useState } from "react";
 
-const AutosuggestTextBox = ({ data, value, setValue, onValueChange, onKeyDown, onSubmitKeyDown, placeholder, returnSuggestion }) => {
+const AutosuggestTextBox = ({ data, value, setValue, onValueChange, onKeyDown, 
+	onSubmitKeyDown, placeholder, returnSuggestion, clearInputOnSubmit }) => {
     
 	const [suggestions, setSuggestions] = useState([]);
-	const [suggestionIndex, setSuggestionIndex] = useState(0);
+	const [suggestionIndex, setSuggestionIndex] = useState(null);
 	const [suggestionsActive, setSuggestionsActive] = useState(false);
-	//const [value, setValue] = useState("");
+	const [inputValue, setInputValue] = useState(value);
 
 	const handleChange = (e) => {
 		const query = e.target.value.toLowerCase();
-		setValue(query);
+		setInputValue(query);
 		if (query.length > 1) {
-		const filterSuggestions = data.filter(
-			(suggestion) =>
-			suggestion.toLowerCase().indexOf(query) > -1
-		);
-		setSuggestions(filterSuggestions);
-		setSuggestionsActive(true);
+			const filterSuggestions = data.filter(
+				(suggestion) => suggestion.toLowerCase().indexOf(query) > -1
+			);
+			setSuggestions(filterSuggestions);
+			setSuggestionsActive(true);
 		} else {
-		setSuggestionsActive(false);
+			setSuggestionsActive(false);
 		}
 
 		if (onValueChange) {
@@ -28,7 +28,6 @@ const AutosuggestTextBox = ({ data, value, setValue, onValueChange, onKeyDown, o
 
 	const handleClick = (e) => {
 		setSuggestions([]);
-		setValue(e.target.innerText);
 		setSuggestionsActive(false);
 		returnSuggestion(e.target.innerText);
 	};
@@ -36,23 +35,33 @@ const AutosuggestTextBox = ({ data, value, setValue, onValueChange, onKeyDown, o
 	const handleKeyDown = (e) => {
 		// UP ARROW
 		if (e.keyCode === 38) {
-		if (suggestionIndex === 0) {
-			return;
-		}
-		setSuggestionIndex(suggestionIndex - 1);
+			if (suggestionIndex === 0 || suggestionIndex === null) {
+				return;
+			}
+			setSuggestionIndex(suggestionIndex - 1);
 		}
 		// DOWN ARROW
 		else if (e.keyCode === 40) {
-		if (suggestionIndex - 1 === suggestions.length) {
-			return;
-		}
-		setSuggestionIndex(suggestionIndex + 1);
+			if (suggestionIndex === suggestions.length) {
+				return;
+			} else if (suggestionIndex === null) {
+				setSuggestionIndex(0);
+			}
+			setSuggestionIndex(suggestionIndex + 1);
 		}
 		// ENTER
 		else if (e.keyCode === 13) {
-		setValue(suggestions[suggestionIndex]);
-		setSuggestionIndex(0);
-		setSuggestionsActive(false);
+			if (suggestionIndex !== null) {
+				setValue(suggestions[suggestionIndex]);
+				setSuggestionIndex(null);
+				setSuggestionsActive(false);
+			} else {
+				setValue(e.target.value);
+			}
+
+			if (clearInputOnSubmit) {
+				setInputValue("");
+			}
 		}
 		// PROPS
 		else if (onKeyDown) {
@@ -87,7 +96,7 @@ const AutosuggestTextBox = ({ data, value, setValue, onValueChange, onKeyDown, o
 		<div className="AutosuggestTextBox">
 		<input
 			type="text"
-			value={value}
+			value={inputValue}
 			onChange={handleChange}
 			onKeyDown={handleKeyDown}
 			placeholder={placeholder}
