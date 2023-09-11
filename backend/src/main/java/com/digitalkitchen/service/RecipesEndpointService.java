@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.digitalkitchen.controller.request.transferobjects.RecipeTransferObject;
 import com.digitalkitchen.entities.Category;
 import com.digitalkitchen.entities.Ingredients;
 import com.digitalkitchen.entities.Measurements;
@@ -42,7 +41,7 @@ public class RecipesEndpointService {
     private MeasurementsService measurementsService;
 
     ObjectMapper objectMapper = new ObjectMapper();
-
+    //TODO:: EDIT VALIDATIONS CHECK FOR DUPLICATES
     public ResponseEntity<?> updateRecipe(Map<String, Object> body) throws Exception {
         try {
         //Get recipe
@@ -76,73 +75,22 @@ public class RecipesEndpointService {
         if( (String) body.get("notes") != recipe.getNotes() && body.get("notes") != null) {
             recipe.setNotes(((String) body.get("notes")).toLowerCase());
         }
-
         recipe = recipesService.updateRecipe(recipe);
 
-        //Ingredients
-        List<Map<String, Object>> ingredientStrings = (List<Map<String, Object>>) body.get("ingredients");
-        List<RecipeIngredients> currentIngredients = recipeIngredientsService.getAllRecipeIngredientsByRecipe(recipe);
-
-        for (int i = 0; i < currentIngredients.size(); i++) {
-            RecipeIngredients currentIngredient = currentIngredients.get(i);
-            Map<String, Object> ingredientMap = (Map<String, Object>) ingredientStrings.get((i));
-        
-            // Retrieve updated values from ingredientMap
-            String updatedName = (String) ingredientMap.get("ingredient");
-            String updatedMeasurement = (String) ingredientMap.get("measurement");
-            float updatedQuantity = Float.parseFloat(((Object) ingredientMap.get("quantity")).toString());
-            String updatedNotes = (String) ingredientMap.get("notes");
-        
-            // Check for difference
-            if (currentIngredient.getIngredient().getIngredient() != updatedName) {
-                currentIngredient.setIngredient((ingredientsService.getIngredientByName(updatedName)).get());
-            }
-            if (currentIngredient.getMeasurement().getMeasurement() != updatedMeasurement) {
-                currentIngredient.setMeasurement((measurementsService.getMeasurementByName(updatedMeasurement)).get());
-            }; 
-            if (currentIngredient.getQuantity() != updatedQuantity) {
-                currentIngredient.setQuantity(updatedQuantity);
-            }
-            if (currentIngredient.getNotes() != updatedNotes) {
-                currentIngredient.setNotes(updatedNotes);
-            };
-        }
+        recipeIngredientsService.updateAllRecipeIngredients(
+            recipeIngredientsService.getRecipeIngredientsFromJSON(
+                recipe, 
+                (List<Map<String, Object>>) body.get("ingredients")));
            
-        //Steps
-        List<Map<String, Object>> updatedStepList = (List<Map<String, Object>>) body.get("steps");
-        List<Steps> currentSteps = stepsService.getAllStepsByRecipe(recipe);
-
-        for (int i = 0; i < currentSteps.size(); i++) {
-            Steps currentStep = currentSteps.get(i);
-            Map<String, Object> stepMap = (Map<String, Object>) updatedStepList.get((0));
+        stepsService.updateAllSteps(
+            stepsService.getStepsFromJSON(
+                recipe, 
+                (List<Map<String, Object>>) body.get("steps")));
         
-            // Retrieve updated values from ingredientMap
-            int updatedNumber = (int) stepMap.get("stepNumber");
-            String updatedDescription = (String) stepMap.get("description");
-        
-            // Check for difference
-            if (currentStep.getStepNumber() != updatedNumber) {
-                currentStep.setStepNumber(updatedNumber);
-            }
-            if (currentStep.getDescription() != updatedDescription) {
-                currentStep.setDescription(updatedDescription);
-            }; 
-        }
-
-        //Tags
-        List<String> updatedTagsList = (List<String>) body.get("tags");
-        List<RecipeTags> currentTags = recipeTagsService.getAllRecipeTagsByRecipe(recipe);
-
-        for (int i = 0; i < currentTags.size(); i++) {
-            RecipeTags currentTag = currentTags.get(i);
-        
-            String updatedTag = updatedTagsList.get(i);
-            
-            // Check for difference
-            if (currentTag.getTag().getName() != updatedTag) {
-                currentTag.setTag((tagsService.getTagByName(updatedTag)).get());
-            }
-        }
+        recipeTagsService.updateAllRecipeTags(
+            recipeTagsService.getRecipeTagsFromJSON(
+                recipe,
+                (List<String>) body.get("tags")));
 
         return ResponseEntity.ok().body(recipesService.createTransferObject(recipe));
         } catch (Exception e) {
@@ -151,20 +99,17 @@ public class RecipesEndpointService {
         }
     }
     
-    public ResponseEntity<?> initalizeRecipe(Map<String, Object> body) throws Exception {
+    public ResponseEntity<?> initalizeRecipe(Map<String, Object> body, boolean force) throws Exception {
         //Recipe creation
         Recipes recipe = createRecipeFromMap((Map<String, Object>) body.get("recipe"));
 
-        try {
-
-            //Check if recipe is already in the database
-            Optional<Recipes> optional = recipesService.getRecipeByName(recipe.getName());
-            if (optional.isPresent()) {
-                recipe = recipesService.getExpandedRecipe(optional.get());
+        try  {
+            List<Recipes> duplicates = recipesService.getRecipeByNameAndAuthor(recipe.getName(), recipe.getAuthor());
+            if ( (!force) & (!duplicates.isEmpty()) ) {
+                recipe = recipesService.getExpandedRecipe(duplicates.get(0)); //TODO: The frontend needs to be configured to take a list
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(recipesService.createTransferObject(recipe));
-            } else {
-                recipe = recipesService.addRecipe(recipe);
-            }
+            } 
+            recipe = recipesService.addRecipe(recipe);
         
             // RecipeIngredients List
             List<RecipeIngredients> recipeIngredients = createRecipeIngredientsListFromMap((List<Map<String, Object>>) body.get("ingredients"), recipe);

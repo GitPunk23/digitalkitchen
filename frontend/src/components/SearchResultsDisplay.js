@@ -1,49 +1,42 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
-import DisplayPage from './pages/DisplayPage';
+import RecipeDisplay from './objects/RecipeDisplay';
 
-class SearchResultsDisplay extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			currentRecipeID: props.currentRecipeID,
-			recipes: props.recipes,
-		};
-	}
+function SearchResultsDisplay(props) {
+  	const [currentRecipeID, setCurrentRecipeID] = useState(props.currentRecipeID);
+  	const [recipes, setRecipes] = useState(props.recipes);
 
-	componentDidUpdate(prevProps) {
-		if (prevProps.currentRecipeID !== this.props.currentRecipeID) {
-			this.setState({ currentRecipeID: this.props.currentRecipeID });
-		}
-	}
+  	useEffect(() => {
+    	if (props.currentRecipeID !== currentRecipeID) {
+      		setCurrentRecipeID(props.currentRecipeID);
+    	}
+  	}, [props.currentRecipeID]);
 
-	handlePrevClick = () => {
-		console.log(this.state.currentRecipeID)
-		if (this.state.currentRecipeID > 0) {
-			this.setState((prevState) => ({
-				currentRecipeID: prevState.currentRecipeID - 1,
-			}));
-		}
+  	const handlePrevClick = () => {
+    	if (currentRecipeID > 0) {
+      		setCurrentRecipeID(prevState => prevState - 1);
+    	}
+  	};
+
+  	const handleNextClick = () => {
+    	if (currentRecipeID < recipes.length - 1) {
+      		setCurrentRecipeID(prevState => prevState + 1);
+    	}
+  	};
+
+	const updateRecipe = (recipeData) => {
+		//console.log(recipeData);
 	};
 
-	handleNextClick = () => {
-		if (this.state.currentRecipeID < this.state.recipes.length - 1) {
-			this.setState((prevState) => ({
-				currentRecipeID: prevState.currentRecipeID + 1,
-			}));
-		}
-	};
-
-	render() {
-		const { currentRecipeID, recipes } = this.state;
-		return (
-			<div key={currentRecipeID}>
-				<Button onClick={this.handlePrevClick}>{'<'}</Button>
-				<DisplayPage data={recipes[currentRecipeID]} />
-				<Button onClick={this.handleNextClick}>{'>'}</Button>
-			</div>
-		);
-	}
+  	return (
+    	<div key={currentRecipeID}>
+      		<Button onClick={handlePrevClick}>{'<'}</Button>
+      		<Button onClick={handleNextClick}>{'>'}</Button>
+      		<RecipeDisplay 
+				formData={recipes[currentRecipeID]} 
+				updateRecipe={updateRecipe}/>
+    	</div>
+  	);
 }
 
 export default SearchResultsDisplay;

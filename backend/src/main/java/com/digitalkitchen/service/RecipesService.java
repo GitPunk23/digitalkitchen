@@ -49,8 +49,12 @@ public class RecipesService {
         return recipesRepository.findById(id);
     }
 
-    public Optional<Recipes> getRecipeByName(String name) {
+    public List<Recipes> getRecipeByName(String name) {
         return recipesRepository.findByName(name);
+    }
+
+    public List<Recipes> getRecipeByNameAndAuthor(String name, String author) {
+        return recipesRepository.findByNameAndAuthor(name, author);
     }
 
     public Recipes getExpandedRecipe(Recipes recipe) {
@@ -78,7 +82,7 @@ public class RecipesService {
         
 
     public boolean recipeExists(Recipes recipe) {
-        Optional<Recipes> dbrecipe = recipesRepository.findByName(recipe.getName());
+        List<Recipes> dbrecipe = recipesRepository.findByName(recipe.getName());
         if (dbrecipe.isEmpty()) {
             return false;
         } else {
