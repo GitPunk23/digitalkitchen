@@ -1,0 +1,5 @@
+@SpringBootTest
+public class StepsServiceTest {
+
+}
+
