@@ -1,4 +1,0 @@
-@SpringBootTest
-public class RecipeTagsServiceTest {
-
-}

@@ -1,5 +1,0 @@
-@SpringBootTest
-public class StepsServiceTest {
-
-}
-
