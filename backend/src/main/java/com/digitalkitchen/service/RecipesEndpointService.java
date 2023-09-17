@@ -101,6 +101,7 @@ public class RecipesEndpointService {
     
     public ResponseEntity<?> initalizeRecipe(Map<String, Object> body, boolean force) throws Exception {
         //Recipe creation
+        System.out.println(body);
         Recipes recipe = createRecipeFromMap((Map<String, Object>) body.get("recipe"));
 
         try  {
@@ -124,6 +125,7 @@ public class RecipesEndpointService {
             recipeTagsService.addRecipeTags(tagList);
     
             recipe = recipesService.getExpandedRecipe(recipe);
+            System.out.println(recipe);
             return ResponseEntity.status(HttpStatus.CREATED).body(recipesService.createTransferObject(recipe));
         } catch (Exception e) {
             recipesService.deleteRecipeById(recipe.getID());

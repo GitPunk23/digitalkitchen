@@ -1,5 +1,6 @@
 backend/target/
 .vscode/
+.idea*
 .env
 backend/src/main/resources/application*
 backend/build/
