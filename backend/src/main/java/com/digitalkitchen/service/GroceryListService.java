@@ -41,7 +41,7 @@ public class GroceryListService {
                 Map<String, Object> ingredientMap = (Map<String, Object>) currentIngredientsList.get(i);
                 String ingredientName = (String) ingredientMap.get("ingredient");
                 Ingredients ingredient = ingredientsService.getIngredientByName(ingredientName).get();
-                Float quantity = ((Integer) currentIngredientsList.get(i).get("quantity")).floatValue();
+                Float quantity = ((Number) currentIngredientsList.get(i).get("quantity")).floatValue();
                 Measurements unit = measurementsService.getMeasurementByName((String) currentIngredientsList.get(i).get("measurement")).get();
                 String notes = (String) currentIngredientsList.get(i).get("notes");
                 ingredientsList.add(new RecipeIngredients(null, ingredient, unit, quantity, notes));
