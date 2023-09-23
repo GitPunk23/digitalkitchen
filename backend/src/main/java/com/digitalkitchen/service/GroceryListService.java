@@ -25,8 +25,7 @@ public class GroceryListService {
     public ResponseEntity<?> createGroceryList(
         @RequestBody List<Map<String, Object>> recipeList) 
         {
-        System.out.println(extractIngredientList(recipeList));
-        return ResponseEntity.ok(recipeList);
+        return ResponseEntity.ok(extractIngredientList(recipeList));
     }
 
     private List<RecipeIngredients> extractIngredientList(List<Map<String, Object>> recipeList) {
