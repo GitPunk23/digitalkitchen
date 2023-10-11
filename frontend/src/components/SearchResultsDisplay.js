@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
-import RecipeDisplay from './objects/RecipeDisplay';
+import Recipe from './objects/Recipe';
 
 function SearchResultsDisplay(props) {
   	const [currentRecipeID, setCurrentRecipeID] = useState(props.currentRecipeID);
@@ -32,9 +32,9 @@ function SearchResultsDisplay(props) {
     	<div key={currentRecipeID}>
       		<Button onClick={handlePrevClick}>{'<'}</Button>
       		<Button onClick={handleNextClick}>{'>'}</Button>
-      		<RecipeDisplay 
-				formData={recipes[currentRecipeID]} 
-				updateRecipe={updateRecipe}/>
+      		<Recipe
+				recipeData={recipes[currentRecipeID]}
+				/>
     	</div>
   	);
 }

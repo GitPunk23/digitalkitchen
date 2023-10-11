@@ -1,6 +1,5 @@
 import Table from 'react-bootstrap/Table';
 import React, { useState, useEffect } from 'react';
-import DisplayPage from './pages/DisplayPage';
 import SearchResultsDisplay from './SearchResultsDisplay';
 import { Button } from 'react-bootstrap';
 
