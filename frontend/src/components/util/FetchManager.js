@@ -121,6 +121,22 @@ const fetchGroceryList = async (recipeList) => {
     }
 };
 
+const fetchMeals = async () => {
+    try {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/meals`, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify()
+        });
+        return response;
+    } catch (error) {
+        console.error('Error:', error);
+        return null;
+    }
+};
+
 const postRecipe = async (recipe) => {
     try {
         const response = await fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/recipes/createRecipe`, {
@@ -163,6 +179,7 @@ const FetchManager = {
     fetchFormAuthorsList,
     fetchFormCategoriesList,
     fetchGroceryList,
+    fetchMeals,
     updateRecipeData,
     postRecipe, 
     postRecipeDuplicate

@@ -4,6 +4,7 @@
 	import HomePage from './components/pages/HomePage';
 	import SearchPage from './components/pages/SearchPage';
 	import CreateRecipePage from './components/pages/CreateRecipePage';
+	import MealPlannerPage from './components/pages/MealPlannerPage';
 	import './styles/App.css';
 	import { GroceryListProvider } from './context/GroceryListContext';
 	import { MeasurementsProvider } from './context/MeasurementsContext';
@@ -21,6 +22,7 @@
 				<Route index element={<HomePage />} />
 				<Route path="/create" element={<CreateRecipePage />} />
 				<Route path="/search" element={<SearchPage />} />
+				<Route path="/meals" element={<MealPlannerPage />} />
 			</Route>
 			</Routes>
 		</Router>

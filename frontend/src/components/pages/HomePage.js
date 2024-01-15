@@ -9,7 +9,7 @@ function HomePage() {
 
   	const handleCreateRecipe = () => { navigate('/create'); };
   	const handleBrowseRecipes = () => { navigate('/search'); };
-  	const handleMealPlanner = () => {};
+  	const handleMealPlanner = () => { navigate('/meals') };
   	const handleGroceryList = () => {};
   	const getServerStatus = async () => {
 		try {
@@ -88,9 +88,9 @@ function HomePage() {
 							size="lg"
 							className={`${buttonClassName} meal-planner-button`}
 							onClick={handleMealPlanner}
-							disabled={true}
+							disabled={!buttonsEnabled}
 						>
-							Meal Planner<br></br>(coming soon)
+							Meal Planner
 						</Button>
 					</Col>
 				</Row>
