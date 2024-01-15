@@ -101,7 +101,8 @@ public class RecipesEndpointService {
     
     public ResponseEntity<?> initalizeRecipe(Map<String, Object> body, boolean force) throws Exception {
         //Recipe creation
-        Recipes recipe = createRecipeFromMap((Map<String, Object>) body.get("recipe"));
+        System.out.println(body);
+        Recipes recipe = createRecipeFromMap(body);
 
         try  {
             List<Recipes> duplicates = recipesService.getRecipeByNameAndAuthor(recipe.getName(), recipe.getAuthor());
@@ -124,6 +125,7 @@ public class RecipesEndpointService {
             recipeTagsService.addRecipeTags(tagList);
     
             recipe = recipesService.getExpandedRecipe(recipe);
+            System.out.println(recipe);
             return ResponseEntity.status(HttpStatus.CREATED).body(recipesService.createTransferObject(recipe));
         } catch (Exception e) {
             recipesService.deleteRecipeById(recipe.getID());
@@ -135,7 +137,7 @@ public class RecipesEndpointService {
 
     private Recipes createRecipeFromMap(Map<String, Object> recipeMap) throws Exception {
         try { 
-            Optional<Category> tempCat = categoriesService.getCategoryById(Integer.parseInt((String)recipeMap.get("category")));
+            Optional<Category> tempCat = categoriesService.getCategoryByName((String)recipeMap.get("category"));
             Category category = tempCat.orElse(new Category());
             String name = ((String)recipeMap.get("name")).toLowerCase();
             String author = ((String)recipeMap.get("author")).toLowerCase();
@@ -171,12 +173,12 @@ public class RecipesEndpointService {
             }
 
             //Get Measurement Object
-            int msmt = Integer.parseInt((String)currentMap.get("measurement"));
-            Optional<Measurements> tempmsmt = measurementsService.getMeasurementById(msmt);
+            String msmt = (String) currentMap.get("measurement");
+            Optional<Measurements> tempmsmt = measurementsService.getMeasurementByName(msmt);
             Measurements measurement = tempmsmt.orElse(new Measurements());
 
             //Set Quantity
-            float quantity = Float.parseFloat((String)currentMap.get("quantity"));
+            float quantity = ((Integer) currentMap.get("quantity")).floatValue();
 
             //Set Notes
             String notes = ((String) currentMap.get("notes")).toLowerCase();

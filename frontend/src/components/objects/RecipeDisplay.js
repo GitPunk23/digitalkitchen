@@ -2,13 +2,25 @@ import React, { useState } from 'react';
 import { Form, Button, ListGroup, Table } from 'react-bootstrap';
 import FetchManager from '../util/FetchManager';
 import RecipeDisplayEditForm from './RecipeDisplayEditForm';
+import { useGroceryList } from '../../context/GroceryListContext';
 
 function RecipeDisplay(props) {
 	const [isEditing, setIsEditing] = useState(false);
-	const [formData, setFormData] = useState({ ...props.formData });
+	const [recipeData, setRecipeData] = useState({ ...props.recipeData });
+	const { groceryList, setGroceryList } = useGroceryList();
 
-	const { updateRecipe } = props;
-	
+	const send = async () => {
+		const recipeList = [];
+		recipeList.push(recipeData);
+		const newList = await FetchManager.fetchGroceryList(recipeList);
+		addToGroceryList(newList);
+		console.log(groceryList);
+	}
+
+	const addToGroceryList = (item) => {
+		setGroceryList(item);
+	};
+
 	const handleEdit = () => {
 		setIsEditing(true);
 	};
@@ -20,7 +32,7 @@ function RecipeDisplay(props) {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(formData.id),
+				body: JSON.stringify(recipeData.id),
 		});
 
 		if (response.status === 200) {
@@ -31,11 +43,11 @@ function RecipeDisplay(props) {
 		}
 	};
 
-	const handleSubmit = async (editedFormData) => {
+	const handleSubmit = async (editedRecipeData) => {
 		setIsEditing(false);
 		//updateRecipe(editedFormData);
 		try {
-			const updatedRecipeData = await FetchManager.updateRecipeData(editedFormData);
+			const updatedRecipeData = await FetchManager.updateRecipeData(editedRecipeData);
 			if ( updatedRecipeData ) {
 				updateRecipe(updatedRecipeData)
 			}
@@ -52,33 +64,27 @@ function RecipeDisplay(props) {
   	return (
     	<div>
       		<h2>Recipe Details</h2>
-			{isEditing ? (
-				<RecipeDisplayEditForm
-					recipeForm={formData}
-					handleSubmit={handleSubmit}
-					handleReset={handleReset}/>
-			) : (
 			<div>
 				<p>
-					<strong>Name:</strong> {formData.name}
+					<strong>Name:</strong> {recipeData.name}
 				</p>
 				<p>
-					<strong>Author:</strong> {formData.author}
+					<strong>Author:</strong> {recipeData.author}
 				</p>
 				<p>
-					<strong>Category:</strong> {formData.category}
+					<strong>Category:</strong> {recipeData.category}
 				</p>
 				<p>
-					<strong>Description:</strong> {formData.description}
+					<strong>Description:</strong> {recipeData.description}
 				</p>
 				<p>
-					<strong>Servings:</strong> {formData.servings}
+					<strong>Servings:</strong> {recipeData.servings}
 				</p>
 				<p>
-					<strong>Calories per Serving:</strong> {formData.caloriesPerServing}
+					<strong>Calories per Serving:</strong> {recipeData.caloriesPerServing}
 				</p>
 				<p>
-					<strong>Notes:</strong> {formData.notes}
+					<strong>Notes:</strong> {recipeData.notes}
 				</p>
 
 				<div>
@@ -93,7 +99,7 @@ function RecipeDisplay(props) {
 							</tr>
 						</thead>
 						<tbody>
-						{(formData.ingredients || []).map((ingredient, index) => (
+						{(recipeData.ingredients || []).map((ingredient, index) => (
 							<tr key={index}>
 							<td>{ingredient.ingredient}</td>
 							<td>{ingredient.quantity}</td>
@@ -107,7 +113,7 @@ function RecipeDisplay(props) {
 				<div>
 				<strong>Steps:</strong>
 				<ol>
-					{(formData.steps || []).map((step, index) => (
+					{(recipeData.steps || []).map((step, index) => (
 					<li key={index}>
 						{`${step.description}`}
 					</li>
@@ -118,20 +124,17 @@ function RecipeDisplay(props) {
 				<div>
 					<strong>Tags:</strong>
 					<ul>
-						{(formData.tags || []).map((tag, index) => (
+						{(recipeData.tags || []).map((tag, index) => (
 						<li key={index}>{tag}</li>
 						))}
 					</ul>
 				</div>
 			</div>
-			)}
-			{!isEditing && (
-				<Button variant="secondary" onClick={handleEdit}>
-					Edit
-				</Button>
-			)}
 			<Button variant="secondary" onClick={handleDelete}>
 				Delete Recipe
+			</Button>
+			<Button onClick={send}>
+				Grocery
 			</Button>
 		</div>
 	);

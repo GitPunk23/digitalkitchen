@@ -91,13 +91,81 @@ const updateRecipeData = async(recipeData) => {
     
 }
 
+const fetchGroceryList = async (recipeList) => {
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND}/digitalkitchen/grocery/createGroceryList`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(recipeList),
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+  
+      if (!data) {
+        console.warn('Empty response');
+      }
+  
+      return data;
+    } catch (error) {
+      console.error('Update error:', error);
+      throw error;
+    }
+};
+
+const postRecipe = async (recipe) => {
+    try {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/recipes/createRecipe`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(recipe),
+        });
+        return response;
+    } catch (error) {
+        console.error('Error:', error);
+        return null;
+    }
+};
+
+const postRecipeDuplicate = async (recipe) => {
+    try {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND}/digitalkitchen/recipes/createRecipe?bypass=true`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(recipe),
+        });
+        const json = await response.json();
+        return json;
+    } catch (error) {
+        console.error('Error:', error);
+        return null;
+    }
+};
+
+  
+
 const FetchManager = {
     fetchFormIngredientsList,
     fetchFormMeasurementsList,
     fetchFormTagsList,
     fetchFormAuthorsList,
     fetchFormCategoriesList,
-    updateRecipeData
+    fetchGroceryList,
+    updateRecipeData,
+    postRecipe, 
+    postRecipeDuplicate
 };
 
 export default FetchManager;

@@ -3,12 +3,12 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
 function DuplicateRecordAlert(props) {
-	const { renderRecordResponse, record, submit, close } = props;
+	const { viewRecipe, submitDuplicate, closeAlert } = props;
 
-	const handleClick_ViewRecipe = () => { renderRecordResponse(record); }
-	const handleClick_SubmitAnyway = () => { submit() }
+	const handleClick_ViewRecipe = () => { viewRecipe(); }
+	const handleClick_SubmitAnyway = () => { submitDuplicate() }
 	const handleClick_ResetForm = () => { window.location.reload(); }
-	const handleClick_Close = () => { close() }
+	const handleClick_Close = () => { closeAlert() }
 
 	return (
 		<>
