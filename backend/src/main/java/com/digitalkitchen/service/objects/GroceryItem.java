@@ -1,7 +1,7 @@
 package com.digitalkitchen.service.objects;
 
-import com.digitalkitchen.entities.Ingredients;
-import com.digitalkitchen.entities.Measurements;
+import com.digitalkitchen.model.entities.Ingredients;
+import com.digitalkitchen.model.entities.Measurements;
 
 public class GroceryItem {
     

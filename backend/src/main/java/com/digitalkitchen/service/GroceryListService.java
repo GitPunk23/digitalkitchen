@@ -9,9 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.digitalkitchen.entities.Ingredients;
-import com.digitalkitchen.entities.Measurements;
-import com.digitalkitchen.entities.RecipeIngredients;
+import com.digitalkitchen.model.entities.Ingredients;
+import com.digitalkitchen.model.entities.Measurements;
+import com.digitalkitchen.model.entities.RecipeIngredients;
 
 @Service
 public class GroceryListService {

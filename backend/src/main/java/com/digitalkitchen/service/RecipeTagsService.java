@@ -8,10 +8,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.digitalkitchen.entities.RecipeTags;
-import com.digitalkitchen.entities.Recipes;
-import com.digitalkitchen.entities.Steps;
-import com.digitalkitchen.entities.Tags;
+import com.digitalkitchen.model.entities.RecipeTags;
+import com.digitalkitchen.model.entities.Recipes;
+import com.digitalkitchen.model.entities.Steps;
+import com.digitalkitchen.model.entities.Tags;
 import com.digitalkitchen.repository.RecipeTagsRepository;
 
 @Service

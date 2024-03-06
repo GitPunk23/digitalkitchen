@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.digitalkitchen.entities.Appliances;
+import com.digitalkitchen.model.entities.Appliances;
 import com.digitalkitchen.repository.AppliancesRepository;
 
 @Service

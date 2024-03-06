@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.digitalkitchen.entities.Category;
-import com.digitalkitchen.entities.Ingredients;
-import com.digitalkitchen.entities.Recipes;
-import com.digitalkitchen.entities.Tags;
+import com.digitalkitchen.model.entities.Category;
+import com.digitalkitchen.model.entities.Ingredients;
+import com.digitalkitchen.model.entities.Recipes;
+import com.digitalkitchen.model.entities.Tags;
 import com.digitalkitchen.service.CategoryService;
 import com.digitalkitchen.service.IngredientsService;
 import com.digitalkitchen.service.TagsService;

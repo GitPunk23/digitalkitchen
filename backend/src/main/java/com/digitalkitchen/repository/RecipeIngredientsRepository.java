@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.digitalkitchen.entities.RecipeIngredients;
-import com.digitalkitchen.entities.Recipes;
+import com.digitalkitchen.model.entities.RecipeIngredients;
+import com.digitalkitchen.model.entities.Recipes;
 
 @Repository
 public interface RecipeIngredientsRepository extends JpaRepository<RecipeIngredients, Integer> {

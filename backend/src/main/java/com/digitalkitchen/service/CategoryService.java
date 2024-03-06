@@ -1,5 +1,5 @@
 package com.digitalkitchen.service;
-import com.digitalkitchen.entities.Category;
+import com.digitalkitchen.model.entities.Category;
 import com.digitalkitchen.repository.CategoryRepository;
 import java.util.List;
 import java.util.Optional;

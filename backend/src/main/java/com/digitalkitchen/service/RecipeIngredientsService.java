@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.digitalkitchen.entities.RecipeIngredients;
-import com.digitalkitchen.entities.Recipes;
+import com.digitalkitchen.model.entities.RecipeIngredients;
+import com.digitalkitchen.model.entities.Recipes;
 import com.digitalkitchen.repository.RecipeIngredientsRepository;
 
 @Service

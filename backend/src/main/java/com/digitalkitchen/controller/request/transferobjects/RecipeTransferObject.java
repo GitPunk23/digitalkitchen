@@ -3,8 +3,8 @@ package com.digitalkitchen.controller.request.transferobjects;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.digitalkitchen.entities.Ingredients;
-import com.digitalkitchen.entities.Recipes;
+import com.digitalkitchen.model.entities.Ingredients;
+import com.digitalkitchen.model.entities.Recipes;
 
 public class RecipeTransferObject {
 

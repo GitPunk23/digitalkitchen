@@ -10,14 +10,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.digitalkitchen.entities.Category;
-import com.digitalkitchen.entities.Ingredients;
-import com.digitalkitchen.entities.Measurements;
-import com.digitalkitchen.entities.RecipeIngredients;
-import com.digitalkitchen.entities.RecipeTags;
-import com.digitalkitchen.entities.Recipes;
-import com.digitalkitchen.entities.Steps;
-import com.digitalkitchen.entities.Tags;
+import com.digitalkitchen.model.entities.Category;
+import com.digitalkitchen.model.entities.Ingredients;
+import com.digitalkitchen.model.entities.Measurements;
+import com.digitalkitchen.model.entities.RecipeIngredients;
+import com.digitalkitchen.model.entities.RecipeTags;
+import com.digitalkitchen.model.entities.Recipes;
+import com.digitalkitchen.model.entities.Steps;
+import com.digitalkitchen.model.entities.Tags;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service

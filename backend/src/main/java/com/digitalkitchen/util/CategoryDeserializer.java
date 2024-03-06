@@ -2,7 +2,7 @@ package com.digitalkitchen.util;
 
 import java.io.IOException;
 
-import com.digitalkitchen.entities.Category;
+import com.digitalkitchen.model.entities.Category;
 import com.digitalkitchen.service.CategoryService;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;

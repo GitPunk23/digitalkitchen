@@ -1,6 +1,7 @@
 package com.digitalkitchen.controller;
 
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.digitalkitchen.service.RecipesEndpointService;
 import com.digitalkitchen.service.RecipesService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,16 +26,12 @@ public class RecipesController {
     @Autowired
     private RecipesEndpointService endpointService;
 
-    //GET requests
-
     @GetMapping("/status")
     public ResponseEntity<?> status() {
-        //Return 202
         return ResponseEntity.accepted().build();
     }
 
-    //POST requests
-
+    
     @PostMapping(value = "/createRecipe", produces = "application/json")
     public ResponseEntity<?> createRecipe(
         @RequestParam(name = "bypass", defaultValue = "false") Boolean bypassFlag,
@@ -41,7 +39,6 @@ public class RecipesController {
     ) throws Exception {
         try {
             ResponseEntity<?> response = endpointService.initalizeRecipe(body, bypassFlag);
-            System.out.println(response);
             return response;
         } catch (Exception e) {
             System.err.println(e.getMessage());

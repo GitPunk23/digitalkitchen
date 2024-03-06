@@ -12,9 +12,9 @@ import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.digitalkitchen.entities.RecipeIngredients;
-import com.digitalkitchen.entities.Recipes;
-import com.digitalkitchen.entities.Steps;
+import com.digitalkitchen.model.entities.RecipeIngredients;
+import com.digitalkitchen.model.entities.Recipes;
+import com.digitalkitchen.model.entities.Steps;
 import com.digitalkitchen.repository.StepsRepository;
 
 @Service

@@ -1,6 +1,6 @@
 package com.digitalkitchen.controller.request.transferobjects;
 
-import com.digitalkitchen.entities.RecipeIngredients;
+import com.digitalkitchen.model.entities.RecipeIngredients;
 
 public class RecipeIngredientsTransferObject {
 

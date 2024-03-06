@@ -2,7 +2,7 @@ package com.digitalkitchen.util;
 
 import java.io.IOException;
 
-import com.digitalkitchen.entities.Tags;
+import com.digitalkitchen.model.entities.Tags;
 import com.digitalkitchen.service.TagsService;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;

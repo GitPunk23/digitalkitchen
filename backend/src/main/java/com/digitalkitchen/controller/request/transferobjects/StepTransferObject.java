@@ -1,6 +1,6 @@
 package com.digitalkitchen.controller.request.transferobjects;
 
-import com.digitalkitchen.entities.Steps;
+import com.digitalkitchen.model.entities.Steps;
 
 public class StepTransferObject {
     
