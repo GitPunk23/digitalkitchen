@@ -13,12 +13,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 
-import com.digitalkitchen.testutils.TestObjectManager;
 import com.digitalkitchen.controller.request.transferobjects.RecipeTransferObject;
-import com.digitalkitchen.entities.RecipeIngredients;
-import com.digitalkitchen.entities.RecipeTags;
-import com.digitalkitchen.entities.Recipes;
-import com.digitalkitchen.entities.Steps;
+import com.digitalkitchen.model.entities.RecipeIngredients;
+import com.digitalkitchen.model.entities.RecipeTags;
+import com.digitalkitchen.model.entities.Recipes;
+import com.digitalkitchen.model.entities.Steps;
+import com.digitalkitchen.util.TestObjectManager;
 
 public class RecipesEndpointServiceTest {
 
