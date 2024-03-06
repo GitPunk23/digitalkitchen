@@ -1,7 +1,9 @@
 backend/target/
 .vscode/
-.idea*
+.idea
 .env
+.iml
+
 backend/src/main/resources/application*
 backend/build/
 backend/archive/
