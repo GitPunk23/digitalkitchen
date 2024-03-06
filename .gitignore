@@ -1,8 +1,8 @@
 backend/target/
 .vscode/
-.idea
+*.idea
 .env
-.iml
+*.iml
 
 backend/src/main/resources/application*
 backend/build/
