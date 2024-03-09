@@ -1,26 +1,29 @@
 package com.digitalkitchen.model.request;
 
-import org.springframework.stereotype.Component;
+import java.util.List;
 
-import com.digitalkitchen.model.entities.Recipes;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
+
+import com.digitalkitchen.model.entities.Recipe;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.AccessLevel;
 
-@Builder
 @Data
-@JsonIgnoreProperties(ignoreUnknown = true)
-//@JsonIncludeProperties(JsonInclude.Include.NON_NULL)
 @AllArgsConstructor
 @NoArgsConstructor
-@Component
+@Builder
+@Setter(AccessLevel.NONE)
 public class RecipeRequest {
-    //TODO:: CREATE REQUEST OBJECT LIKE WORK
 
-    private Recipes recipe;
+    @JsonProperty("recipes")
+    @Valid
+    @Size(min = 1, message = "At least one recipe is required")
+    private List<Recipe> recipes;
 }

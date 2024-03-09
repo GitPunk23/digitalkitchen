@@ -1,77 +1,59 @@
 package com.digitalkitchen.controller;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.digitalkitchen.service.RecipesEndpointService;
-import com.digitalkitchen.service.RecipesService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.digitalkitchen.model.request.RecipeRequest;
+import com.digitalkitchen.model.response.RecipeResponse;
+import com.digitalkitchen.service.RecipeService;
 
 @RestController
 @RequestMapping("/recipes")
+@Validated
 public class RecipesController {
 
     @Autowired
-    private RecipesService recipesService;
-    @Autowired
-    private RecipesEndpointService endpointService;
+    private RecipeService recipesService;
 
-    @GetMapping("/status")
-    public ResponseEntity<?> status() {
-        return ResponseEntity.accepted().build();
+    @PostMapping(value = "/create")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<RecipeResponse> createRecipe( @RequestParam(name = "bypass", defaultValue = "false") Boolean bypassFlag,
+                                                        @RequestBody RecipeRequest request) {
+        recipesService.createRecipe(request, bypassFlag);
+        return null;
     }
 
+    @GetMapping(value = "/search")
+    public ResponseEntity<RecipeResponse> searchRecipes(@RequestParam String param) {
+        return null;
+    }
     
-    @PostMapping(value = "/createRecipe", produces = "application/json")
-    public ResponseEntity<?> createRecipe(
-        @RequestParam(name = "bypass", defaultValue = "false") Boolean bypassFlag,
-        @RequestBody Map<String, Object> body
-    ) throws Exception {
-        try {
-            ResponseEntity<?> response = endpointService.initalizeRecipe(body, bypassFlag);
-            return response;
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<RecipeResponse> retrieveRecipe(final @PathVariable("id") String id) {
+        return null;
     }
 
-    @PostMapping(value = "/update", produces = "application/json")
-    public ResponseEntity<?> updateRecipe(@RequestBody Map<String, Object> body) throws Exception {
-        try {
-            ResponseEntity<?> response = endpointService.updateRecipe(body);
-            System.out.println(response);
-
-            // Convert the response object to JSON
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonResponse = objectMapper.writeValueAsString(response.getBody());
-            // Create a new ResponseEntity with the JSON response
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            return new ResponseEntity<>(jsonResponse, headers, response.getStatusCode());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PatchMapping(value = "/update")
+    public ResponseEntity<RecipeResponse> updateRecipe(@RequestBody RecipeRequest request) {
+        recipesService.updateRecipe(request);
+        return null;
     }
 
-    @PostMapping(value = "/delete", produces = "application/json")
-    public ResponseEntity<?> deleteRecipe(@RequestBody int recipeID) throws Exception {
-        try {
-            recipesService.deleteRecipeById(recipeID);
-            System.out.println("Successfully removed recipe " + recipeID);
-            return ResponseEntity.ok().body("Successfully removed recipe " + recipeID);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @DeleteMapping(value = "/delete")
+    public ResponseEntity<RecipeResponse> deleteRecipe(@RequestBody int recipeID) {
+        recipesService.deleteRecipe(recipeID);
+        return null;
     }
 }

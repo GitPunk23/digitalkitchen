@@ -1,44 +1,36 @@
 package com.digitalkitchen.model.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Column;
-
 
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "tags")
-public class Tags {
+public class Tag {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ID;
+    @Setter(AccessLevel.NONE)
+    private int id;
 
-    @Column(name = "tag")
-    private String tag;
+    @Column(name = "recipe_id")
+    private int recipeId;
 
-    @Column(name = "hits")
-    private int hits;
-
-    public Tags(String tag) {
-        this.tag = tag;
-    }
-
-    public void incrementhits() {
-        this.hits++;
-    }
-
-    public void decrementHits() {
-        if (this.hits != 0) {
-            this.hits--;
-        }
-    }
+    @Column(name = "name")
+    private String name;
 }

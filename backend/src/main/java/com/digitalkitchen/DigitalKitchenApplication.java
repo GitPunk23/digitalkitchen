@@ -13,11 +13,11 @@ import org.springframework.boot.SpringApplication;
 @ComponentScan("com.digitalkitchen.controller")
 @ComponentScan("com.digitalkitchen.config")
 @ComponentScan("com.digitalkitchen.util")
-public class App implements CommandLineRunner
+public class DigitalKitchenApplication implements CommandLineRunner
 {
     public static void main( String[] args )
     {
-        SpringApplication.run(App.class, args);
+        SpringApplication.run(DigitalKitchenApplication.class, args);
     }
 
     @Override
