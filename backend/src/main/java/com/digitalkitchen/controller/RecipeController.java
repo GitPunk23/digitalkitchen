@@ -22,17 +22,20 @@ import com.digitalkitchen.service.RecipeService;
 @RestController
 @RequestMapping("/recipes")
 @Validated
-public class RecipesController {
+public class RecipeController {
 
-    @Autowired
-    private RecipeService recipesService;
+    private final RecipeService recipeService;
+
+    public RecipeController(final RecipeService recipeService) {
+        this.recipeService = recipeService;
+    }
 
     @PostMapping(value = "/create")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<RecipeResponse> createRecipe( @RequestParam(name = "bypass", defaultValue = "false") Boolean bypassFlag,
                                                         @RequestBody RecipeRequest request) {
-        recipesService.createRecipe(request, bypassFlag);
-        return null;
+        RecipeResponse response = recipeService.createRecipe(request, bypassFlag);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping(value = "/search")
@@ -47,13 +50,13 @@ public class RecipesController {
 
     @PatchMapping(value = "/update")
     public ResponseEntity<RecipeResponse> updateRecipe(@RequestBody RecipeRequest request) {
-        recipesService.updateRecipe(request);
+        recipeService.updateRecipe(request);
         return null;
     }
 
     @DeleteMapping(value = "/delete")
-    public ResponseEntity<RecipeResponse> deleteRecipe(@RequestBody int recipeID) {
-        recipesService.deleteRecipe(recipeID);
+    public ResponseEntity<RecipeResponse> deleteRecipe(final @RequestParam int recipeID) {
+        recipeService.deleteRecipe(recipeID);
         return null;
     }
 }

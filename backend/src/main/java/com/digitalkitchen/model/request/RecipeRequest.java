@@ -5,7 +5,6 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
-import com.digitalkitchen.model.entities.Recipe;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -25,5 +24,5 @@ public class RecipeRequest {
     @JsonProperty("recipes")
     @Valid
     @Size(min = 1, message = "At least one recipe is required")
-    private List<Recipe> recipes;
+    private List<RecipeRequestInfo> recipes;
 }

@@ -8,11 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 
 @SpringBootApplication
-@EnableJpaRepositories("com.digitalkitchen.repository")
-@ComponentScan("com.digitalkitchen.service")
-@ComponentScan("com.digitalkitchen.controller")
-@ComponentScan("com.digitalkitchen.config")
-@ComponentScan("com.digitalkitchen.util")
+@ComponentScan("com.digitalkitchen")
 public class DigitalKitchenApplication implements CommandLineRunner
 {
     public static void main( String[] args )

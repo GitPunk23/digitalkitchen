@@ -59,7 +59,7 @@ public class Recipe {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "recipe_id")
-    private List<Ingredient> ingredients;
+    private List<RecipeIngredient> ingredients;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "recipe_id")
@@ -67,5 +67,5 @@ public class Recipe {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "recipe_id")
-    private List<Tag> tags;    
+    private List<RecipeTag> tags;    
 }

@@ -28,9 +28,6 @@ public class Tag {
     @Setter(AccessLevel.NONE)
     private int id;
 
-    @Column(name = "recipe_id")
-    private int recipeId;
-
     @Column(name = "name")
     private String name;
 }

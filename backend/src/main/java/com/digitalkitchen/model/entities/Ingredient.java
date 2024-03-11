@@ -3,8 +3,6 @@ package com.digitalkitchen.model.entities;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.digitalkitchen.enums.Measurement;
-
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,18 +28,6 @@ public class Ingredient {
     @Setter(AccessLevel.NONE)
     private int id;
 
-    @Column(name = "recipe_id")
-    private int recipeId;
-
     @Column(name = "name")
     private String name;
-
-    @Column(name = "measurement")
-    private Measurement measurement;
-
-    @Column(name = "quantity")
-    private Float quantity;
-
-    @Column(name = "notes")
-    private String notes;
 }
