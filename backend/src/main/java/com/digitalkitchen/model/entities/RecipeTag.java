@@ -8,15 +8,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 @Builder
 @Table(name = "recipe_tags")
 public class RecipeTag {
@@ -27,7 +25,7 @@ public class RecipeTag {
 
     @ManyToOne
     @JoinColumn(name = "recipe_id")
-    private int recipeId;
+    private Recipe recipe;
 
     @ManyToOne
     @JoinColumn(name = "tag_id")

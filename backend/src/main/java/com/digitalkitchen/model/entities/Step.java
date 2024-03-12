@@ -1,24 +1,14 @@
 package com.digitalkitchen.model.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
+import lombok.*;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 @Builder
 @Table(name = "steps")
 public class Step {
@@ -28,12 +18,13 @@ public class Step {
     @Setter(AccessLevel.NONE)
     private int id;
 
-    @Column(name = "recipe_id")
-    private int recipeId;
+    @ManyToOne
+    @JoinColumn(name = "recipe_id")
+    private Recipe recipe;
 
     @Column(name = "step_number")
     private int stepNumber;
 
-    @Column(name = "step_description")
+    @Column(name = "description")
     private String description;
 }

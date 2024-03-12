@@ -11,17 +11,13 @@ import javax.persistence.Table;
 
 import com.digitalkitchen.enums.Measurement;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 @Builder
 @Table(name = "recipe_ingredients")
 public class RecipeIngredient {
@@ -33,7 +29,7 @@ public class RecipeIngredient {
 
     @ManyToOne
     @JoinColumn(name = "recipe_id")
-    private int recipeId;
+    private Recipe recipe;
 
     @ManyToOne
     @JoinColumn(name = "ingredient_id")
