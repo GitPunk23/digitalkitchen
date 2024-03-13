@@ -1,12 +1,13 @@
 package com.digitalkitchen.service;
 
+import com.digitalkitchen.enums.ResponseStatus;
 import com.digitalkitchen.model.entities.Recipe;
 import com.digitalkitchen.model.response.RecipeResponse;
 
 import java.util.Collections;
+import java.util.List;
 
-import static com.digitalkitchen.enums.ResponseStatus.CREATED;
-import static com.digitalkitchen.enums.ResponseStatus.DUPLICATE;
+import static com.digitalkitchen.enums.ResponseStatus.*;
 
 public class ResponseMapper {
     
@@ -23,6 +24,14 @@ public class ResponseMapper {
         return RecipeResponse.builder()
                 .status(DUPLICATE)
                 .recipes(Collections.singletonList(recipe))
+                .build();
+    }
+
+    public static RecipeResponse buildRecipeSearchResponse(List<Recipe> recipes) {
+        ResponseStatus status = (recipes.isEmpty()) ? EMPTY : FOUND;
+        return RecipeResponse.builder()
+                .status(status)
+                .recipes(recipes)
                 .build();
     }
 }

@@ -8,9 +8,11 @@ import java.util.stream.Collectors;
 
 import com.digitalkitchen.model.entities.*;
 import com.digitalkitchen.model.request.RecipeRequestInfo;
+import com.digitalkitchen.model.request.RecipeSearchRequest;
 import com.digitalkitchen.repository.IngredientRepository;
 import com.digitalkitchen.repository.TagRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import com.digitalkitchen.model.request.RecipeRequest;
@@ -126,9 +128,19 @@ public class RecipeService {
         }
     }
 
-    public List<Recipe> searchRecipes(Map<String, Object> searchParams) { 
-        //return recipeRepository.searchRecipes(searchParams);
-        throw new UnsupportedOperationException("Unimplemented method 'searchRecipes'");
+    public RecipeResponse searchRecipes(RecipeSearchRequest searchParams) {
+        String name = searchParams.getName();
+        List<String> categories = searchParams.getCategories();
+        List<String> authors = searchParams.getAuthors();
+        List<String> tags = searchParams.getTags();
+        List<String> ingredients = searchParams.getIngredients();
+        List<Integer> servings = searchParams.getServings();
+        List<Integer> calories = searchParams.getCalories();
+        //TODO::SANITIZE INPUT
+
+
+        List<Recipe> recipes = recipeRepository.searchRecipes(name, categories, authors, tags, ingredients, servings, calories);
+        return ResponseMapper.buildRecipeSearchResponse(recipes);
     }
 
     public void updateRecipe(RecipeRequest request) {

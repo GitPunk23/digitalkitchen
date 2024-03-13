@@ -5,7 +5,9 @@ import lombok.Getter;
 @Getter
 public enum ResponseStatus {
     CREATED("CREATED"),
-    DUPLICATE("DUPLICATE");
+    DUPLICATE("DUPLICATE"),
+    EMPTY("EMPTY"),
+    FOUND("FOUND");
 
     private final String displayName;
 

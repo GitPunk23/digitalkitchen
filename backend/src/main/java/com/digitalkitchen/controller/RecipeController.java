@@ -1,5 +1,6 @@
 package com.digitalkitchen.controller;
 
+import com.digitalkitchen.model.request.RecipeSearchRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -38,9 +39,11 @@ public class RecipeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping(value = "/search")
-    public ResponseEntity<RecipeResponse> searchRecipes(@RequestParam String param) {
-        return null;
+    @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<RecipeResponse> searchRecipes(@RequestBody RecipeSearchRequest searchParams) {
+        RecipeResponse response = recipeService.searchRecipes(searchParams);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     
     @GetMapping(value = "/{id}")
