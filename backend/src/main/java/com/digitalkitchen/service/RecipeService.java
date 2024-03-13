@@ -22,9 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RecipeService {
     
-    private RecipeRepository recipeRepository;
-    private IngredientRepository ingredientRepository;
-    private TagRepository tagRepository;
+    private final RecipeRepository recipeRepository;
+    private final IngredientRepository ingredientRepository;
+    private final TagRepository tagRepository;
 
     RecipeService(RecipeRepository recipeRepository, IngredientRepository ingredientRepository, TagRepository tagRepository) {
         this.recipeRepository = recipeRepository;
@@ -77,7 +77,7 @@ public class RecipeService {
     }
 
     /**
-     * Saves a list of ingredients to the database. If a duplicate error is encountered, it retrieves the ingredient.
+     * Saves a list of ingredients to the database. If an ingredient already exists, the record is retrieved.
      * @param ingredients list of ingredients to save to the database
      * @return the list of saved ingredients with the id field populated
      */
@@ -95,7 +95,7 @@ public class RecipeService {
     }
 
     /**
-     * Saves a list of tags to the database. If a duplicate error is encountered, it retrieves the tag.
+     * Saves a list of tags to the database. If a tag already exists, the record is retrieved.
      * @param tags list of tags to save to the database
      * @return the list of saved tags with the id field populated
      */
