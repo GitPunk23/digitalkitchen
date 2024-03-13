@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import com.digitalkitchen.enums.Measurement;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 @Entity
@@ -29,6 +30,7 @@ public class RecipeIngredient {
 
     @ManyToOne
     @JoinColumn(name = "recipe_id")
+    @JsonBackReference
     private Recipe recipe;
 
     @ManyToOne

@@ -32,13 +32,13 @@ public class RecipeTestUtils {
             .build();
 
         Step step = Step.builder()
-                .recipeId(recipe.getId())
+                .recipe(recipe)
                 .stepNumber(1)
                 .description("Just go buy some")
                 .build();
 
         RecipeIngredient ingredient = RecipeIngredient.builder()
-                .recipeId(recipe.getId())
+                .recipe(recipe)
                 .ingredient(Ingredient.builder()
                         .name("Burger")
                         .build())
@@ -47,7 +47,7 @@ public class RecipeTestUtils {
                 .build();
 
         RecipeTag tag = RecipeTag.builder()
-                .recipeId(recipe.getId())
+                .recipe(recipe)
                 .tag(Tag.builder()
                         .name("cheap")
                         .build())

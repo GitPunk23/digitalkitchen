@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 @Entity
@@ -25,6 +26,7 @@ public class RecipeTag {
 
     @ManyToOne
     @JoinColumn(name = "recipe_id")
+    @JsonBackReference
     private Recipe recipe;
 
     @ManyToOne

@@ -3,7 +3,7 @@ package com.digitalkitchen.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.digitalkitchen.model.entities.*;
@@ -16,9 +16,7 @@ import org.springframework.stereotype.Service;
 import com.digitalkitchen.model.request.RecipeRequest;
 import com.digitalkitchen.model.response.RecipeResponse;
 import com.digitalkitchen.repository.RecipeRepository;
-import org.springframework.dao.DataIntegrityViolationException;
-
-import javax.persistence.criteria.CriteriaBuilder;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -35,7 +33,7 @@ public class RecipeService {
     }
 
     private Recipe buildRecipe(RecipeRequestInfo requestInfo) {
-        final Recipe recipe = Recipe.builder()
+        return Recipe.builder()
                 .name(requestInfo.getName())
                 .author(requestInfo.getAuthor())
                 .category(requestInfo.getCategory())
@@ -47,18 +45,19 @@ public class RecipeService {
                 .steps(requestInfo.getSteps())
                 .tags(requestInfo.getTags())
                 .build();
+    }
 
+    private Recipe processRecipeRequest(RecipeRequestInfo requestInfo) {
+        Recipe recipe = buildRecipe(requestInfo);
         List<RecipeIngredient> recipeIngredients = recipe.getIngredients();
         List<Step> steps = recipe.getSteps();
         List<RecipeTag> recipeTags = recipe.getTags();
-
-        List<Ingredient> ingredients = saveIngredientsFromCreateRequest(recipeIngredients.stream()
-                                                                                         .map(RecipeIngredient::getIngredient)
-                                                                                         .collect(Collectors.toList()));
-
-        List<Tag> tags = saveTagsFromCreateRequest(recipeTags.stream()
-                                                             .map(RecipeTag::getTag)
-                                                             .collect(Collectors.toList()));
+        List<Ingredient> ingredients = saveIngredients(recipeIngredients.stream()
+                                                                        .map(RecipeIngredient::getIngredient)
+                                                                        .collect(Collectors.toList()));
+        List<Tag> tags = saveTags(recipeTags.stream()
+                                            .map(RecipeTag::getTag)
+                                            .collect(Collectors.toList()));
 
         for (int i = 0; i < recipeIngredients.size(); i++) {
             RecipeIngredient recipeIngredient = recipeIngredients.get(i);
@@ -77,38 +76,54 @@ public class RecipeService {
         return recipe;
     }
 
-    private List<Ingredient> saveIngredientsFromCreateRequest(List<Ingredient> ingredients) {
+    /**
+     * Saves a list of ingredients to the database. If a duplicate error is encountered, it retrieves the ingredient.
+     * @param ingredients list of ingredients to save to the database
+     * @return the list of saved ingredients with the id field populated
+     */
+    private List<Ingredient> saveIngredients(List<Ingredient> ingredients) {
         List<Ingredient> outputIngredients = new ArrayList<>();
 
         ingredients.forEach(ingredient -> {
-            try {
+            Optional<Ingredient> foundIngredient = ingredientRepository.findByName(ingredient.getName());
+            if (foundIngredient.isPresent()) {
+                outputIngredients.add(foundIngredient.get());
+            } else {
                 outputIngredients.add(ingredientRepository.save(ingredient));
-            } catch(DataIntegrityViolationException e) {
-                outputIngredients.add(ingredientRepository.findByName(ingredient.getName()));
-            }
-        });
+        }});
         return outputIngredients;
     }
 
-    private List<Tag> saveTagsFromCreateRequest(List<Tag> tags) {
+    /**
+     * Saves a list of tags to the database. If a duplicate error is encountered, it retrieves the tag.
+     * @param tags list of tags to save to the database
+     * @return the list of saved tags with the id field populated
+     */
+    private List<Tag> saveTags(List<Tag> tags) {
         List<Tag> outputTags = new ArrayList<>();
 
         tags.forEach(tag -> {
-            try {
+            Optional<Tag> foundTag = tagRepository.findByName(tag.getName());
+            if (foundTag.isPresent()) {
+                outputTags.add(foundTag.get());
+            } else {
                 outputTags.add(tagRepository.save(tag));
-            } catch(DataIntegrityViolationException e) {
-                outputTags.add(tagRepository.findByName(tag.getName()));
-            }
-        });
+            }});
         return outputTags;
     }
 
+    @Transactional
     public RecipeResponse createRecipe(RecipeRequest request, boolean force) {
-        //TODO::CHECK FOR DUPLICATE
-        //TODO::PUT INTO A TRANSACTION SO THAT IF IT FAILS HALFWAY IN, THE INGREDIENTS OR TAGS AREN'T SAVED
-        Recipe recipe = buildRecipe(request.getRecipes().get(0));
-        recipeRepository.save(recipe);
-        return ResponseMapper.buildRecipeResponse(recipe);
+        String name = request.getRecipes().get(0).getName();
+        String author = request.getRecipes().get(0).getAuthor();
+        Optional<Recipe> duplicate = recipeRepository.findByNameAndAuthor(name, author);
+        if (duplicate.isPresent()) {
+            return ResponseMapper.buildRecipeDuplicateResponse(duplicate.get());
+        } else {
+            Recipe recipe = processRecipeRequest(request.getRecipes().get(0));
+            recipeRepository.save(recipe);
+            return ResponseMapper.buildRecipeCreationResponse(recipe);
+        }
     }
 
     public List<Recipe> searchRecipes(Map<String, Object> searchParams) { 

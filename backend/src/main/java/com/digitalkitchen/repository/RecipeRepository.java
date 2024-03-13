@@ -7,6 +7,7 @@ import com.digitalkitchen.model.entities.Recipe;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.digitalkitchen.util.QueryConstants.GET_ALL_AUTHORS;
 import static com.digitalkitchen.util.QueryConstants.SEARCH_RECIPES;
@@ -16,7 +17,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 
     public List<Recipe> findByName(String name);
 
-    public List<Recipe> findByNameAndAuthor(String name, String author);
+    public Optional<Recipe> findByNameAndAuthor(String name, String author);
 
     public boolean existsByNameAndAuthor(String name, String author);
 

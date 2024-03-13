@@ -2,6 +2,7 @@ package com.digitalkitchen.model.entities;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 @Entity
@@ -20,6 +21,7 @@ public class Step {
 
     @ManyToOne
     @JoinColumn(name = "recipe_id")
+    @JsonBackReference
     private Recipe recipe;
 
     @Column(name = "step_number")

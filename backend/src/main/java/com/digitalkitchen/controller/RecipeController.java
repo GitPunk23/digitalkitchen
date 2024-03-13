@@ -1,7 +1,7 @@
 package com.digitalkitchen.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,7 +30,7 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<RecipeResponse> createRecipe( @RequestParam(name = "bypass", defaultValue = "false") Boolean bypassFlag,
                                                         @RequestBody RecipeRequest request) {
