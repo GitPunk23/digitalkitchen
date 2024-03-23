@@ -51,10 +51,11 @@ public class RecipeController {
         return null;
     }
 
-    @PatchMapping(value = "/update")
+    @PatchMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<RecipeResponse> updateRecipe(@RequestBody RecipeRequest request) {
-        recipeService.updateRecipe(request);
-        return null;
+        RecipeResponse response = recipeService.updateRecipe(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @DeleteMapping(value = "/delete")

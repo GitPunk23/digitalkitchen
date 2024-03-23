@@ -61,4 +61,18 @@ class RecipeServiceTest {
         RecipeResponse response = testObject.createRecipe(request, false);
         assertNotNull(response.getRecipes());
     }
+
+    @Test
+    void testUpdateRecipe() {
+        Recipe recipe = RecipeTestUtils.getTestRecipe();
+        RecipeRequest request = RecipeTestUtils.getTestRecipeRequest();
+
+        when(recipeRepository.findById(any())).thenReturn(Optional.of(recipe));
+        when(ingredientRepository.save(any())).thenReturn(recipe.getIngredients().get(0).getIngredient());
+        when(tagRepository.save(any())).thenReturn(recipe.getTags().get(0).getTag());
+        when(recipeRepository.save(any())).thenReturn(recipe);
+        RecipeResponse response = testObject.updateRecipe(request);
+        verify(recipeRepository, times(1)).save(any());
+        assertNotNull(response.getRecipes());
+    }
 }

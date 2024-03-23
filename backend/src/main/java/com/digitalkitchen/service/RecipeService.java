@@ -14,6 +14,7 @@ import com.digitalkitchen.repository.IngredientRepository;
 import com.digitalkitchen.repository.RecipeRepositoryExtension;
 import com.digitalkitchen.repository.TagRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.digitalkitchen.model.request.RecipeRequest;
@@ -117,6 +118,42 @@ public class RecipeService {
         return outputTags;
     }
 
+    private Recipe setUpdatedRecipeData(Recipe recipeToUpdate, RecipeRequestInfo requestInfo) {
+        recipeToUpdate.setCategory(requestInfo.getCategory());
+        recipeToUpdate.setName(requestInfo.getName());
+        recipeToUpdate.setDescription(requestInfo.getDescription());
+        recipeToUpdate.setServings(requestInfo.getServings());
+        recipeToUpdate.setCaloriesPerServing(requestInfo.getCaloriesPerServing());
+        recipeToUpdate.setNotes(requestInfo.getNotes());
+        recipeToUpdate.setAuthor(requestInfo.getAuthor());
+        recipeToUpdate.setIngredients(requestInfo.getIngredients());
+        recipeToUpdate.setSteps(requestInfo.getSteps());
+        recipeToUpdate.setTags(requestInfo.getTags());
+
+        List<RecipeIngredient> recipeIngredients = recipeToUpdate.getIngredients();
+        List<RecipeTag> recipeTags = recipeToUpdate.getTags();
+        List<Ingredient> ingredients = saveIngredients(recipeIngredients.stream()
+                .map(RecipeIngredient::getIngredient)
+                .collect(Collectors.toList()));
+        List<Tag> tags = saveTags(recipeTags.stream()
+                .map(RecipeTag::getTag)
+                .collect(Collectors.toList()));
+
+        for (int i = 0; i < recipeIngredients.size(); i++) {
+            RecipeIngredient recipeIngredient = recipeIngredients.get(i);
+            Ingredient ingredient = ingredients.get(i);
+            recipeIngredient.setRecipe(recipeToUpdate);
+            recipeIngredient.setIngredient(ingredient);
+        }
+        for (int i = 0; i < recipeTags.size(); i++) {
+            RecipeTag recipeTag = recipeTags.get(i);
+            Tag tag = tags.get(i);
+            recipeTag.setRecipe(recipeToUpdate);
+            recipeTag.setTag(tag);
+        }
+        return recipeToUpdate;
+    }
+
     @Transactional
     public RecipeResponse createRecipe(RecipeRequest request, boolean force) {
         String name = request.getRecipes().get(0).getName();
@@ -126,7 +163,7 @@ public class RecipeService {
             return ResponseMapper.buildRecipeDuplicateResponse(duplicate.get());
         } else {
             Recipe recipe = processRecipeRequest(request.getRecipes().get(0));
-            recipeRepository.save(recipe);
+            recipe = recipeRepository.save(recipe);
             return ResponseMapper.buildRecipeCreationResponse(recipe);
         }
     }
@@ -136,10 +173,16 @@ public class RecipeService {
         return ResponseMapper.buildRecipeSearchResponse(recipes);
     }
 
-    public void updateRecipe(RecipeRequest request) {
-        throw new UnsupportedOperationException("Unimplemented method 'updateRecipe'");
+    @Transactional
+    public RecipeResponse updateRecipe(RecipeRequest request) {
+        RecipeRequestInfo requestInfo = request.getRecipes().get(0);
+        Recipe recipe = recipeRepository.findById(requestInfo.getId()).get();
+        Recipe updatedRecipe = setUpdatedRecipeData(recipe, requestInfo);
+        updatedRecipe = recipeRepository.save(updatedRecipe);
+        return ResponseMapper.buildRecipeCreationResponse(updatedRecipe);
     }
 
+    @Transactional
     public void deleteRecipe(int recipeID) {
         throw new UnsupportedOperationException("Unimplemented method 'deleteRecipe'");
     }
