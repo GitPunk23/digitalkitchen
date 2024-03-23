@@ -3,36 +3,37 @@ package com.digitalkitchen.enums;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 public enum Category {
     
-    APPETIZER("appetizer"),
-    BEEF("beef"),
-    BREAD("bread"),
-    BREAKFAST("breakfast"),
-    DESSERT("dessert"),
-    DRINK("drink"),
-    HOLIDAY("holiday"),
-    PASTA("pasta"),
-    PIZZA_AND_FLATBREADS("pizza & flatbreads"),
-    PORK("pork"),
-    POULTRY("poultry"),
-    SALAD("salad"),
-    SANDWICHES_AND_WRAPS("sandwiches & wraps"),
-    SAUCE("sauce"),
-    SAUSAGE("sausage"),
-    SEAFOOD("seafood"),
-    SIDE("side"),
-    SOUP("soup"),
-    SPICES("spices"),
-    VEGETABLES("vegetables");
+    APPETIZER,
+    BEEF,
+    BREAD,
+    BREAKFAST,
+    DESSERT,
+    DRINK,
+    HOLIDAY,
+    PASTA,
+    PIZZA_AND_FLATBREADS,
+    PORK,
+    POULTRY,
+    SALAD,
+    SANDWICHES_AND_WRAPS,
+    SAUCE,
+    SAUSAGE,
+    SEAFOOD,
+    SIDE,
+    SOUP,
+    SPICES,
+    VEGETABLES;
 
-    private final String displayName;
-
-    Category(final String displayName) { this.displayName = displayName; }
-
-    @Override
-    public String toString() {
-        return displayName;
+    public static List<String> getAllCategoryStrings() {
+        return Arrays.stream(Category.values())
+                .map(Enum::name)
+                .collect(Collectors.toList());
     }
 }

@@ -2,23 +2,29 @@ package com.digitalkitchen.enums;
 
 import lombok.Getter;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 public enum Measurement {
     
-    CUP("cup"),
-    FLUID_OUNCE("fluid ounce"),
-    GALLON("gallon"),
-    GRAM("gram"),
-    MILLIGRAM("milligram"),
-    OUNCE("ounce"),
-    PINT("pint"),
-    POUND("pound"),
-    QUART("quart"),
-    TABLESPOON("tablespoon"),
-    TEASPOON("teaspoon"),
-    WHOLE("whole");
+    CUP,
+    FLUID_OUNCE,
+    GALLON,
+    GRAM,
+    MILLIGRAM,
+    OUNCE,
+    PINT,
+    POUND,
+    QUART,
+    TABLESPOON,
+    TEASPOON,
+    WHOLE;
 
-    private final String displayName;
-
-    Measurement(final String displayName) { this.displayName = displayName; }
+    public static List<String> getAllMeasurementStrings() {
+        return Arrays.stream(Measurement.values())
+                .map(Enum::name)
+                .collect(Collectors.toList());
+    }
 }
