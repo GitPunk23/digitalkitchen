@@ -1,6 +1,7 @@
 package com.digitalkitchen.enums;
 
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 public enum Category {
@@ -29,4 +30,9 @@ public enum Category {
     private final String displayName;
 
     Category(final String displayName) { this.displayName = displayName; }
+
+    @Override
+    public String toString() {
+        return displayName;
+    }
 }

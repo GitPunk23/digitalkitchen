@@ -11,14 +11,21 @@ public class QueryConstants {
     public static final String GET_ALL_INGREDIENTS = "SELECT i.ingredient " +
                                                      "FROM Ingredient i";
 
-    public static final String SEARCH_RECIPES = "SELECT r FROM Recipe r " +
-            "WHERE (:name IS NULL OR r.name LIKE CONCAT('%', :name, '%')) " +
-            "AND (:categories IS NULL OR r.category.name IN :categories) " +
-            "AND (:authors IS NULL OR r.author IN :authors) " +
-            "AND (:tags IS NULL OR EXISTS (SELECT t FROM Tag t WHERE t.name IN :tags AND t MEMBER OF r.tags)) " +
-            "AND (:ingredients IS NULL OR EXISTS (SELECT i FROM Ingredient i WHERE i.name IN :ingredients AND i MEMBER OF r.ingredients)) " +
-            "AND (:servings IS NULL OR r.servings IN :servings) " +
-            "AND (:calories IS NULL OR r.caloriesPerServing IN :calories)";
+    public static final String SEARCH_RECIPES =
+            "SELECT * FROM recipes r " +
+                    "JOIN recipe_tags rt ON r.id = rt.recipe_id " +
+                    "JOIN recipe_ingredients ri ON r.id = ri.recipe_id " +
+                    "WHERE (:name IS NULL OR LOWER(r.name) LIKE CONCAT('%', LOWER(:name), '%')) " +
+                    "OR (:categories IS NULL OR r.category IN :categories) " +
+                    "OR (:authors IS NULL OR LOWER(r.author) IN :authors) " +
+                    "OR (:tags IS NULL OR rt.tag_id IN (SELECT id FROM tags WHERE name IN :tags)) " +
+                    "OR (:ingredients IS NULL OR ri.ingredient_id IN (SELECT id FROM ingredients WHERE name IN :ingredients)) " +
+                    "OR (:servings IS NULL OR r.servings IN :servings) " +
+                    "OR (:calories IS NULL OR r.calories_per_serving IN :calories)";
+
+
+
+
 
 
 

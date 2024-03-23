@@ -1,4 +1,5 @@
 package com.digitalkitchen.repository;
+import com.digitalkitchen.enums.Category;
 import com.digitalkitchen.model.request.RecipeSearchRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,15 +27,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
     @Query(GET_ALL_AUTHORS)
     public List<String> getAllAuthors();
 
-    @Query(SEARCH_RECIPES)
-    List<Recipe> searchRecipes(
-            @Param("name") String name,
-            @Param("categories") List<String> categories,
-            @Param("authors") List<String> authors,
-            @Param("tags") List<String> tags,
-            @Param("ingredients") List<String> ingredients,
-            @Param("servings") List<Integer> servings,
-            @Param("calories") List<Integer> calories
-    );
+
     
 }

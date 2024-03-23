@@ -28,6 +28,6 @@ public class Ingredient {
     @Setter(AccessLevel.NONE)
     private int id;
 
-    @Column(name = "name")
+    @Column
     private String name;
 }

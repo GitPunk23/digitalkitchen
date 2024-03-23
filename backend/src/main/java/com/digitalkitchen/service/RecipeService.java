@@ -6,13 +6,14 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.digitalkitchen.enums.Category;
 import com.digitalkitchen.model.entities.*;
 import com.digitalkitchen.model.request.RecipeRequestInfo;
 import com.digitalkitchen.model.request.RecipeSearchRequest;
 import com.digitalkitchen.repository.IngredientRepository;
+import com.digitalkitchen.repository.RecipeRepositoryExtension;
 import com.digitalkitchen.repository.TagRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import com.digitalkitchen.model.request.RecipeRequest;
@@ -25,11 +26,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class RecipeService {
     
     private final RecipeRepository recipeRepository;
+    private final RecipeRepositoryExtension recipeRepositoryExtension;
     private final IngredientRepository ingredientRepository;
     private final TagRepository tagRepository;
 
-    RecipeService(RecipeRepository recipeRepository, IngredientRepository ingredientRepository, TagRepository tagRepository) {
+    RecipeService(RecipeRepository recipeRepository, RecipeRepositoryExtension recipeRepositoryExtension, IngredientRepository ingredientRepository, TagRepository tagRepository) {
         this.recipeRepository = recipeRepository;
+        this.recipeRepositoryExtension = recipeRepositoryExtension;
         this.ingredientRepository = ingredientRepository;
         this.tagRepository = tagRepository;
     }
@@ -129,17 +132,7 @@ public class RecipeService {
     }
 
     public RecipeResponse searchRecipes(RecipeSearchRequest searchParams) {
-        String name = searchParams.getName();
-        List<String> categories = searchParams.getCategories();
-        List<String> authors = searchParams.getAuthors();
-        List<String> tags = searchParams.getTags();
-        List<String> ingredients = searchParams.getIngredients();
-        List<Integer> servings = searchParams.getServings();
-        List<Integer> calories = searchParams.getCalories();
-        //TODO::SANITIZE INPUT
-
-
-        List<Recipe> recipes = recipeRepository.searchRecipes(name, categories, authors, tags, ingredients, servings, calories);
+        List<Recipe> recipes = recipeRepositoryExtension.searchRecipes(searchParams);
         return ResponseMapper.buildRecipeSearchResponse(recipes);
     }
 
@@ -150,4 +143,7 @@ public class RecipeService {
     public void deleteRecipe(int recipeID) {
         throw new UnsupportedOperationException("Unimplemented method 'deleteRecipe'");
     }
+
+
+
 }

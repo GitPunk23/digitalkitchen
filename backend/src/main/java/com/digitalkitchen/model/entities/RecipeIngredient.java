@@ -1,13 +1,6 @@
 package com.digitalkitchen.model.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.digitalkitchen.enums.Measurement;
 
@@ -37,13 +30,14 @@ public class RecipeIngredient {
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
-    @Column(name = "measurement")
+    @Column
+    @Enumerated(EnumType.STRING)
     private Measurement measurement;
 
-    @Column(name = "quantity")
+    @Column
     private Float quantity;
 
-    @Column(name = "notes")
+    @Column
     private String notes;
 }
 

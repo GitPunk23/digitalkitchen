@@ -3,16 +3,7 @@ package com.digitalkitchen.model.entities;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.digitalkitchen.enums.Category;
 
@@ -33,36 +24,37 @@ public class Recipe {
     @Setter(AccessLevel.NONE)
     private int id;
 
-    @Column(name = "category")
+    @Column
+    @Enumerated(EnumType.STRING)
     private Category category;
 
-    @Column(name = "name")
+    @Column
     private String name;
 
-    @Column(name = "description")
+    @Column
     private String description;
 
-    @Column(name = "servings")
+    @Column
     private int servings;
 
-    @Column(name = "calories_per_serving")
+    @Column
     private int caloriesPerServing;
 
-    @Column(name = "notes")
+    @Column
     private String notes;
 
-    @Column(name = "author")  
+    @Column
     private String author;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "recipe_id")
     private List<RecipeIngredient> ingredients;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "recipe_id")
     private List<Step> steps;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "recipe_id")
     private List<RecipeTag> tags;
 }

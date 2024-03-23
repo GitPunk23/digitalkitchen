@@ -24,9 +24,9 @@ public class Step {
     @JsonBackReference
     private Recipe recipe;
 
-    @Column(name = "step_number")
+    @Column
     private int stepNumber;
 
-    @Column(name = "description")
+    @Column
     private String description;
 }

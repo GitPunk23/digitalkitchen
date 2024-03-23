@@ -5,6 +5,7 @@ import com.digitalkitchen.model.request.RecipeRequest;
 import com.digitalkitchen.model.response.RecipeResponse;
 import com.digitalkitchen.repository.IngredientRepository;
 import com.digitalkitchen.repository.RecipeRepository;
+import com.digitalkitchen.repository.RecipeRepositoryExtension;
 import com.digitalkitchen.repository.TagRepository;
 import com.digitalkitchen.util.RecipeTestUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +26,8 @@ class RecipeServiceTest {
     @Mock
     private RecipeRepository recipeRepository;
     @Mock
+    private RecipeRepositoryExtension recipeRepositoryExtension;
+    @Mock
     private IngredientRepository ingredientRepository;
     @Mock
     private TagRepository tagRepository;
@@ -32,7 +35,7 @@ class RecipeServiceTest {
     @BeforeEach
     void beforeEach() {
         MockitoAnnotations.openMocks(this);
-        testObject = Mockito.spy(new RecipeService(recipeRepository, ingredientRepository, tagRepository));
+        testObject = Mockito.spy(new RecipeService(recipeRepository, recipeRepositoryExtension, ingredientRepository, tagRepository));
     }
 
     @Test
