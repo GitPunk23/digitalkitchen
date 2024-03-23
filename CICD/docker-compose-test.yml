@@ -3,7 +3,7 @@ services:
   frontend-test:
     build:
       context: ./frontend
-      dockerfile: Dockerfile.test  
+      dockerfile: Dockerfile.test
     ports:
       - "0.0.0.0:4040:4040"  # Map host port 8080 to container port 3000
     networks:
@@ -13,7 +13,7 @@ services:
 
   backend-test:
     build: 
-      context: ./backend
+      context: ../backend
       dockerfile: Dockerfile.test
     ports:
       - "4000:4000"  # Map host port 8000 to container port 80
