@@ -46,7 +46,8 @@ public class RecipeController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<RecipeResponse> retrieveRecipe(final @PathVariable("id") String recipeId) {
         RecipeResponse response = recipeService.retrieveRecipe(recipeId);
         return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -60,8 +61,9 @@ public class RecipeController {
     }
 
     @DeleteMapping(value = "/delete")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<RecipeResponse> deleteRecipe(final @RequestParam int recipeID) {
         recipeService.deleteRecipe(recipeID);
-        return null;
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 }

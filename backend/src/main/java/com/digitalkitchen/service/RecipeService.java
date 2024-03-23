@@ -192,7 +192,7 @@ public class RecipeService {
 
     @Transactional
     public void deleteRecipe(int recipeID) {
-        throw new UnsupportedOperationException("Unimplemented method 'deleteRecipe'");
+        recipeRepository.deleteById(recipeID);
     }
 
 
