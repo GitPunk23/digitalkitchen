@@ -173,6 +173,14 @@ public class RecipeService {
         return ResponseMapper.buildRecipeSearchResponse(recipes);
     }
 
+    public RecipeResponse retrieveRecipe(String idString) {
+        int recipeId = Integer.parseInt(idString);
+        List<Recipe> recipes = new ArrayList<>();
+        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+        recipes.add(recipeOptional.get());
+        return ResponseMapper.buildRecipeSearchResponse(recipes);
+    }
+
     @Transactional
     public RecipeResponse updateRecipe(RecipeRequest request) {
         RecipeRequestInfo requestInfo = request.getRecipes().get(0);

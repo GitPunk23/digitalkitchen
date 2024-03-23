@@ -63,6 +63,16 @@ class RecipeServiceTest {
     }
 
     @Test
+    void testRetrieveRecipe() {
+        Recipe recipe = RecipeTestUtils.getTestRecipe();
+        String recipeId = String.valueOf(recipe.getId());
+
+        when(recipeRepository.findById(any())).thenReturn(Optional.of(recipe));
+        RecipeResponse response = testObject.retrieveRecipe(recipeId);
+        assertNotNull(response.getRecipes());
+    }
+
+    @Test
     void testUpdateRecipe() {
         Recipe recipe = RecipeTestUtils.getTestRecipe();
         RecipeRequest request = RecipeTestUtils.getTestRecipeRequest();

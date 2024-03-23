@@ -13,7 +13,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.digitalkitchen.model.request.RecipeRequest;
 import com.digitalkitchen.model.response.RecipeResponse;
 import com.digitalkitchen.service.RecipeService;
 
@@ -39,6 +38,16 @@ public class RecipeControllerTest {
         when(recipeService.createRecipe(any(), anyBoolean())).thenReturn(sampleResponse);
         ResponseEntity<RecipeResponse> response = testObject.createRecipe(false, getTestRecipeRequest());
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(sampleResponse, response.getBody());
+    }
+
+    @Test
+    void testRetrieveRecipe() {
+        RecipeResponse sampleResponse = getTestRecipeResponse();
+
+        when(recipeService.retrieveRecipe(any())).thenReturn(sampleResponse);
+        ResponseEntity<RecipeResponse> response = testObject.retrieveRecipe("1");
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(sampleResponse, response.getBody());
     }
 

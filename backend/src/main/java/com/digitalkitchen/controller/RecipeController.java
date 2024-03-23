@@ -47,8 +47,9 @@ public class RecipeController {
     }
     
     @GetMapping(value = "/{id}")
-    public ResponseEntity<RecipeResponse> retrieveRecipe(final @PathVariable("id") String id) {
-        return null;
+    public ResponseEntity<RecipeResponse> retrieveRecipe(final @PathVariable("id") String recipeId) {
+        RecipeResponse response = recipeService.retrieveRecipe(recipeId);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PatchMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
