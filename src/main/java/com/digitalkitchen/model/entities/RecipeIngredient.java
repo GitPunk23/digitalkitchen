@@ -21,12 +21,12 @@ public class RecipeIngredient {
     @Setter(AccessLevel.NONE)
     private int id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "recipe_id")
     @JsonBackReference
     private Recipe recipe;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 

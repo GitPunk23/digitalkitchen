@@ -1,6 +1,5 @@
 package com.digitalkitchen.util;
 
-import com.digitalkitchen.enums.Measurement;
 import com.digitalkitchen.model.entities.*;
 import com.digitalkitchen.model.request.RecipeRequest;
 import com.digitalkitchen.model.request.RecipeRequestInfo;
@@ -16,8 +15,8 @@ import static com.digitalkitchen.enums.Measurement.WHOLE;
 
 public class RecipeTestUtils {
 
-    public static Recipe getTestRecipe() {
-        Recipe recipe = Recipe.builder()
+    public static com.digitalkitchen.model.entities.Recipe getTestRecipe() {
+        com.digitalkitchen.model.entities.Recipe recipe = com.digitalkitchen.model.entities.Recipe.builder()
             .id(1337)
             .name("bantha burgers")
             .author("Han Solo")
@@ -60,7 +59,7 @@ public class RecipeTestUtils {
     }
 
     public static RecipeRequest getTestRecipeRequest() {
-        Recipe recipe = getTestRecipe();
+        com.digitalkitchen.model.entities.Recipe recipe = getTestRecipe();
         RecipeRequestInfo requestInfo = RecipeRequestInfo.builder()
             .name(recipe.getName())
             .author(recipe.getAuthor())
@@ -83,8 +82,8 @@ public class RecipeTestUtils {
     }
 
     public static RecipeResponse getTestRecipeResponse() {
-        Recipe recipe = getTestRecipe();
-        ArrayList<Recipe> recipeList = new ArrayList<>();
+        com.digitalkitchen.model.entities.Recipe recipe = getTestRecipe();
+        ArrayList<com.digitalkitchen.model.entities.Recipe> recipeList = new ArrayList<>();
 
         recipeList.add(recipe);
         return RecipeResponse.builder()

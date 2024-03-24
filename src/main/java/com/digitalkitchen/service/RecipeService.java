@@ -2,11 +2,9 @@ package com.digitalkitchen.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.digitalkitchen.enums.Category;
 import com.digitalkitchen.model.entities.*;
 import com.digitalkitchen.model.request.RecipeRequestInfo;
 import com.digitalkitchen.model.request.RecipeSearchRequest;
@@ -14,7 +12,6 @@ import com.digitalkitchen.repository.IngredientRepository;
 import com.digitalkitchen.repository.RecipeRepositoryExtension;
 import com.digitalkitchen.repository.TagRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.digitalkitchen.model.request.RecipeRequest;
@@ -53,17 +50,12 @@ public class RecipeService {
                 .build();
     }
 
-    private Recipe processRecipeRequest(RecipeRequestInfo requestInfo) {
-        Recipe recipe = buildRecipe(requestInfo);
+    private void buildRecipeIngredientList(Recipe recipe) {
         List<RecipeIngredient> recipeIngredients = recipe.getIngredients();
-        List<Step> steps = recipe.getSteps();
-        List<RecipeTag> recipeTags = recipe.getTags();
         List<Ingredient> ingredients = saveIngredients(recipeIngredients.stream()
-                                                                        .map(RecipeIngredient::getIngredient)
-                                                                        .collect(Collectors.toList()));
-        List<Tag> tags = saveTags(recipeTags.stream()
-                                            .map(RecipeTag::getTag)
-                                            .collect(Collectors.toList()));
+                .map(RecipeIngredient::getIngredient)
+                .map(Ingredient::getName)
+                .collect(Collectors.toList()));
 
         for (int i = 0; i < recipeIngredients.size(); i++) {
             RecipeIngredient recipeIngredient = recipeIngredients.get(i);
@@ -71,54 +63,78 @@ public class RecipeService {
             recipeIngredient.setRecipe(recipe);
             recipeIngredient.setIngredient(ingredient);
         }
+    }
+
+    private void buildRecipeTagList(Recipe recipe) {
+        List<RecipeTag> recipeTags = recipe.getTags();
+        List<Tag> tags = saveTags(recipeTags.stream()
+                .map(RecipeTag::getTag)
+                .map(Tag::getName)
+                .collect(Collectors.toList()));
+
         for (int i = 0; i < recipeTags.size(); i++) {
             RecipeTag recipeTag = recipeTags.get(i);
             Tag tag = tags.get(i);
             recipeTag.setRecipe(recipe);
             recipeTag.setTag(tag);
         }
+    }
+
+    private void buildStepsList(Recipe recipe) {
+        List<Step> steps = recipe.getSteps();
         steps.forEach(step -> step.setRecipe(recipe));
+    }
+
+    private Recipe processRecipeRequest(RecipeRequestInfo recipeRequestInfo) {
+        Recipe recipe = buildRecipe(recipeRequestInfo);
+        buildRecipeIngredientList(recipe);
+        buildRecipeTagList(recipe);
+        buildStepsList(recipe);
 
         return recipe;
     }
 
     /**
      * Saves a list of ingredients to the database. If an ingredient already exists, the record is retrieved.
-     * @param ingredients list of ingredients to save to the database
+     * @param ingredientNames list of ingredient names to save to the database
      * @return the list of saved ingredients with the id field populated
      */
-    private List<Ingredient> saveIngredients(List<Ingredient> ingredients) {
+    private List<Ingredient> saveIngredients(List<String> ingredientNames) {
         List<Ingredient> outputIngredients = new ArrayList<>();
 
-        ingredients.forEach(ingredient -> {
-            Optional<Ingredient> foundIngredient = ingredientRepository.findByName(ingredient.getName());
+        ingredientNames.forEach(name -> {
+            Optional<Ingredient> foundIngredient = ingredientRepository.findByName(name);
             if (foundIngredient.isPresent()) {
                 outputIngredients.add(foundIngredient.get());
             } else {
-                outputIngredients.add(ingredientRepository.save(ingredient));
+                outputIngredients.add(ingredientRepository.save(Ingredient.builder()
+                        .name(name)
+                        .build()));
         }});
         return outputIngredients;
     }
 
     /**
      * Saves a list of tags to the database. If a tag already exists, the record is retrieved.
-     * @param tags list of tags to save to the database
+     * @param tagNames list of tags to save to the database
      * @return the list of saved tags with the id field populated
      */
-    private List<Tag> saveTags(List<Tag> tags) {
+    private List<Tag> saveTags(List<String> tagNames) {
         List<Tag> outputTags = new ArrayList<>();
 
-        tags.forEach(tag -> {
-            Optional<Tag> foundTag = tagRepository.findByName(tag.getName());
+        tagNames.forEach(name -> {
+            Optional<Tag> foundTag = tagRepository.findByName(name);
             if (foundTag.isPresent()) {
                 outputTags.add(foundTag.get());
             } else {
-                outputTags.add(tagRepository.save(tag));
+                outputTags.add(tagRepository.save(Tag.builder()
+                        .name(name)
+                        .build()));
             }});
         return outputTags;
     }
 
-    private Recipe setUpdatedRecipeData(Recipe recipeToUpdate, RecipeRequestInfo requestInfo) {
+    private void setUpdatedRecipeData(Recipe recipeToUpdate, RecipeRequestInfo requestInfo) {
         recipeToUpdate.setCategory(requestInfo.getCategory());
         recipeToUpdate.setName(requestInfo.getName());
         recipeToUpdate.setDescription(requestInfo.getDescription());
@@ -129,72 +145,56 @@ public class RecipeService {
         recipeToUpdate.setIngredients(requestInfo.getIngredients());
         recipeToUpdate.setSteps(requestInfo.getSteps());
         recipeToUpdate.setTags(requestInfo.getTags());
-
-        List<RecipeIngredient> recipeIngredients = recipeToUpdate.getIngredients();
-        List<RecipeTag> recipeTags = recipeToUpdate.getTags();
-        List<Ingredient> ingredients = saveIngredients(recipeIngredients.stream()
-                .map(RecipeIngredient::getIngredient)
-                .collect(Collectors.toList()));
-        List<Tag> tags = saveTags(recipeTags.stream()
-                .map(RecipeTag::getTag)
-                .collect(Collectors.toList()));
-
-        for (int i = 0; i < recipeIngredients.size(); i++) {
-            RecipeIngredient recipeIngredient = recipeIngredients.get(i);
-            Ingredient ingredient = ingredients.get(i);
-            recipeIngredient.setRecipe(recipeToUpdate);
-            recipeIngredient.setIngredient(ingredient);
-        }
-        for (int i = 0; i < recipeTags.size(); i++) {
-            RecipeTag recipeTag = recipeTags.get(i);
-            Tag tag = tags.get(i);
-            recipeTag.setRecipe(recipeToUpdate);
-            recipeTag.setTag(tag);
-        }
-        return recipeToUpdate;
+        buildRecipeIngredientList(recipeToUpdate);
+        buildStepsList(recipeToUpdate);
+        buildRecipeTagList(recipeToUpdate);
     }
 
     @Transactional
     public RecipeResponse createRecipe(RecipeRequest request, boolean force) {
         String name = request.getRecipes().get(0).getName();
         String author = request.getRecipes().get(0).getAuthor();
-        Optional<Recipe> duplicate = recipeRepository.findByNameAndAuthor(name, author);
+        Optional<com.digitalkitchen.model.entities.Recipe> duplicate = recipeRepository.findByNameAndAuthor(name, author);
+        RecipeResponse response;
         if (duplicate.isPresent()) {
-            return ResponseMapper.buildRecipeDuplicateResponse(duplicate.get());
+            response = ResponseMapper.buildRecipeDuplicateResponse(duplicate.get());
         } else {
-            Recipe recipe = processRecipeRequest(request.getRecipes().get(0));
+            com.digitalkitchen.model.entities.Recipe recipe = processRecipeRequest(request.getRecipes().get(0));
             recipe = recipeRepository.save(recipe);
-            return ResponseMapper.buildRecipeCreationResponse(recipe);
+            response = ResponseMapper.buildRecipeCreationResponse(recipe);
         }
+        return response;
     }
 
     public RecipeResponse searchRecipes(RecipeSearchRequest searchParams) {
-        List<Recipe> recipes = recipeRepositoryExtension.searchRecipes(searchParams);
+        List<com.digitalkitchen.model.entities.Recipe> recipes = recipeRepositoryExtension.searchRecipes(searchParams);
         return ResponseMapper.buildRecipeSearchResponse(recipes);
     }
 
     public RecipeResponse retrieveRecipe(String idString) {
         int recipeId = Integer.parseInt(idString);
-        List<Recipe> recipes = new ArrayList<>();
-        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+        List<com.digitalkitchen.model.entities.Recipe> recipes = new ArrayList<>();
+        Optional<com.digitalkitchen.model.entities.Recipe> recipeOptional = recipeRepository.findById(recipeId);
         recipes.add(recipeOptional.get());
         return ResponseMapper.buildRecipeSearchResponse(recipes);
     }
 
     @Transactional
     public RecipeResponse updateRecipe(RecipeRequest request) {
-        RecipeRequestInfo requestInfo = request.getRecipes().get(0);
-        Recipe recipe = recipeRepository.findById(requestInfo.getId()).get();
-        Recipe updatedRecipe = setUpdatedRecipeData(recipe, requestInfo);
-        updatedRecipe = recipeRepository.save(updatedRecipe);
-        return ResponseMapper.buildRecipeCreationResponse(updatedRecipe);
+        int recipeId = request.getRecipes().get(0).getId();
+        Optional<Recipe> recipeOpt = recipeRepository.findById(recipeId);
+        if (recipeOpt.isPresent()) {
+            Recipe recipe = recipeOpt.get();
+            setUpdatedRecipeData(recipe, request.getRecipes().get(0));
+            Recipe updatedRecipe = recipeRepository.save(recipe);
+            return ResponseMapper.buildRecipeCreationResponse(updatedRecipe);
+        }
+        return null;
     }
 
     @Transactional
-    public void deleteRecipe(int recipeID) {
-        recipeRepository.deleteById(recipeID);
+    public void deleteRecipe(int recipeId) {
+        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+        recipeOptional.ifPresent(recipeRepository::delete);
     }
-
-
-
 }

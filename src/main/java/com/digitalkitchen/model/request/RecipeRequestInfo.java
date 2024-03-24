@@ -1,7 +1,6 @@
 package com.digitalkitchen.model.request;
 
 import java.util.List;
-import java.util.Set;
 
 import com.digitalkitchen.enums.Category;
 import com.digitalkitchen.model.entities.RecipeIngredient;

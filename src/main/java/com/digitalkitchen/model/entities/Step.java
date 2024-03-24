@@ -19,7 +19,7 @@ public class Step {
     @Setter(AccessLevel.NONE)
     private int id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "recipe_id")
     @JsonBackReference
     private Recipe recipe;

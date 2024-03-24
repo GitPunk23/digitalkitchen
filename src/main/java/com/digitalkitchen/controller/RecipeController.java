@@ -54,16 +54,19 @@ public class RecipeController {
     }
 
     @PatchMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
     public ResponseEntity<RecipeResponse> updateRecipe(@RequestBody RecipeRequest request) {
-        RecipeResponse response = recipeService.updateRecipe(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        //RecipeResponse response = recipeService.updateRecipe(request);
+        //return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        /* Method is receiving several issues that are very hard to debug. Would be best to design a better update algorithm
+        from scratch */
+        return null;
     }
 
     @DeleteMapping(value = "/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<RecipeResponse> deleteRecipe(final @RequestParam int recipeID) {
-        recipeService.deleteRecipe(recipeID);
+    public ResponseEntity<RecipeResponse> deleteRecipe(final @RequestParam int recipeId) {
+        recipeService.deleteRecipe(recipeId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 }
