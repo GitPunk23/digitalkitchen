@@ -1,14 +1,14 @@
-backend/target/
+target/
 .vscode/
-.idea*
+*.idea
 .env
-backend/src/main/resources/application*
-backend/build/
-backend/archive/
-backend/*.jar
-backend/certs/
+*.iml
+
+src/main/resources/application*
 build/
-frontend/node_modules/
-frontend/.env*
+archive/
+*.jar
+certs/
+
 
 
