@@ -4,8 +4,6 @@ v0.8.0
 
 ## Table of Contents
 - [Digital Kitchen](#digital-kitchen)
-  - [Table of Contents](#table-of-contents)
-  - [What's new!](#whats-new)
   - [Project Description](#project-description)
   
 ## Project Description
