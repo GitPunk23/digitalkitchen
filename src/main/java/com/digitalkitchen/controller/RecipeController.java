@@ -20,6 +20,8 @@ import com.digitalkitchen.model.request.RecipeRequest;
 import com.digitalkitchen.model.response.RecipeResponse;
 import com.digitalkitchen.service.RecipeService;
 
+import static com.digitalkitchen.enums.ResponseStatus.*;
+
 @RestController
 @RequestMapping("/recipes")
 @Validated
@@ -36,7 +38,8 @@ public class RecipeController {
     public ResponseEntity<RecipeResponse> createRecipe( @RequestParam(name = "bypass", defaultValue = "false") Boolean bypassFlag,
                                                         @RequestBody RecipeRequest request) {
         RecipeResponse response = recipeService.createRecipe(request, bypassFlag);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        HttpStatus status = response.getStatus().equals(CREATED) ? HttpStatus.CREATED : HttpStatus.CONFLICT;
+        return ResponseEntity.status(status).body(response);
     }
 
     @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -54,13 +57,11 @@ public class RecipeController {
     }
 
     @PatchMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<RecipeResponse> updateRecipe(@RequestBody RecipeRequest request) {
-        //RecipeResponse response = recipeService.updateRecipe(request);
-        //return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        /* Method is receiving several issues that are very hard to debug. Would be best to design a better update algorithm
-        from scratch */
-        return null;
+        RecipeResponse response = recipeService.updateRecipe(request);
+        HttpStatus status = response.getStatus().equals(UPDATED) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        return ResponseEntity.status(status).body(response);
     }
 
     @DeleteMapping(value = "/delete")
