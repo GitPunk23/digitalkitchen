@@ -43,17 +43,19 @@ public class RecipeController {
     }
 
     @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.FOUND)
     public ResponseEntity<RecipeResponse> searchRecipes(@RequestBody RecipeSearchRequest searchParams) {
         RecipeResponse response = recipeService.searchRecipes(searchParams);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        HttpStatus status = response.getStatus().equals(FOUND) ? HttpStatus.FOUND : HttpStatus.NOT_FOUND;
+        return ResponseEntity.status(status).body(response);
     }
     
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.FOUND)
     public ResponseEntity<RecipeResponse> retrieveRecipe(final @PathVariable("id") String recipeId) {
         RecipeResponse response = recipeService.retrieveRecipe(recipeId);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        HttpStatus status = response.getStatus().equals(FOUND) ? HttpStatus.FOUND : HttpStatus.NOT_FOUND;
+        return ResponseEntity.status(status).body(response);
     }
 
     @PatchMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -1,8 +1,6 @@
 package com.digitalkitchen.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.digitalkitchen.model.entities.*;
@@ -17,6 +15,7 @@ import com.digitalkitchen.model.response.RecipeResponse;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.digitalkitchen.enums.ResponseStatus.NOT_FOUND;
+import static com.digitalkitchen.service.ResponseMapper.*;
 
 @Slf4j
 @Service
@@ -174,7 +173,7 @@ public class RecipeService {
         List<RecipeIngredient> recipeIngredientsToDelete = currentRecipeIngredients.stream()
                 .filter(recipeIngredient -> newRecipeIngredients.stream()
                         .noneMatch(newIngredient -> newIngredient.getIngredient().equals(recipeIngredient.getIngredient())))
-                .collect(Collectors.toList());
+                .toList();
 
         for (RecipeIngredient toDelete : recipeIngredientsToDelete) {
             recipeIngredientRepository.delete(toDelete);
@@ -226,29 +225,28 @@ public class RecipeService {
     public RecipeResponse createRecipe(RecipeRequest request, boolean force) {
         String name = request.getRecipes().get(0).getName();
         String author = request.getRecipes().get(0).getAuthor();
-        Optional<com.digitalkitchen.model.entities.Recipe> duplicate = recipeRepository.findByNameAndAuthor(name, author);
+        Optional<Recipe> duplicate = recipeRepository.findByNameAndAuthor(name, author);
         RecipeResponse response;
         if (duplicate.isPresent()) {
-            response = ResponseMapper.buildRecipeDuplicateResponse(duplicate.get());
+            response = buildRecipeDuplicateResponse(duplicate.get());
         } else {
-            com.digitalkitchen.model.entities.Recipe recipe = processRecipeRequest(request.getRecipes().get(0));
+            Recipe recipe = processRecipeRequest(request.getRecipes().get(0));
             recipe = recipeRepository.save(recipe);
-            response = ResponseMapper.buildRecipeCreationResponse(recipe);
+            response = buildRecipeCreationResponse(recipe);
         }
         return response;
     }
 
     public RecipeResponse searchRecipes(RecipeSearchRequest searchParams) {
-        List<com.digitalkitchen.model.entities.Recipe> recipes = recipeRepositoryExtension.searchRecipes(searchParams);
-        return ResponseMapper.buildRecipeSearchResponse(recipes);
+        List<Recipe> recipes = recipeRepositoryExtension.searchRecipes(searchParams);
+        return buildRecipeSearchResponse(recipes);
     }
 
     public RecipeResponse retrieveRecipe(String idString) {
         int recipeId = Integer.parseInt(idString);
-        List<com.digitalkitchen.model.entities.Recipe> recipes = new ArrayList<>();
-        Optional<com.digitalkitchen.model.entities.Recipe> recipeOptional = recipeRepository.findById(recipeId);
-        recipes.add(recipeOptional.get());
-        return ResponseMapper.buildRecipeSearchResponse(recipes);
+        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+        List<Recipe> recipes = Collections.singletonList(recipeOptional.get());
+        return buildRecipeSearchResponse(recipes);
     }
 
     @Transactional
@@ -259,7 +257,7 @@ public class RecipeService {
             Recipe recipe = recipeOpt.get();
             setUpdatedRecipeData(recipe, request.getRecipes().get(0));
             Recipe updatedRecipe = recipeRepository.save(recipe);
-            return ResponseMapper.buildRecipeCreationResponse(updatedRecipe);
+            return buildRecipeCreationResponse(updatedRecipe);
         } else {
             return RecipeResponse.builder().status(NOT_FOUND).build();
         }

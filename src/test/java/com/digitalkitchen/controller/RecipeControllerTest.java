@@ -1,8 +1,10 @@
 package com.digitalkitchen.controller;
 
+import static com.digitalkitchen.enums.ResponseStatus.*;
+import static com.digitalkitchen.util.RecipeTestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,10 +18,7 @@ import org.springframework.http.ResponseEntity;
 import com.digitalkitchen.model.response.RecipeResponse;
 import com.digitalkitchen.service.RecipeService;
 
-import static com.digitalkitchen.util.RecipeTestUtils.getTestRecipeRequest;
-import static com.digitalkitchen.util.RecipeTestUtils.getTestRecipeResponse;
-
-public class RecipeControllerTest {
+class RecipeControllerTest {
 
     private RecipeController testObject;
     @Mock
@@ -34,6 +33,7 @@ public class RecipeControllerTest {
     @Test
     void testCreateRecipe() {
         RecipeResponse sampleResponse = getTestRecipeResponse();
+        sampleResponse.setStatus(CREATED);
 
         when(recipeService.createRecipe(any(), anyBoolean())).thenReturn(sampleResponse);
         ResponseEntity<RecipeResponse> response = testObject.createRecipe(false, getTestRecipeRequest());
@@ -42,22 +42,43 @@ public class RecipeControllerTest {
     }
 
     @Test
+    void testSearchRecipes() {
+        RecipeResponse sampleResponse = getTestRecipeResponse();
+        sampleResponse.setStatus(FOUND);
+
+        when(recipeService.searchRecipes(any())).thenReturn(sampleResponse);
+        ResponseEntity<RecipeResponse> response = testObject.searchRecipes(getRecipeSearchRequest());
+        assertEquals(HttpStatus.FOUND, response.getStatusCode());
+        assertEquals(sampleResponse, response.getBody());
+    }
+
+    @Test
     void testRetrieveRecipe() {
         RecipeResponse sampleResponse = getTestRecipeResponse();
+        sampleResponse.setStatus(FOUND);
 
         when(recipeService.retrieveRecipe(any())).thenReturn(sampleResponse);
         ResponseEntity<RecipeResponse> response = testObject.retrieveRecipe("1");
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.FOUND, response.getStatusCode());
         assertEquals(sampleResponse, response.getBody());
     }
 
     @Test
     void testUpdateRecipe() {
         RecipeResponse sampleResponse = getTestRecipeResponse();
+        sampleResponse.setStatus(UPDATED);
 
         when(recipeService.updateRecipe(any())).thenReturn(sampleResponse);
         ResponseEntity<RecipeResponse> response = testObject.updateRecipe(getTestRecipeRequest());
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(sampleResponse, response.getBody());
+    }
+
+    @Test
+    void testDeleteRecipe() {
+        Mockito.doNothing().when(recipeService).deleteRecipe(anyInt());
+        ResponseEntity<RecipeResponse> response = testObject.deleteRecipe(7);
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        assertNull(response.getBody());
     }
 }

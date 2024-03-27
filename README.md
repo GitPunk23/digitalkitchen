@@ -7,5 +7,8 @@ v0.8.0
   - [Project Description](#project-description)
   
 ## Project Description
-This project was born from both an interest in learning new technologies (specifically the spring boot framework and learning tech stacks in general) as well as creating a management system for my partner and I's vast amount of recipes. This project connects with a MYSQL database used to hold information pertaining to recipes and allows the user to interact with them.
-
+This project was born from both an interest in learning new technologies 
+(specifically the spring boot framework and learning tech stacks in general) 
+as well as creating a management system for my partner and I's vast amount 
+of recipes. This project connects with a MYSQL database used to hold 
+information pertaining to recipes and allows the user to interact with them.
