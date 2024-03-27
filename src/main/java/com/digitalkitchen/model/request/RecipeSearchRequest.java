@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Builder
 public class RecipeSearchRequest {
     private String name;
     private List<Category> categories;

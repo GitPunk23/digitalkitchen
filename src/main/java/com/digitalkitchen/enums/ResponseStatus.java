@@ -7,7 +7,9 @@ public enum ResponseStatus {
     CREATED("CREATED"),
     DUPLICATE("DUPLICATE"),
     EMPTY("EMPTY"),
-    FOUND("FOUND");
+    FOUND("FOUND"),
+    NOT_FOUND("NOT FOUND"),
+    UPDATED("UPDATED");
 
     private final String displayName;
 
