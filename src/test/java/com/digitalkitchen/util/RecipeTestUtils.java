@@ -3,6 +3,7 @@ package com.digitalkitchen.util;
 import com.digitalkitchen.model.entities.*;
 import com.digitalkitchen.model.request.RecipeRequest;
 import com.digitalkitchen.model.request.RecipeRequestInfo;
+import com.digitalkitchen.model.request.RecipeSearchRequest;
 import com.digitalkitchen.model.response.RecipeResponse;
 
 import java.util.ArrayList;
@@ -11,12 +12,13 @@ import java.util.List;
 
 import com.digitalkitchen.enums.Category;
 
+import static com.digitalkitchen.enums.Category.PIZZA_AND_FLATBREADS;
 import static com.digitalkitchen.enums.Measurement.WHOLE;
 
 public class RecipeTestUtils {
 
-    public static com.digitalkitchen.model.entities.Recipe getTestRecipe() {
-        com.digitalkitchen.model.entities.Recipe recipe = com.digitalkitchen.model.entities.Recipe.builder()
+    public static Recipe getTestRecipe() {
+        Recipe recipe = Recipe.builder()
             .id(1337)
             .name("bantha burgers")
             .author("Han Solo")
@@ -59,7 +61,7 @@ public class RecipeTestUtils {
     }
 
     public static RecipeRequest getTestRecipeRequest() {
-        com.digitalkitchen.model.entities.Recipe recipe = getTestRecipe();
+        Recipe recipe = getTestRecipe();
         RecipeRequestInfo requestInfo = RecipeRequestInfo.builder()
             .name(recipe.getName())
             .author(recipe.getAuthor())
@@ -82,12 +84,33 @@ public class RecipeTestUtils {
     }
 
     public static RecipeResponse getTestRecipeResponse() {
-        com.digitalkitchen.model.entities.Recipe recipe = getTestRecipe();
-        ArrayList<com.digitalkitchen.model.entities.Recipe> recipeList = new ArrayList<>();
+        Recipe recipe = getTestRecipe();
+        ArrayList<Recipe> recipeList = new ArrayList<>();
 
         recipeList.add(recipe);
         return RecipeResponse.builder()
             .recipes(recipeList)
             .build();
+    }
+
+    public static RecipeSearchRequest getRecipeSearchRequest() {
+        String name = "name";
+        List<Category> categories = Collections.singletonList(PIZZA_AND_FLATBREADS);
+        List<String> authors = Collections.singletonList("daniel tosh");
+        List<String> tags = Collections.singletonList("tag");
+        List<String> ingredients = Collections.singletonList("strawberry");
+        List<Integer> servings = Collections.singletonList(1);
+        List<Integer> calories = Collections.singletonList(1);
+
+        return RecipeSearchRequest.builder()
+                .name(name)
+                .categories(categories)
+                .authors(authors)
+                .tags(tags)
+                .ingredients(ingredients)
+                .servings(servings)
+                .calories(calories)
+                .build();
+
     }
 }

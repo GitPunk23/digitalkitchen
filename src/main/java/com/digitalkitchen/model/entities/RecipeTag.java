@@ -23,7 +23,7 @@ public class RecipeTag {
     @JsonBackReference
     private Recipe recipe;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tag_id")
     private Tag tag;
 }

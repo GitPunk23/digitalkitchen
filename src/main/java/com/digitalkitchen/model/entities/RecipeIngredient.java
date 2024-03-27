@@ -26,7 +26,7 @@ public class RecipeIngredient {
     @JsonBackReference
     private Recipe recipe;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
