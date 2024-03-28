@@ -1,9 +1,8 @@
 package com.digitalkitchen.model.entities;
 
 import java.util.List;
-import java.util.Set;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import com.digitalkitchen.enums.Category;
 

@@ -1,6 +1,6 @@
 package com.digitalkitchen.model.entities;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;

@@ -6,11 +6,10 @@ import com.digitalkitchen.model.request.RecipeSearchRequest;
 import com.digitalkitchen.repository.RecipeRepositoryExtension;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class RecipeRepositoryExtensionImpl implements RecipeRepositoryExtension {

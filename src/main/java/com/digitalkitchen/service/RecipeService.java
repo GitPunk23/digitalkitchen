@@ -7,7 +7,6 @@ import com.digitalkitchen.model.entities.*;
 import com.digitalkitchen.model.request.RecipeRequestInfo;
 import com.digitalkitchen.model.request.RecipeSearchRequest;
 import com.digitalkitchen.repository.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import com.digitalkitchen.model.request.RecipeRequest;
@@ -17,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import static com.digitalkitchen.enums.ResponseStatus.NOT_FOUND;
 import static com.digitalkitchen.service.ResponseMapper.*;
 
-@Slf4j
 @Service
 public class RecipeService {
     

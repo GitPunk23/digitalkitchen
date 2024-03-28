@@ -1,8 +1,6 @@
 package com.digitalkitchen.model.request;
 
 import com.digitalkitchen.enums.Category;
-import com.digitalkitchen.model.entities.Ingredient;
-import com.digitalkitchen.model.entities.Tag;
 import lombok.*;
 
 import java.util.List;
