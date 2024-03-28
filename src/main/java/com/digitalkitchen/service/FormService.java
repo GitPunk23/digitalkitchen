@@ -7,11 +7,13 @@ import com.digitalkitchen.model.entities.Tag;
 import com.digitalkitchen.repository.IngredientRepository;
 import com.digitalkitchen.repository.RecipeRepository;
 import com.digitalkitchen.repository.TagRepository;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@AutoConfiguration
 @Service
 public class FormService {
 

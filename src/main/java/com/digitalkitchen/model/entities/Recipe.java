@@ -1,7 +1,6 @@
 package com.digitalkitchen.model.entities;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.*;
 

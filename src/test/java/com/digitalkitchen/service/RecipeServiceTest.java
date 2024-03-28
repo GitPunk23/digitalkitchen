@@ -1,8 +1,6 @@
 package com.digitalkitchen.service;
 
 import com.digitalkitchen.model.entities.Recipe;
-import com.digitalkitchen.model.entities.RecipeIngredient;
-import com.digitalkitchen.model.entities.RecipeTag;
 import com.digitalkitchen.model.request.RecipeRequest;
 import com.digitalkitchen.model.request.RecipeSearchRequest;
 import com.digitalkitchen.model.response.RecipeResponse;
@@ -24,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@SuppressWarnings("null")
 class RecipeServiceTest {
 
     private RecipeService testObject;
