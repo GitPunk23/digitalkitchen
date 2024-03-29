@@ -1,0 +1,176 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Digital Kitchen",
+    "dateExported": "2024-03-23T12:33:05.138Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "de51cffd-8b48-4098-9613-af48787f5f6e",
+            "colId": "49de4c9e-cbbd-404c-82e8-033029a8e447",
+            "containerId": "",
+            "name": "POST Recipe Local",
+            "url": "localhost:8080/recipes/create",
+            "method": "POST",
+            "sortNum": 5000,
+            "created": "2024-03-12T23:06:55.197Z",
+            "modified": "2024-03-12T23:06:55.197Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"recipes\": [\n    {\n      \"name\": \"bantha burgers\",\n      \"author\": \"Han Solo\",\n      \"category\": \"SANDWICHES_AND_WRAPS\",\n      \"description\": \"mos eisley special\",\n      \"servings\": 4,\n      \"caloriesPerServing\": 500,\n      \"notes\": null,\n      \"ingredients\": [\n        {\n          \"ingredient\": {\n            \"name\": \"Burger\"\n          },\n          \"measurement\": \"WHOLE\",\n          \"quantity\": 4.0\n        }\n      ],\n      \"steps\": [\n        {\n          \"stepNumber\": 1,\n          \"description\": \"Just go buy some\"\n        }\n      ],\n      \"tags\": [\n        {\n          \"tag\": {\n            \"name\": \"cheap\"\n          }\n        }\n      ]\n    }\n  ]\n}\n\n",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "d00bf051-e6ac-4484-b08a-631026687ea4",
+            "colId": "49de4c9e-cbbd-404c-82e8-033029a8e447",
+            "containerId": "",
+            "name": "GET Recipes Search Local",
+            "url": "localhost:8080/recipes/search",
+            "method": "POST",
+            "sortNum": 8750,
+            "created": "2024-03-13T01:16:40.797Z",
+            "modified": "2024-03-23T12:26:40.416Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n    \"name\": null,\n    \"categories\": null,\n    \"authors\": null,\n    \"tags\": null,\n    \"ingredients\": null,\n    \"servings\": null,\n    \"calories\": null\n}\n\n",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "a93d7660-a2f0-4cef-afbd-8ba50179524e",
+            "colId": "49de4c9e-cbbd-404c-82e8-033029a8e447",
+            "containerId": "",
+            "name": "GET Recipe Local",
+            "url": "localhost:8080/recipes/{id}",
+            "method": "GET",
+            "sortNum": 12500,
+            "created": "2024-03-23T12:25:44.262Z",
+            "modified": "2024-03-23T12:25:44.262Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "id",
+                    "value": "5",
+                    "isPath": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "21b2ccd0-9162-4da1-8ad4-4e860b3fde64",
+            "colId": "49de4c9e-cbbd-404c-82e8-033029a8e447",
+            "containerId": "",
+            "name": "PATCH Recipe Local",
+            "url": "localhost:8080/recipes/update",
+            "method": "PATCH",
+            "sortNum": 18750,
+            "created": "2024-03-23T12:30:49.097Z",
+            "modified": "2024-03-23T12:30:49.097Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"recipes\": [\n    {\n      \"id\": 191,\n      \"name\": \"bantha burgers\",\n      \"author\": \"Han Solo\",\n      \"category\": \"SANDWICHES_AND_WRAPS\",\n      \"description\": \"mos eisley special\",\n      \"servings\": 4,\n      \"caloriesPerServing\": 500,\n      \"notes\": null,\n      \"ingredients\": [\n        {\n          \"ingredient\": {\n            \"name\": \"Burger\"\n          },\n          \"measurement\": \"WHOLE\",\n          \"quantity\": 4.0\n        }\n      ],\n      \"steps\": [\n        {\n          \"stepNumber\": 1,\n          \"description\": \"Just go buy some\"\n        }\n      ],\n      \"tags\": [\n        {\n          \"tag\": {\n            \"name\": \"cheap\"\n          }\n        }\n      ]\n    }\n  ]\n}\n\n",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "dd70df3b-c49b-4001-a42a-9dc7787ae1cd",
+            "colId": "49de4c9e-cbbd-404c-82e8-033029a8e447",
+            "containerId": "",
+            "name": "DELETE Recipe Local",
+            "url": "localhost:8080/recipes/delete?recipeId",
+            "method": "DELETE",
+            "sortNum": 25000,
+            "created": "2024-03-23T12:28:33.961Z",
+            "modified": "2024-03-23T12:28:33.961Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "recipeId",
+                    "value": "",
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "6682856c-1d55-406b-afbb-b23cd7ce25cb",
+            "colId": "49de4c9e-cbbd-404c-82e8-033029a8e447",
+            "containerId": "",
+            "name": "GET Categories Local",
+            "url": "localhost:8080/form/categories",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2024-03-23T12:13:00.448Z",
+            "modified": "2024-03-23T12:21:42.863Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "2747337a-c001-4666-8207-47c541748e5e",
+            "colId": "49de4c9e-cbbd-404c-82e8-033029a8e447",
+            "containerId": "",
+            "name": "GET Measurements Local ",
+            "url": "localhost:8080/form/measurements",
+            "method": "GET",
+            "sortNum": 50000,
+            "created": "2024-03-23T12:31:22.011Z",
+            "modified": "2024-03-23T12:31:41.286Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "fcec624a-875d-4bc5-9e7d-f9e7d13cbd20",
+            "colId": "49de4c9e-cbbd-404c-82e8-033029a8e447",
+            "containerId": "",
+            "name": "GET Authors Local",
+            "url": "localhost:8080/form/authors",
+            "method": "GET",
+            "sortNum": 55000,
+            "created": "2024-03-06T22:38:34.491Z",
+            "modified": "2024-03-23T12:21:38.355Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "30d10d31-366b-4012-afa7-45a313f190f6",
+            "colId": "49de4c9e-cbbd-404c-82e8-033029a8e447",
+            "containerId": "",
+            "name": "GET Tags Local ",
+            "url": "localhost:8080/form/tags",
+            "method": "GET",
+            "sortNum": 60000,
+            "created": "2024-03-23T12:31:45.521Z",
+            "modified": "2024-03-23T12:32:13.510Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "a72bf5ba-022a-40fc-94b6-69bd5b242109",
+            "colId": "49de4c9e-cbbd-404c-82e8-033029a8e447",
+            "containerId": "",
+            "name": "GET Ingredients Local",
+            "url": "localhost:8080/form/ingredients",
+            "method": "GET",
+            "sortNum": 70000,
+            "created": "2024-03-23T12:32:04.149Z",
+            "modified": "2024-03-23T12:32:40.842Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ]
+}
