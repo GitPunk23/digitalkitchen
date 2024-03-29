@@ -3,18 +3,18 @@ services:
   frontend:
     build: ./frontend/
     ports:
-      - "0.0.0.0:8080:8080"  # Map host port 8080 to container port 3000
+      - "8080:8080"  # Map host port 8080 to container port 8080
     networks:
-      - digitalkitchen-network  # Attach frontend service to the custom network
+      - digitalkitchen-network
     container_name: digitalkitchen-frontend
     image: digitalkitchen-frontend
 
   backend:
     build: ../backend
     ports:
-      - "8000:8000"  # Map host port 8000 to container port 80
+      - "8000:8000"  # Map host port 8000 to container port 8000
     networks:
-      - digitalkitchen-network  # Attach frontend service to the custom network
+      - digitalkitchen-network
     container_name: digitalkitchen-backend
     image: digitalkitchen-backend
 
@@ -22,7 +22,7 @@ networks:
   digitalkitchen-network:
     driver: bridge
     driver_opts:
-      com.docker.network.enable_ipv6: "false"  # Disable IPv6 to use only IPv4
+      com.docker.network.enable_ipv6: "false"
     ipam:
       config:
         - subnet: 192.168.10.0/24
