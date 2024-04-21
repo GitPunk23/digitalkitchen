@@ -16,7 +16,6 @@ import static com.digitalkitchen.recipes.enums.ResponseStatus.*;
 @RestController
 @RequestMapping("/recipes")
 @Validated
-@CrossOrigin(origins = "http://localhost:3000")
 public class RecipeController {
 
     private final RecipeService recipeService;
