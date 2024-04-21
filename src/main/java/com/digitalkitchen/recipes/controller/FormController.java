@@ -11,7 +11,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/form")
 @Validated
-@CrossOrigin(origins = "http://localhost:3000")
 public class FormController {
 
     private final FormService formService;
