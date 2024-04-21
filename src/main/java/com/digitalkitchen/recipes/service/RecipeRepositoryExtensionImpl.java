@@ -18,6 +18,10 @@ public class RecipeRepositoryExtensionImpl implements RecipeRepositoryExtension 
 
     public RecipeRepositoryExtensionImpl(final EntityManager entityManager) { this.entityManager = entityManager; }
 
+    private <T> boolean listContainsElements(List<T> list) {
+        return list != null && !list.isEmpty();
+    }
+
     @Override
     public List<Recipe> searchRecipes(RecipeSearchRequest searchParams) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -31,19 +35,19 @@ public class RecipeRepositoryExtensionImpl implements RecipeRepositoryExtension 
             predicates.add(predicateForName);
         }
 
-        if (searchParams.getCategories() != null) {
+        if (listContainsElements(searchParams.getCategories())) {
             List<Category> categories = searchParams.getCategories();
-            final Predicate predicateForCategories = builder.equal(root.get("category"), categories);
+            final Predicate predicateForCategories = root.get("category").in(categories);
             predicates.add(predicateForCategories);
         }
 
-        if (searchParams.getAuthors() != null) {
+        if (listContainsElements(searchParams.getAuthors())) {
             List<String> authors = searchParams.getAuthors();
-            final Predicate predicateForAuthors = builder.equal(root.get("author"), authors);
+            final Predicate predicateForAuthors = root.get("author").in(authors);
             predicates.add(predicateForAuthors);
         }
 
-        if (searchParams.getIngredients() != null) {
+        if (listContainsElements(searchParams.getIngredients())) {
             List<String> ingredients = searchParams.getIngredients();
             Subquery<RecipeIngredient> subquery = query.subquery(RecipeIngredient.class);
             Root<RecipeIngredient> subRoot = subquery.from(RecipeIngredient.class);
@@ -55,7 +59,7 @@ public class RecipeRepositoryExtensionImpl implements RecipeRepositoryExtension 
             predicates.add(predicateForIngredients);
         }
 
-        if (searchParams.getTags() != null) {
+        if (listContainsElements(searchParams.getTags())) {
             List<String> tags = searchParams.getTags();
             Subquery<RecipeTag> subquery = query.subquery(RecipeTag.class);
             Root<RecipeTag> subRoot = subquery.from(RecipeTag.class);
@@ -67,15 +71,15 @@ public class RecipeRepositoryExtensionImpl implements RecipeRepositoryExtension 
             predicates.add(predicateForTags);
         }
 
-        if (searchParams.getServings() != null) {
+        if (listContainsElements(searchParams.getServings())) {
             List<Integer> servings = searchParams.getServings();
-            final Predicate predicateForServings = builder.equal(root.get("servings"), servings);
+            final Predicate predicateForServings = root.get("servings").in(servings);
             predicates.add(predicateForServings);
         }
 
-        if (searchParams.getCalories() != null) {
+        if (listContainsElements(searchParams.getCalories())) {
             List<Integer> calories = searchParams.getCalories();
-            final Predicate predicateForCalories = builder.equal(root.get("calories_per_serving"), calories);
+            final Predicate predicateForCalories = root.get("caloriesPerServing").in(calories);
             predicates.add(predicateForCalories);
         }
 
