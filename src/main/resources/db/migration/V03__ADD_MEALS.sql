@@ -1,4 +1,4 @@
-CREATE TABLE meals (
+CREATE TABLE IF NOT EXISTS meals (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     date VARCHAR(10) NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE meals (
     notes VARCHAR(255)
 );
 
-CREATE TABLE meal_recipes (
+CREATE TABLE IF NOT EXISTS meal_recipes (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     meal_id BIGINT NOT NULL,
     recipe_id int NOT NULL,
@@ -15,8 +15,8 @@ CREATE TABLE meal_recipes (
     FOREIGN KEY (recipe_id) REFERENCES recipes(id)
 );
 
-CREATE TABLE meal_plans (
+CREATE TABLE IF NOT EXISTS meal_plans (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    startDate VARCHAR(10) NOT NULL,
-    endDate VARCHAR(10) NOT NULL
+    start_date VARCHAR(10) NOT NULL,
+    end_date VARCHAR(10) NOT NULL
 );
