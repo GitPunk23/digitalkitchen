@@ -1,6 +1,7 @@
 package com.digitalkitchen.meals.service;
 
 import com.digitalkitchen.meals.model.entities.Meal;
+import com.digitalkitchen.meals.model.entities.MealPlan;
 import com.digitalkitchen.meals.model.response.MealResponse;
 import com.digitalkitchen.meals.model.response.MealResponseInfo;
 import com.digitalkitchen.recipes.enums.ResponseStatus;
@@ -19,8 +20,20 @@ public class MealResponseMapper {
                 .status(CREATED)
                 .meals(Collections.singletonList(
                     MealResponseInfo.builder()
-                    .meals(Collections.singletonList(meal))
-                    .build()
+                        .meals(Collections.singletonList(meal))
+                        .build()
+                    ))
+                .build();
+    }
+
+    public static MealResponse buildCreateResponse(Meal meal, MealPlan mealPlan) {
+        return MealResponse.builder()
+                .status(CREATED)
+                .meals(Collections.singletonList(
+                    MealResponseInfo.builder()
+                        .plan(mealPlan)
+                        .meals(Collections.singletonList(meal))
+                        .build()
                     ))
                 .build();
     }

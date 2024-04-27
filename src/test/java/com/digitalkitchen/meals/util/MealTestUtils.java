@@ -1,6 +1,5 @@
 package com.digitalkitchen.meals.util;
 
-import com.digitalkitchen.meals.enums.MealType;
 import com.digitalkitchen.meals.model.entities.Meal;
 import com.digitalkitchen.meals.model.entities.MealPlan;
 import com.digitalkitchen.meals.model.entities.MealRecipe;
@@ -46,7 +45,7 @@ public class MealTestUtils {
                 .build();
     }
 
-    public static MealResponse getTestMealResponse() {
+    public static MealResponse getTestMealResponse_NoPlan() {
         Meal meal = getTestMeal();
 
         return MealResponse.builder()
@@ -58,7 +57,34 @@ public class MealTestUtils {
             ))
             .build();
     }
-    public static MealRequest getTestMealRequest() {
+
+    public static MealResponse getTestMealResponse_WithPlan() {
+        MealPlan mealPlan = getTestMealPlan_OneWeek();
+        Meal meal = getTestMeal();
+        meal.setMealPlanId(mealPlan.getId());
+
+        return MealResponse.builder()
+                .meals(List.of(
+                        MealResponseInfo.builder()
+                                .plan(mealPlan)
+                                .meals(List.of(meal))
+                                .build()
+                ))
+                .build();
+    }
+
+    public static MealRequest getTestMealRequest_WithPlan() {
+        MealRequest mealRequest = getTestMealRequest_NoPlan();
+        mealRequest.setPlan(
+            MealRequestPlanInfo.builder()
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now().plusWeeks(1))
+                .build());
+
+        return mealRequest;
+    }
+
+    public static MealRequest getTestMealRequest_NoPlan() {
         Meal meal = getTestMeal();
         MealRequest mealRequest = MealRequest.builder()
             .plan(null)

@@ -1,6 +1,5 @@
 package com.digitalkitchen.meals.controller;
 
-import com.digitalkitchen.meals.model.entities.Meal;
 import com.digitalkitchen.meals.model.request.MealRequest;
 import com.digitalkitchen.meals.model.response.MealResponse;
 import com.digitalkitchen.meals.service.MealService;
@@ -32,12 +31,24 @@ public class MealControllerTest {
 
     @Test
     void testCreateMeal() {
-        MealRequest mealRequest = getTestMealRequest();
-        MealResponse sampleResponse = getTestMealResponse();
+        MealRequest mealRequest = getTestMealRequest_NoPlan();
+        MealResponse sampleResponse = getTestMealResponse_NoPlan();
         sampleResponse.setStatus(CREATED);
 
         when(mealService.createMeal(any())).thenReturn(sampleResponse);
         ResponseEntity<MealResponse> response = testObject.createMeal(mealRequest);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(sampleResponse, response.getBody());
+    }
+
+    @Test
+    void testCreateMealPlan() {
+        MealRequest mealRequest = getTestMealRequest_WithPlan();
+        MealResponse sampleResponse = getTestMealResponse_WithPlan();
+        sampleResponse.setStatus(CREATED);
+
+        when(mealService.createMealPlan(any())).thenReturn(sampleResponse);
+        ResponseEntity<MealResponse> response = testObject.createMealPlan(mealRequest);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(sampleResponse, response.getBody());
     }
