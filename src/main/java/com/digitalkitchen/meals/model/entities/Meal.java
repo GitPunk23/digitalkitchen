@@ -24,15 +24,6 @@ public class Meal {
     private String name;
 
     @Column
-    private LocalDate date;
-
-    @Column
-    private MealType type;
-
-    @Column
-    private Long mealPlanId;
-
-    @Column
     private String notes;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

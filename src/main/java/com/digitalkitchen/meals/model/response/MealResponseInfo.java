@@ -2,6 +2,7 @@ package com.digitalkitchen.meals.model.response;
 
 import com.digitalkitchen.meals.model.entities.Meal;
 import com.digitalkitchen.meals.model.entities.MealPlan;
+import com.digitalkitchen.meals.model.entities.MealRecord;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,4 +20,7 @@ public class MealResponseInfo {
 
     @JsonProperty("meals")
     private final List<Meal> meals;
+
+    @JsonProperty("records")
+    private final List<MealRecord> records;
 }

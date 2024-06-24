@@ -3,7 +3,6 @@ package com.digitalkitchen.meals.model.request;
 import com.digitalkitchen.meals.enums.MealType;
 import lombok.*;
 
-import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -11,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MealRequestMealInfo {
+public class MealInfo {
     private long id;
     private String name;
     private LocalDate date;

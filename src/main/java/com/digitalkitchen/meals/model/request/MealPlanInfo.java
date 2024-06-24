@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MealRequestPlanInfo {
+public class MealPlanInfo {
     private long id;
     private LocalDate startDate;
     private LocalDate endDate;

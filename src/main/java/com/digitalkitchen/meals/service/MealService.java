@@ -1,11 +1,13 @@
 package com.digitalkitchen.meals.service;
 
 import com.digitalkitchen.meals.model.entities.Meal;
-import com.digitalkitchen.meals.model.entities.MealPlan;
 import com.digitalkitchen.meals.model.entities.MealRecipe;
+import com.digitalkitchen.meals.model.entities.MealRecord;
+import com.digitalkitchen.meals.model.request.MealRecordInfo;
 import com.digitalkitchen.meals.model.request.MealRequest;
-import com.digitalkitchen.meals.model.request.MealRequestMealInfo;
-import com.digitalkitchen.meals.model.request.MealRequestPlanInfo;
+import com.digitalkitchen.meals.model.request.MealInfo;
+import com.digitalkitchen.meals.model.request.MealPlanInfo;
+import com.digitalkitchen.meals.model.entities.MealPlan;
 import com.digitalkitchen.meals.model.response.MealResponse;
 import com.digitalkitchen.meals.repository.MealPlanRepository;
 import com.digitalkitchen.meals.repository.MealRepository;
@@ -13,6 +15,7 @@ import com.digitalkitchen.recipes.model.entities.Recipe;
 import com.digitalkitchen.recipes.repository.RecipeRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,41 +31,45 @@ public class MealService {
         this.recipeRepository = recipeRepository;
     }
 
-    public MealResponse createMeal(MealRequest request) {
-        MealRequestMealInfo requestInfo = request.getMeals().get(0);
-        Meal meal = buildMeal(requestInfo);
-        List<Recipe> recipes = recipeRepository.findAllById(requestInfo.getRecipeIds());
-        List<MealRecipe> mealRecipes = recipes.stream()
-                .map(recipe -> buildMealRecipes(meal, recipe))
-                .toList();
-        meal.setMealRecipes(mealRecipes);
-        mealRepository.save(meal);
+    public List<Meal> createMeal(List<MealInfo> request) {
+        List<Meal> meals = new ArrayList<>();
 
-        return MealResponseMapper.buildCreateResponse(meal);
+        for (MealInfo info: request) {
+            Meal meal = buildMeal(info);
+            List<Recipe> recipes = recipeRepository.findAllById(info.getRecipeIds());
+            List<MealRecipe> mealRecipes = recipes.stream()
+                    .map(recipe -> buildMealRecipes(meal, recipe))
+                    .toList();
+            meal.setMealRecipes(mealRecipes);
+
+            meals.add(meal);
+        }
+
+        return mealRepository.saveAll(meals);
     }
 
-    public MealResponse createMealPlan(MealRequest request) {
-        MealRequestMealInfo mealInfo = request.getMeals().get(0);
-        MealPlan mealPlan = buildMealPlan(request.getPlan());
-        Meal meal = buildMeal(mealInfo);
-        List<Recipe> recipes = recipeRepository.findAllById(mealInfo.getRecipeIds());
-        List<MealRecipe> mealRecipes = recipes.stream()
-                .map(recipe -> buildMealRecipes(meal, recipe))
-                .toList();
-        meal.setMealRecipes(mealRecipes);
-        meal.setMealPlanId(mealPlan.getId());
-        mealRepository.save(meal);
-        mealPlanRepository.save(mealPlan);
-
-        return MealResponseMapper.buildCreateResponse(meal, mealPlan);
+    public MealPlan createMealPlan(MealPlanInfo request) {
+        MealPlan mealPlan = buildMealPlan(request);
+        return mealPlanRepository.save(mealPlan);
     }
 
-    private Meal buildMeal(MealRequestMealInfo requestInfo) {
+    public List<MealRecord> createMealRecords(List<MealRecordInfo> recordInfoList, MealPlan plan, List<Meal> meals) {
+        return recordInfoList.stream()
+                .map(recordInfo -> buildMealRecord(recordInfo, findMeal(recordInfo, meals), plan))
+                .toList();
+    }
+
+    public MealResponse processCreateRequest(MealRequest request) {
+        List<Meal> meals = createMeal(request.getMeals());
+        MealPlan plan = createMealPlan(request.getPlan());
+        List<MealRecord> records = createMealRecords(request.getRecords(), plan, meals);
+
+        return MealResponseMapper.buildCreateResponse(meals, plan, records);
+    }
+
+    private Meal buildMeal(MealInfo requestInfo) {
         return Meal.builder()
                 .name(requestInfo.getName())
-                .date(requestInfo.getDate())
-                .type(requestInfo.getType())
-                .mealPlanId(Long.getLong(requestInfo.getMealPlanId()))
                 .notes(requestInfo.getNotes())
                 .build();
     }
@@ -72,13 +79,30 @@ public class MealService {
                 .meal(meal)
                 .recipe(recipe)
                 .build();
-
     }
 
-    private MealPlan buildMealPlan(MealRequestPlanInfo requestInfo) {
+    private MealPlan buildMealPlan(MealPlanInfo requestInfo) {
         return MealPlan.builder()
                 .startDate(requestInfo.getStartDate())
                 .endDate(requestInfo.getEndDate())
                 .build();
+    }
+
+    private MealRecord buildMealRecord(MealRecordInfo mealRecordInfo, Meal meal, MealPlan mealPlan) {
+        return MealRecord.builder()
+                .meal(meal)
+                .mealPlan(mealPlan)
+                .mealType(mealRecordInfo.getMealType())
+                .date(mealRecordInfo.getDate())
+                .build();
+    }
+
+    private Meal findMeal(MealRecordInfo request, List<Meal> meals) {
+        Long requestId = request.getMealId();
+
+        return meals.stream()
+                .filter(meal -> meal.getId() == requestId)
+                .findFirst()
+                .orElseThrow();
     }
 }

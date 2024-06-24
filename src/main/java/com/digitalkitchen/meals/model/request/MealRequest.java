@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 
 import java.util.List;
 
-import static com.digitalkitchen.meals.util.Constants.AT_LEAST_ONE_MEAL;
+import static com.digitalkitchen.meals.util.Constants.AT_LEAST_ONE_REQUIRED;
 
 @Data
 @NoArgsConstructor
@@ -21,10 +21,15 @@ public class MealRequest {
 
     @JsonProperty("plan")
     @Valid
-    private MealRequestPlanInfo plan;
+    private MealPlanInfo plan;
+
+    @JsonProperty("records")
+    @Valid
+    @Size(min = 1, message = AT_LEAST_ONE_REQUIRED)
+    private List<MealRecordInfo> records;
 
     @JsonProperty("meals")
     @Valid
-    @Size(min = 1, message = AT_LEAST_ONE_MEAL)
-    private List<MealRequestMealInfo> meals;
+    @Size(min = 1, message = AT_LEAST_ONE_REQUIRED)
+    private List<MealInfo> meals;
 }

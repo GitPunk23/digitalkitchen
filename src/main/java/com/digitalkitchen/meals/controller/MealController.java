@@ -20,16 +20,8 @@ public class MealController {
 
     @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<MealResponse> createMeal(@RequestBody MealRequest request) {
-        MealResponse response = mealService.createMeal(request);
+    public ResponseEntity<MealResponse> create(@RequestBody MealRequest request) {
+        MealResponse response = mealService.processCreateRequest(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-
-    @PostMapping(value = "/create-plan", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<MealResponse> createMealPlan(@RequestBody MealRequest request) {
-        MealResponse response = mealService.createMealPlan(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
 }
