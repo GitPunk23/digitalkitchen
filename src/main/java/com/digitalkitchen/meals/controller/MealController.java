@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/meals")
 @Validated
@@ -20,7 +22,7 @@ public class MealController {
 
     @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<MealResponse> create(@RequestBody MealRequest request) {
+    public ResponseEntity<MealResponse> create(@RequestBody @Valid MealRequest request) {
         MealResponse response = mealService.processCreateRequest(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

@@ -6,12 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Size;
+import jakarta.validation.Valid;
 
 import java.util.List;
-
-import static com.digitalkitchen.meals.util.Constants.AT_LEAST_ONE_REQUIRED;
 
 @Data
 @NoArgsConstructor
@@ -25,11 +22,9 @@ public class MealRequest {
 
     @JsonProperty("records")
     @Valid
-    @Size(min = 1, message = AT_LEAST_ONE_REQUIRED)
     private List<MealRecordInfo> records;
 
     @JsonProperty("meals")
     @Valid
-    @Size(min = 1, message = AT_LEAST_ONE_REQUIRED)
     private List<MealInfo> meals;
 }

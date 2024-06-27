@@ -2,7 +2,7 @@ package com.digitalkitchen.recipes.model.response;
 
 import java.util.List;
 
-import com.digitalkitchen.recipes.enums.ResponseStatus;
+import com.digitalkitchen.enums.ResponseStatus;
 import com.digitalkitchen.recipes.model.entities.Recipe;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

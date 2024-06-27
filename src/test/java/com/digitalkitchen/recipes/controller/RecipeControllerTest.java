@@ -1,6 +1,6 @@
 package com.digitalkitchen.recipes.controller;
 
-import static com.digitalkitchen.recipes.enums.ResponseStatus.*;
+import static com.digitalkitchen.enums.ResponseStatus.*;
 import static com.digitalkitchen.recipes.util.RecipeTestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;

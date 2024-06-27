@@ -1,9 +1,10 @@
 package com.digitalkitchen.meals.model.entities;
 
 import com.digitalkitchen.meals.enums.MealType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -17,14 +18,16 @@ public class MealRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
-    private Long id;
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "meal_id")
+    @JsonBackReference
     private Meal meal;
 
     @ManyToOne
     @JoinColumn(name = "meal_plan_id")
+    @JsonBackReference
     private MealPlan mealPlan;
 
     @Column
@@ -32,5 +35,5 @@ public class MealRecord {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private MealType mealType;
+    private MealType type;
 }

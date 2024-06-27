@@ -1,4 +1,4 @@
-package com.digitalkitchen.recipes.enums;
+package com.digitalkitchen.enums;
 
 import lombok.Getter;
 

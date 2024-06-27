@@ -1,21 +1,32 @@
 package com.digitalkitchen.meals.model.request;
 
-import com.digitalkitchen.meals.enums.MealType;
-import lombok.*;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 
-import java.time.LocalDate;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Valid
 public class MealInfo {
-    private long id;
+    private String id;
+
+    @NotNull
     private String name;
-    private LocalDate date;
-    private MealType type;
-    private String mealPlanId;
+
     private String notes;
+
+    @Size(min=1)
     private List<Integer> recipeIds;
+
+    @NotBlank
+    private String relationId;
 }

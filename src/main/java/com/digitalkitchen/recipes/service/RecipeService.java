@@ -13,9 +13,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static com.digitalkitchen.recipes.enums.ResponseStatus.NOT_FOUND;
+import static com.digitalkitchen.enums.ResponseStatus.NOT_FOUND;
 import static com.digitalkitchen.recipes.service.ResponseMapper.*;
 
 @Service
@@ -61,7 +60,7 @@ public class RecipeService {
         List<Ingredient> ingredients = saveIngredients(recipeIngredients.stream()
                 .map(RecipeIngredient::getIngredient)
                 .map(Ingredient::getName)
-                .collect(Collectors.toList()));
+                .toList());
 
         for (int i = 0; i < recipeIngredients.size(); i++) {
             RecipeIngredient recipeIngredient = recipeIngredients.get(i);
@@ -76,7 +75,7 @@ public class RecipeService {
         List<Tag> tags = saveTags(recipeTags.stream()
                 .map(RecipeTag::getTag)
                 .map(Tag::getName)
-                .collect(Collectors.toList()));
+                .toList());
 
         for (int i = 0; i < recipeTags.size(); i++) {
             RecipeTag recipeTag = recipeTags.get(i);
@@ -244,8 +243,8 @@ public class RecipeService {
 
     public RecipeResponse retrieveRecipe(String idString) {
         int recipeId = Integer.parseInt(idString);
-        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
-        List<Recipe> recipes = Collections.singletonList(recipeOptional.get());
+        Optional<Recipe> optRecipe = recipeRepository.findById(recipeId);
+        List<Recipe> recipes = Collections.singletonList(optRecipe.orElse(null));
         return buildRecipeSearchResponse(recipes);
     }
 

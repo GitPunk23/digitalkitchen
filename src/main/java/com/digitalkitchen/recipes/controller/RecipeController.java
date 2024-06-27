@@ -11,7 +11,7 @@ import com.digitalkitchen.recipes.model.request.RecipeRequest;
 import com.digitalkitchen.recipes.model.response.RecipeResponse;
 import com.digitalkitchen.recipes.service.RecipeService;
 
-import static com.digitalkitchen.recipes.enums.ResponseStatus.*;
+import static com.digitalkitchen.enums.ResponseStatus.*;
 
 @RestController
 @RequestMapping("/recipes")
