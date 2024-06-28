@@ -7,4 +7,5 @@ public class Constants {
     }
 
     public static final String NOTHING_CREATED = "Nothing was created";
+    public static final String NOT_FOUND = "Nothing was found";
 }

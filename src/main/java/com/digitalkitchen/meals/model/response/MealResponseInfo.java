@@ -15,8 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 public class MealResponseInfo {
 
-    @JsonProperty("mealPlan")
-    private final MealPlan plan;
+    @JsonProperty("plans")
+    private final List<MealPlan> plans;
 
     @JsonProperty("meals")
     private final List<Meal> meals;
