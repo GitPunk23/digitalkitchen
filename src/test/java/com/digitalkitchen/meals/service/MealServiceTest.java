@@ -69,7 +69,7 @@ class MealServiceTest {
         List<MealRecord> records = List.of(buildMealRecord());
         MealPlan plan = buildMealPlan();
         MealInfo mealInfo = buildMealInfo();
-        mealInfo.setId(""+MEAL_ID);
+        mealInfo.setId(String.valueOf(MEAL_ID));
         MealRequest request = buildCreateRequest(List.of(mealInfo), buildMealPlanInfo(), List.of(buildMealRecordInfo()));
         Recipe recipe = getTestRecipe();
 
