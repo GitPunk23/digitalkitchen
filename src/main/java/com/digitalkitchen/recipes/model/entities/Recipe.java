@@ -1,5 +1,6 @@
 package com.digitalkitchen.recipes.model.entities;
 
+import com.digitalkitchen.authors.model.entities.Author;
 import jakarta.persistence.*;
 
 import com.digitalkitchen.recipes.enums.Category;
@@ -42,8 +43,8 @@ public class Recipe {
     @Column
     private String notes;
 
-    @Column
-    private String author;
+    @Column(name = "author_id")
+    private Author author;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "recipe_id")
