@@ -35,8 +35,8 @@ class RecipeControllerTest {
         RecipeResponse sampleResponse = getTestRecipeResponse();
         sampleResponse.setStatus(CREATED);
 
-        when(recipeService.createRecipe(any(), anyBoolean())).thenReturn(sampleResponse);
-        ResponseEntity<RecipeResponse> response = testObject.createRecipe(false, getTestRecipeRequest());
+        when(recipeService.createRecipe(any())).thenReturn(sampleResponse);
+        ResponseEntity<RecipeResponse> response = testObject.createRecipe( getTestRecipeRequest());
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(sampleResponse, response.getBody());
     }

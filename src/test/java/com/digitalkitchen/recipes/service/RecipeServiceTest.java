@@ -1,6 +1,5 @@
 package com.digitalkitchen.recipes.service;
 
-import com.digitalkitchen.authors.repository.AuthorRepository;
 import com.digitalkitchen.recipes.model.entities.Recipe;
 import com.digitalkitchen.recipes.model.request.RecipeRequest;
 import com.digitalkitchen.recipes.model.request.RecipeSearchRequest;
@@ -58,7 +57,7 @@ class RecipeServiceTest {
         when(ingredientRepository.save(any())).thenReturn(recipe.getIngredients().get(0).getIngredient());
         when(tagRepository.save(any())).thenReturn(recipe.getTags().get(0).getTag());
         when(recipeRepository.save(any())).thenReturn(recipe);
-        RecipeResponse response = testObject.createRecipe(request, false);
+        RecipeResponse response = testObject.createRecipe(request);
         verify(recipeRepository, times(1)).save(any());
         assertNotNull(response.getRecipes());
     }
@@ -69,7 +68,7 @@ class RecipeServiceTest {
         RecipeRequest request = RecipeTestUtils.getTestRecipeRequest();
 
         when(recipeRepository.findByNameAndAuthorId(any(), anyLong())).thenReturn(Optional.of(recipe));
-        RecipeResponse response = testObject.createRecipe(request, false);
+        RecipeResponse response = testObject.createRecipe(request);
         assertNotNull(response.getRecipes());
     }
 

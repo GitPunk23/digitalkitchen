@@ -26,9 +26,8 @@ public class RecipeController {
 
     @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<RecipeResponse> createRecipe( @RequestParam(name = "bypass", defaultValue = "false") Boolean bypassFlag,
-                                                        @RequestBody RecipeRequest request) {
-        RecipeResponse response = recipeService.createRecipe(request, bypassFlag);
+    public ResponseEntity<RecipeResponse> createRecipe(@RequestBody RecipeRequest request) {
+        RecipeResponse response = recipeService.createRecipe(request);
         HttpStatus status = response.getStatus().equals(CREATED) ? HttpStatus.CREATED : HttpStatus.CONFLICT;
         return ResponseEntity.status(status).body(response);
     }

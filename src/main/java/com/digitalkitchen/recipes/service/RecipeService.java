@@ -221,7 +221,7 @@ public class RecipeService {
     }
 
     @Transactional
-    public RecipeResponse createRecipe(RecipeRequest request, boolean force) {
+    public RecipeResponse createRecipe(RecipeRequest request) {
         String name = request.getRecipes().get(0).getName();
         long authorId = request.getRecipes().get(0).getAuthor().getId();
         Optional<Recipe> duplicate = recipeRepository.findByNameAndAuthorId(name, authorId);
