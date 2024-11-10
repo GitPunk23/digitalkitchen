@@ -1,5 +1,6 @@
 package com.digitalkitchen.meals.service;
 
+import com.digitalkitchen.enums.OperationType;
 import com.digitalkitchen.meals.model.entities.Meal;
 import com.digitalkitchen.meals.model.entities.MealRecipe;
 import com.digitalkitchen.meals.model.entities.MealRecord;
@@ -85,7 +86,6 @@ public class MealService {
         if (request.isEmpty()) {
             return MealResponseMapper.buildEmptyResponse(NOTHING_CREATED);
         }
-
         List<Meal> meals = request.getMeals() != null
                 ? buildAndSaveMeal(request.getMeals())
                 : null;
@@ -97,6 +97,24 @@ public class MealService {
                 : null;
 
         return MealResponseMapper.buildCreateResponse(meals, plans, records);
+        /**TODO::
+         * MP + M + MR = new meal plan creation with attached records and new meals
+         * MP + MR = New meal plan creation with attached records that are existing meals
+         * MP = Empty meal plan creation
+         * M = New Meal creation
+         * M + MR = New Meal added as also as a record for a meal plan
+         * MR = nwe meal record added to meal plan
+         * MP + M = cannot happen
+         */
+    }
+
+    @Transactional
+    public MealResponse processUpdateRequest(MealRequest request) {
+        if (request.isEmpty()) {
+            return MealResponseMapper.buildEmptyResponse(NOTHING_CREATED);
+        }
+
+        List
     }
 
     public MealResponse getMeal(Long mealId) {

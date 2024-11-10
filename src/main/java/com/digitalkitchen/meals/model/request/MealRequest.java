@@ -1,5 +1,6 @@
 package com.digitalkitchen.meals.model.request;
 
+import com.digitalkitchen.model.Metadata;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +16,10 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class MealRequest {
+
+    @JsonProperty("metadata")
+    @Valid
+    private Metadata metadata;
 
     @JsonProperty("plan")
     @Valid

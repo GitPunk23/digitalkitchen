@@ -28,6 +28,13 @@ public class MealController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @PatchMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<MealResponse> update(@RequestBody @Valid MealRequest request) {
+        MealResponse response = mealService.processUpdateRequest(request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     @GetMapping(value = "/meal/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.FOUND)
     public ResponseEntity<MealResponse> retrieveMeal(final @PathVariable("id") Long mealId) {
