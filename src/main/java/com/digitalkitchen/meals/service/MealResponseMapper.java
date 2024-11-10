@@ -50,6 +50,22 @@ public class MealResponseMapper {
                 .build();
     }
 
+    public static MealResponse buildSearchResponse(MealPlan plan) {
+        List<MealPlan> plans = List.of(plan);
+        List<MealRecord> mealRecords = plans.get(0).getMealRecords();
+        List<Meal> meals = mealRecords.stream()
+                .map(MealRecord::getMeal)
+                .toList();
+        return MealResponseMapper.buildSearchResponse(meals, mealRecords, plans);
+    }
+
+    public static MealResponse buildSearchResponse(MealRecord mealRecord) {
+        List<MealRecord> mealRecords = List.of(mealRecord);
+        List<Meal> meals = List.of(mealRecord.getMeal());
+        List<MealPlan> plans = List.of(mealRecord.getMealPlan());
+        return MealResponseMapper.buildSearchResponse(meals, mealRecords, plans);
+    }
+
     public static MealResponse buildSearchResponse(List<Meal> meals, List<MealRecord> records, List<MealPlan> plans) {
         return MealResponse.builder()
                 .status(FOUND)

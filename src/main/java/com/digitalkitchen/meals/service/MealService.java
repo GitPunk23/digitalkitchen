@@ -43,7 +43,7 @@ public class MealService {
         this.recipeRepository = recipeRepository;
     }
 
-    public List<Meal> createMeal(List<MealInfo> request) {
+    public List<Meal> buildAndSaveMeal(List<MealInfo> request) {
         List<Meal> meals = new ArrayList<>();
 
         for (MealInfo info: request) {
@@ -59,12 +59,12 @@ public class MealService {
         return mealRepository.saveAll(meals);
     }
 
-    public MealPlan createMealPlan(MealPlanInfo request) {
+    public MealPlan buildAndSaveMealPlan(MealPlanInfo request) {
         MealPlan mealPlan = buildMealPlan(request);
         return mealPlanRepository.save(mealPlan);
     }
 
-    public List<MealRecord> createMealRecords(MealRequest request, MealPlan plan, List<Meal> meals) {
+    public List<MealRecord> buildAndSaveMealRecords(MealRequest request, MealPlan plan, List<Meal> meals) {
         Map<String, Meal> newMeals = request.getMeals().stream()
                 .filter(mealInfo -> isBlank(mealInfo.getId()))
                 .collect(Collectors.toMap(
@@ -75,66 +75,52 @@ public class MealService {
                                 .orElseThrow()));
 
         List<MealRecord> records = request.getRecords().stream()
-                .map(recordInfo -> buildMealRecord(recordInfo, findMeal(recordInfo, meals, newMeals), plan))
+                .map(recordInfo -> buildMealRecord(recordInfo, getMealFromMealRecordInfo(recordInfo, meals, newMeals), plan))
                 .toList();
         return mealRecordRepository.saveAll(records);
     }
 
     @Transactional
     public MealResponse processCreateRequest(MealRequest request) {
-        boolean mealsPresent = request.getMeals() != null;
-        boolean planPresent = request.getPlan() != null;
-        boolean recordsPresent = request.getRecords() != null;
-
-        if (!mealsPresent && !planPresent && !recordsPresent) {
+        if (request.isEmpty()) {
             return MealResponseMapper.buildEmptyResponse(NOTHING_CREATED);
         }
 
-        List<Meal> meals = mealsPresent ? createMeal(request.getMeals()) : null;
-        List<MealPlan> plans = List.of(planPresent ? createMealPlan(request.getPlan()) : null);
-        List<MealRecord> records = recordsPresent ? createMealRecords(request, plans.get(0), meals) : null;
+        List<Meal> meals = request.getMeals() != null
+                ? buildAndSaveMeal(request.getMeals())
+                : null;
+        List<MealPlan> plans = List.of(request.getPlan() != null
+                ? buildAndSaveMealPlan(request.getPlan())
+                : null);
+        List<MealRecord> records = request.getRecords() != null
+                ? buildAndSaveMealRecords(request, plans.get(0), meals)
+                : null;
 
         return MealResponseMapper.buildCreateResponse(meals, plans, records);
     }
 
     public MealResponse getMeal(Long mealId) {
         Optional<Meal> meal = mealRepository.findById(mealId);
-        return meal.isPresent() ? buildSearchResponse(meal.get()) : MealResponseMapper.buildEmptyResponse(NOT_FOUND);
+        return meal.isPresent()
+                ? buildSearchResponse(meal.get())
+                : MealResponseMapper.buildEmptyResponse(NOT_FOUND);
     }
 
     public MealResponse getMealRecord(Long mealRecordId) {
         MealResponse response;
         Optional<MealRecord> mealRecord = mealRecordRepository.findById(mealRecordId);
-
-        if (mealRecord.isPresent()) {
-            List<MealRecord> mealRecords = List.of(mealRecord.get());
-            List<Meal> meals = List.of(mealRecord.get().getMeal());
-            List<MealPlan> plans = List.of(mealRecord.get().getMealPlan());
-            response = MealResponseMapper.buildSearchResponse(meals, mealRecords, plans);
-
-        } else {
-            response = MealResponseMapper.buildEmptyResponse(NOT_FOUND);
-        }
-
-        return response;
+        return mealRecord.isPresent()
+                ? buildSearchResponse(mealRecord.get())
+                : MealResponseMapper.buildEmptyResponse(NOT_FOUND);
     }
 
     public MealResponse getMealPlan(Long planId) {
         MealResponse response;
         Optional<MealPlan> plan = mealPlanRepository.findById(planId);
 
-        if (plan.isPresent()) {
-            List<MealPlan> plans = List.of(plan.get());
-            List<MealRecord> mealRecords = plans.get(0).getMealRecords();
-            List<Meal> meals = mealRecords.stream()
-                    .map(MealRecord::getMeal)
-                    .toList();
-            response = MealResponseMapper.buildSearchResponse(meals, mealRecords, plans);
-
-        } else {
-            response = MealResponseMapper.buildEmptyResponse(NOT_FOUND);
-        }
-        return response;
+        return plan.isPresent()
+                ? buildSearchResponse(plan.get())
+                : MealResponseMapper.buildEmptyResponse(NOT_FOUND);
     }
 
     private Meal buildMeal(MealInfo requestInfo) {
@@ -167,7 +153,7 @@ public class MealService {
                 .build();
     }
 
-    private Meal findMeal(MealRecordInfo request, List<Meal> meals, Map<String, Meal> newMeals) {
+    private Meal getMealFromMealRecordInfo(MealRecordInfo request, List<Meal> meals, Map<String, Meal> newMeals) {
         Meal foundMeal;
 
         if (isBlank(request.getMealId())) {

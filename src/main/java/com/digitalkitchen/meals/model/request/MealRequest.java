@@ -27,4 +27,10 @@ public class MealRequest {
     @JsonProperty("meals")
     @Valid
     private List<MealInfo> meals;
+
+    public boolean isEmpty() {
+        return this.plan == null &&
+                this.records.isEmpty() &&
+                this.meals.isEmpty();
+    }
 }
