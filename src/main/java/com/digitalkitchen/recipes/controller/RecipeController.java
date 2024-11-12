@@ -58,7 +58,7 @@ public class RecipeController {
 
     @DeleteMapping(value = "/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<RecipeResponse> deleteRecipe(final @RequestParam int recipeId) {
+    public ResponseEntity<RecipeResponse> deleteRecipe(final @RequestParam Long recipeId) {
         recipeService.deleteRecipe(recipeId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }

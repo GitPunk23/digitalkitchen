@@ -242,7 +242,7 @@ public class RecipeService {
     }
 
     public RecipeResponse retrieveRecipe(String idString) {
-        int recipeId = Integer.parseInt(idString);
+        Long recipeId = Long.parseLong(idString);
         Optional<Recipe> optRecipe = recipeRepository.findById(recipeId);
         List<Recipe> recipes = Collections.singletonList(optRecipe.orElse(null));
         return buildRecipeSearchResponse(recipes);
@@ -250,7 +250,7 @@ public class RecipeService {
 
     @Transactional
     public RecipeResponse updateRecipe(RecipeRequest request) {
-        int recipeId = request.getRecipes().get(0).getId();
+        Long recipeId = request.getRecipes().get(0).getId();
         Optional<Recipe> recipeOpt = recipeRepository.findById(recipeId);
         if (recipeOpt.isPresent()) {
             Recipe recipe = recipeOpt.get();
@@ -263,7 +263,7 @@ public class RecipeService {
     }
 
     @Transactional
-    public void deleteRecipe(int recipeId) {
+    public void deleteRecipe(Long recipeId) {
         Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
         recipeOptional.ifPresent(recipeRepository::delete);
     }

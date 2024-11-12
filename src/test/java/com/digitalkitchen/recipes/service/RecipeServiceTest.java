@@ -112,8 +112,8 @@ class RecipeServiceTest {
 
         when(recipeRepository.findById(any())).thenReturn(Optional.of(recipe));
         Mockito.doNothing().when(recipeRepository).delete(any());
-        testObject.deleteRecipe(7);
-        verify(recipeRepository, times(1)).findById(anyInt());
+        testObject.deleteRecipe(7L);
+        verify(recipeRepository, times(1)).findById(any());
         verify(recipeRepository, times(1)).delete(any());
     }
 }

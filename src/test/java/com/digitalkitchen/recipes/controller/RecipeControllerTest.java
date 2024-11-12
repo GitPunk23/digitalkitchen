@@ -76,8 +76,8 @@ class RecipeControllerTest {
 
     @Test
     void testDeleteRecipe() {
-        Mockito.doNothing().when(recipeService).deleteRecipe(anyInt());
-        ResponseEntity<RecipeResponse> response = testObject.deleteRecipe(7);
+        Mockito.doNothing().when(recipeService).deleteRecipe(any());
+        ResponseEntity<RecipeResponse> response = testObject.deleteRecipe(7L);
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         assertNull(response.getBody());
     }

@@ -22,7 +22,7 @@ public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
-    private int id;
+    private long id;
 
     @Column
     @Enumerated(EnumType.STRING)

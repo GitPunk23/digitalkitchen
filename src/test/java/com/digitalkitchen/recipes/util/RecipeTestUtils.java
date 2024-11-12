@@ -26,7 +26,7 @@ public class RecipeTestUtils {
 
     public static Recipe getTestRecipe() {
         Recipe recipe = Recipe.builder()
-            .id(1337)
+            .id(1337L)
             .name("bantha burgers")
             .author(getTestAuthor())
             .category(Category.SANDWICHES_AND_WRAPS)

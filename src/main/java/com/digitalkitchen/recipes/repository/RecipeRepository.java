@@ -7,7 +7,7 @@ import com.digitalkitchen.recipes.model.entities.Recipe;
 import java.util.Optional;
 
 @Repository
-public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
+public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     Optional<Recipe> findByNameAndAuthorId(String name, long authorId);
 }

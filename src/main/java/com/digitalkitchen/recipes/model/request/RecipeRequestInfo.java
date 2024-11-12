@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class RecipeRequestInfo {
-    private int id;
+    private Long id;
     private Category category;
     private String name;
     private String description;
