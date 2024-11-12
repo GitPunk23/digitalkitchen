@@ -1,6 +1,5 @@
 package com.digitalkitchen.meals.model.request;
 
-import com.digitalkitchen.model.Metadata;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import jakarta.validation.Valid;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -16,10 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class MealRequest {
-
-    @JsonProperty("metadata")
-    @Valid
-    private Metadata metadata;
 
     @JsonProperty("plan")
     @Valid
@@ -35,7 +31,7 @@ public class MealRequest {
 
     public boolean isEmpty() {
         return this.plan == null &&
-                this.records.isEmpty() &&
-                this.meals.isEmpty();
+                CollectionUtils.isEmpty(this.records) &&
+                CollectionUtils.isEmpty(this.meals);
     }
 }

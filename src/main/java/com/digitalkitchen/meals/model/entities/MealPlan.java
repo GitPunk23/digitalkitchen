@@ -22,6 +22,9 @@ public class MealPlan {
     private long id;
 
     @Column
+    private String nickname;
+
+    @Column
     private LocalDate startDate;
 
     @Column

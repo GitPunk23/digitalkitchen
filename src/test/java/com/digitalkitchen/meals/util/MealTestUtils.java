@@ -8,13 +8,19 @@ import com.digitalkitchen.meals.model.request.MealRecordInfo;
 import com.digitalkitchen.meals.model.request.MealRequest;
 import com.digitalkitchen.meals.model.request.MealInfo;
 import com.digitalkitchen.meals.model.request.MealPlanInfo;
+import com.digitalkitchen.meals.model.response.MealResponse;
+import com.digitalkitchen.meals.model.response.MealResponseInfo;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
+import static com.digitalkitchen.enums.ResponseStatus.CREATED;
+import static com.digitalkitchen.enums.ResponseStatus.FOUND;
 import static com.digitalkitchen.meals.enums.MealType.DINNER;
 import static com.digitalkitchen.meals.util.TestConstants.*;
 import static com.digitalkitchen.recipes.util.RecipeTestUtils.getTestRecipe;
+import static java.util.Objects.nonNull;
 
 public class MealTestUtils {
 
@@ -26,26 +32,31 @@ public class MealTestUtils {
                 .build();
     }
 
-    public static MealInfo buildMealInfo() {
+    public static MealInfo buildMealInfo(String id, String relationId) {
         return MealInfo.builder()
+                .id(id)
+                .relationId(relationId)
                 .name("Star Wars Night")
                 .recipeIds(List.of(RECIPE_ID))
-                .relationId("R01")
                 .build();
     }
 
     public static MealPlanInfo buildMealPlanInfo() {
         return MealPlanInfo.builder()
+                .id(String.valueOf(MEAL_PLAN_ID))
+                .nickname("Super Diet")
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now().plusDays(3))
                 .build();
     }
 
-    public static MealRecordInfo buildMealRecordInfo() {
+    public static MealRecordInfo buildMealRecordInfo(String relationId) {
         return MealRecordInfo.builder()
                 .mealType(DINNER)
                 .date(LocalDate.now())
-                .relationId("R01")
+                .mealId(String.valueOf(MEAL_ID))
+                .mealPlanId(String.valueOf(MEAL_PLAN_ID))
+                .relationId(relationId)
                 .build();
     }
 
@@ -71,9 +82,16 @@ public class MealTestUtils {
     public static MealPlan buildMealPlan() {
         return MealPlan.builder()
                 .id(MEAL_PLAN_ID)
+                .nickname("Super Diet")
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now().plusDays(3))
                 .build();
+    }
+
+    public static MealPlan buildMealPlan(MealRecord mealRecord) {
+        MealPlan mealPlan = buildMealPlan();
+        mealPlan.setMealRecords(List.of(mealRecord));
+        return mealPlan;
     }
 
     public static MealRecord buildMealRecord() {
@@ -83,6 +101,43 @@ public class MealTestUtils {
                 .meal(buildMeal())
                 .type(DINNER)
                 .date(LocalDate.now())
+                .build();
+    }
+
+    public static MealRecord buildMealRecord(MealPlan mealPlan) {
+        return MealRecord.builder()
+                .id(MEAL_RECORD_ID)
+                .mealPlan(mealPlan)
+                .meal(buildMeal())
+                .type(DINNER)
+                .date(LocalDate.now())
+                .build();
+    }
+
+    public static MealResponse buildMealCreatedResponse() {
+        MealPlan mealPlan = buildMealPlan();
+        MealRecord mealRecord = buildMealRecord();
+        Meal meal = buildMeal();
+        return MealResponse.builder()
+                .status(CREATED)
+                .meals(Collections.singletonList(
+                        MealResponseInfo.builder()
+                                .plans(List.of(mealPlan))
+                                .meals(List.of(meal))
+                                .records(List.of(mealRecord))
+                                .build()))
+                .build();
+    }
+
+    public static MealResponse buildMealSearchResponse() {
+        return MealResponse.builder()
+                .status(FOUND)
+                .meals(Collections.singletonList(
+                        MealResponseInfo.builder()
+                                .plans(List.of(buildMealPlan()))
+                                .meals(List.of(buildMeal()))
+                                .records(List.of(buildMealRecord()))
+                                .build()))
                 .build();
     }
 }

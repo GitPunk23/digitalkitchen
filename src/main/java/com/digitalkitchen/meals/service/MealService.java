@@ -1,6 +1,6 @@
 package com.digitalkitchen.meals.service;
 
-import com.digitalkitchen.enums.OperationType;
+import com.digitalkitchen.exceptions.DataException;
 import com.digitalkitchen.meals.model.entities.Meal;
 import com.digitalkitchen.meals.model.entities.MealRecipe;
 import com.digitalkitchen.meals.model.entities.MealRecord;
@@ -27,7 +27,9 @@ import java.util.stream.Collectors;
 import static com.digitalkitchen.meals.service.MealResponseMapper.buildSearchResponse;
 import static com.digitalkitchen.util.Constants.NOTHING_CREATED;
 import static com.digitalkitchen.util.Constants.NOT_FOUND;
+import static java.util.Objects.nonNull;
 import static org.apache.logging.log4j.util.Strings.isBlank;
+import static org.springframework.util.CollectionUtils.isEmpty;
 
 @Service
 public class MealService {
@@ -65,19 +67,13 @@ public class MealService {
         return mealPlanRepository.save(mealPlan);
     }
 
-    public List<MealRecord> buildAndSaveMealRecords(MealRequest request, MealPlan plan, List<Meal> meals) {
-        Map<String, Meal> newMeals = request.getMeals().stream()
-                .filter(mealInfo -> isBlank(mealInfo.getId()))
-                .collect(Collectors.toMap(
-                        MealInfo::getRelationId,
-                        mealInfo -> meals.stream()
-                                .filter(meal -> meal.getName().equals(mealInfo.getName()))
-                                .findFirst()
-                                .orElseThrow()));
-
-        List<MealRecord> records = request.getRecords().stream()
-                .map(recordInfo -> buildMealRecord(recordInfo, getMealFromMealRecordInfo(recordInfo, meals, newMeals), plan))
-                .toList();
+    public List<MealRecord> buildAndSaveMealRecords(List<MealRecordInfo> recordInfos) {
+        List<MealRecord> records = new ArrayList<>();
+        recordInfos.forEach(recordInfo ->{
+            Meal meal = mealRepository.findById(Long.valueOf(recordInfo.getMealId())).get();
+            MealPlan mealPlan = mealPlanRepository.findById(Long.valueOf(recordInfo.getMealPlanId())).get();
+            records.add(buildMealRecord(recordInfo, meal, mealPlan));
+        });
         return mealRecordRepository.saveAll(records);
     }
 
@@ -89,32 +85,27 @@ public class MealService {
         List<Meal> meals = request.getMeals() != null
                 ? buildAndSaveMeal(request.getMeals())
                 : null;
-        List<MealPlan> plans = List.of(request.getPlan() != null
+
+        MealPlan plan = request.getPlan() != null
                 ? buildAndSaveMealPlan(request.getPlan())
-                : null);
-        List<MealRecord> records = request.getRecords() != null
-                ? buildAndSaveMealRecords(request, plans.get(0), meals)
                 : null;
 
-        return MealResponseMapper.buildCreateResponse(meals, plans, records);
-        /**TODO::
-         * MP + M + MR = new meal plan creation with attached records and new meals
-         * MP + MR = New meal plan creation with attached records that are existing meals
-         * MP = Empty meal plan creation
-         * M = New Meal creation
-         * M + MR = New Meal added as also as a record for a meal plan
-         * MR = nwe meal record added to meal plan
-         * MP + M = cannot happen
-         */
+        List<MealRecord> records;
+        if (request.getRecords() != null) {
+            List<MealRecordInfo> recordInfos = request.getRecords();
+            setMealRecordMealPlanIds(recordInfos, plan);
+            setMealRecordMealIds(recordInfos, meals, request.getMeals());
+            records = buildAndSaveMealRecords(recordInfos);
+        } else {
+            records = null;
+        }
+
+        return MealResponseMapper.buildCreateResponse(meals, plan, records);
     }
 
     @Transactional
     public MealResponse processUpdateRequest(MealRequest request) {
-        if (request.isEmpty()) {
-            return MealResponseMapper.buildEmptyResponse(NOTHING_CREATED);
-        }
-
-        List
+        return MealResponseMapper.buildEmptyResponse(NOTHING_CREATED);
     }
 
     public MealResponse getMeal(Long mealId) {
@@ -125,7 +116,6 @@ public class MealService {
     }
 
     public MealResponse getMealRecord(Long mealRecordId) {
-        MealResponse response;
         Optional<MealRecord> mealRecord = mealRecordRepository.findById(mealRecordId);
         return mealRecord.isPresent()
                 ? buildSearchResponse(mealRecord.get())
@@ -133,7 +123,6 @@ public class MealService {
     }
 
     public MealResponse getMealPlan(Long planId) {
-        MealResponse response;
         Optional<MealPlan> plan = mealPlanRepository.findById(planId);
 
         return plan.isPresent()
@@ -171,18 +160,35 @@ public class MealService {
                 .build();
     }
 
-    private Meal getMealFromMealRecordInfo(MealRecordInfo request, List<Meal> meals, Map<String, Meal> newMeals) {
-        Meal foundMeal;
-
-        if (isBlank(request.getMealId())) {
-            foundMeal = newMeals.get(request.getRelationId());
-        } else {
-            long requestId = Long.parseLong(request.getMealId());
-            foundMeal = meals.stream()
-                    .filter(meal -> meal.getId() == requestId)
-                    .findFirst()
-                    .orElseThrow();
+    private void setMealRecordMealPlanIds(List<MealRecordInfo> recordInfos, MealPlan plan) {
+        if(nonNull(plan)) {
+            recordInfos.stream()
+                    .filter(mealRecordInfo -> mealRecordInfo.getMealPlanId().isEmpty())
+                    .forEach(mealRecordInfo -> mealRecordInfo.setMealPlanId(String.valueOf(plan.getId())));
         }
-        return foundMeal;
+    }
+
+    private void setMealRecordMealIds(List<MealRecordInfo> recordInfos, List<Meal> meals, List<MealInfo> requestMeals) {
+        if (!isEmpty(meals)) {
+
+            Map<String, Long> relationIdToMealIdMap = requestMeals.stream()
+                    .collect(Collectors.toMap(
+                            MealInfo::getRelationId,
+                            requestMeal -> meals.stream()
+                                    .filter(meal -> meal.getName().equalsIgnoreCase(requestMeal.getName()))
+                                    .findFirst()
+                                    .map(Meal::getId)
+                                    .orElseThrow(()-> new DataException("", "An error occurred while mapping relationIds, request failed"))//DATAEXCEPTION
+                    ));
+
+            recordInfos.stream()
+                    .filter(recordInfo -> isBlank(recordInfo.getMealId()))
+                    .forEach(recordInfo -> {
+                        Long mealId = relationIdToMealIdMap.get(recordInfo.getRelationId());
+                        if (mealId != null) {
+                            recordInfo.setMealId(mealId.toString());
+                        }
+                    });
+        }
     }
 }

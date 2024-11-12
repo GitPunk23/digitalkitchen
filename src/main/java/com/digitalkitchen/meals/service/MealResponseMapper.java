@@ -8,12 +8,11 @@ import com.digitalkitchen.meals.model.response.MealResponseInfo;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static com.digitalkitchen.enums.ResponseStatus.CREATED;
 import static com.digitalkitchen.enums.ResponseStatus.EMPTY;
 import static com.digitalkitchen.enums.ResponseStatus.FOUND;
-import static com.digitalkitchen.util.Constants.NOTHING_CREATED;
+import static java.util.Objects.nonNull;
 
 public class MealResponseMapper {
 
@@ -21,12 +20,14 @@ public class MealResponseMapper {
         throw new IllegalStateException("Utility class");
     }
 
-    public static MealResponse buildCreateResponse(List<Meal> meals, List<MealPlan> mealPlan, List<MealRecord> mealRecords) {
+    public static MealResponse buildCreateResponse(List<Meal> meals, MealPlan mealPlan, List<MealRecord> mealRecords) {
         return MealResponse.builder()
                 .status(CREATED)
                 .meals(Collections.singletonList(
                         MealResponseInfo.builder()
-                            .plans(mealPlan)
+                            .plans(nonNull(mealPlan)
+                                    ? List.of(mealPlan)
+                                    : null)
                             .meals(meals)
                             .records(mealRecords)
                             .build()))

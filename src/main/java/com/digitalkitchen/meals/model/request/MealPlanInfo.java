@@ -1,5 +1,6 @@
 package com.digitalkitchen.meals.model.request;
 
+import com.digitalkitchen.meals.model.entities.MealPlan;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,8 @@ public class MealPlanInfo {
 
     private String id;
 
+    private String nickname;
+
     @NotNull
     @FutureOrPresent
     private LocalDate startDate;
@@ -30,5 +33,11 @@ public class MealPlanInfo {
 
     @NotBlank
     private String relationId;
+
+    public boolean isCopyOfMealPlan(MealPlan mealPlan) {
+        return mealPlan.getNickname().equals(this.nickname) &&
+                mealPlan.getStartDate().equals(this.startDate) &&
+                mealPlan.getEndDate().equals(this.endDate);
+    }
 
 }
