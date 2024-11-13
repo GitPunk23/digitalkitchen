@@ -21,8 +21,11 @@ import java.util.Optional;
 
 import static com.digitalkitchen.enums.ResponseStatus.EMPTY;
 import static com.digitalkitchen.enums.ResponseStatus.FOUND;
+import static com.digitalkitchen.enums.ResponseStatus.UPDATED;
 import static com.digitalkitchen.meals.util.MealTestUtils.*;
 import static com.digitalkitchen.enums.ResponseStatus.CREATED;
+import static com.digitalkitchen.meals.util.TestConstants.MEAL_ID;
+import static com.digitalkitchen.meals.util.TestConstants.MEAL_RECIPE_ID;
 import static com.digitalkitchen.recipes.util.RecipeTestUtils.getTestRecipe;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -49,7 +52,7 @@ class MealServiceTest {
 
     @Test
     void processCreateRequestTest_mealPlanOnly_success() {
-        MealRequest request = buildCreateRequest(null, buildMealPlanInfo(), null);
+        MealRequest request = buildRequest(null, buildMealPlanInfo(), null);
         MealPlan plan = buildMealPlan();
 
         when(mealPlanRepository.save(any())).thenReturn(plan);
@@ -63,7 +66,7 @@ class MealServiceTest {
     @Test
     void processCreateRequestTest_mealOnly_success() {
         List<Meal> meals = List.of(buildMeal());
-        MealRequest request = buildCreateRequest(List.of(buildMealInfo(null, null)), null, null);
+        MealRequest request = buildRequest(List.of(buildMealInfo(null, null)), null, null);
         Recipe recipe = getTestRecipe();
 
         when(recipeRepository.findAllById(any())).thenReturn(List.of(recipe));
@@ -79,7 +82,7 @@ class MealServiceTest {
     @Test
     void processCreateRequestTest_mealRecordOnly_success() {
         List<MealRecord> mealRecords = List.of(buildMealRecord());
-        MealRequest request = buildCreateRequest(null, null, List.of(buildMealRecordInfo(null)));
+        MealRequest request = buildRequest(null, null, List.of(buildMealRecordInfo(null)));
         Optional<Meal> meal = Optional.of(buildMeal());
         Optional<MealPlan> mealPlan = Optional.of(buildMealPlan());
 
@@ -96,7 +99,7 @@ class MealServiceTest {
 
     @Test
     void processCreateRequestTest_fullRequest_success() {
-        MealRequest request = buildCreateRequest(List.of(buildMealInfo(null, "1")),
+        MealRequest request = buildRequest(List.of(buildMealInfo(null, "1")),
                 buildMealPlanInfo(),
                 List.of(buildMealRecordInfo("1")));
         List<MealRecord> mealRecords = List.of(buildMealRecord());
@@ -120,8 +123,67 @@ class MealServiceTest {
 
     @Test
     void processCreateRequestTest_emptyRequest_success() {
-        MealRequest request = buildCreateRequest(null, null, null);
+        MealRequest request = buildRequest(null, null, null);
         MealResponse response = testObject.processCreateRequest(request);
+        assertEquals(EMPTY, response.getStatus());
+    }
+
+    @Test
+    void processUpdateRequestTest_mealOnly_success() {
+        MealRequest request = buildRequest(List.of(buildMealInfo(String.valueOf(MEAL_ID), null)), null, null);
+        request.getMeals().get(0).setMealRecipeIds(List.of(MEAL_RECIPE_ID));
+
+        when(mealRepository.findById(any())).thenReturn(Optional.of(buildMeal()));
+        MealResponse response = testObject.processUpdateRequest(request);
+        assertEquals(UPDATED, response.getStatus());
+        verify(mealPlanRepository, never()).save(any());
+        verify(mealRepository, atMostOnce()).save(any());
+        verify(mealRecordRepository, never()).save(any());
+    }
+
+    @Test
+    void processUpdateRequestTest_mealPlanOnly_success() {
+        MealRequest request = buildRequest(null, buildMealPlanInfo(), null);
+
+        when(mealPlanRepository.findById(any())).thenReturn(Optional.of(buildMealPlan()));
+        MealResponse response = testObject.processUpdateRequest(request);
+        assertEquals(UPDATED, response.getStatus());
+        verify(mealPlanRepository, atMostOnce()).save(any());
+        verify(mealRepository, never()).save(any());
+        verify(mealRecordRepository, never()).save(any());
+    }
+
+    @Test
+    void processUpdateRequestTest_mealRecordOnly_success() {
+        MealRequest request = buildRequest(null, null, List.of(buildMealRecordInfo()));
+
+        when(mealRecordRepository.findById(any())).thenReturn(Optional.of(buildMealRecord()));
+        MealResponse response = testObject.processUpdateRequest(request);
+        assertEquals(UPDATED, response.getStatus());
+        verify(mealPlanRepository, never()).save(any());
+        verify(mealRepository, never()).save(any());
+        verify(mealRecordRepository, atMostOnce()).save(any());
+    }
+
+    @Test
+    void processUpdateRequestTest_fullRequest_success() {
+        MealRequest request = buildRequest(List.of(buildMealInfo(String.valueOf(MEAL_ID), null)), buildMealPlanInfo(), List.of(buildMealRecordInfo()));
+        request.getMeals().get(0).setMealRecipeIds(List.of(MEAL_RECIPE_ID));
+
+        when(mealRepository.findById(any())).thenReturn(Optional.of(buildMeal()));
+        when(mealPlanRepository.findById(any())).thenReturn(Optional.of(buildMealPlan()));
+        when(mealRecordRepository.findById(any())).thenReturn(Optional.of(buildMealRecord()));
+        MealResponse response = testObject.processUpdateRequest(request);
+        assertEquals(UPDATED, response.getStatus());
+        verify(mealPlanRepository, atMostOnce()).save(any());
+        verify(mealRepository, atMostOnce()).save(any());
+        verify(mealRecordRepository, atMostOnce()).save(any());
+    }
+
+    @Test
+    void processUpdateRequestTest_emptyRequest_success() {
+        MealRequest request = buildRequest(null, null, null);
+        MealResponse response = testObject.processUpdateRequest(request);
         assertEquals(EMPTY, response.getStatus());
     }
 
@@ -148,5 +210,4 @@ class MealServiceTest {
         MealResponse response = testObject.getMealRecord(mealRecord.getId());
         assertEquals(FOUND, response.getStatus());
     }
-
 }

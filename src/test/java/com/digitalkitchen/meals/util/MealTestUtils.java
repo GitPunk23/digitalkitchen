@@ -17,14 +17,14 @@ import java.util.List;
 
 import static com.digitalkitchen.enums.ResponseStatus.CREATED;
 import static com.digitalkitchen.enums.ResponseStatus.FOUND;
+import static com.digitalkitchen.enums.ResponseStatus.UPDATED;
 import static com.digitalkitchen.meals.enums.MealType.DINNER;
 import static com.digitalkitchen.meals.util.TestConstants.*;
 import static com.digitalkitchen.recipes.util.RecipeTestUtils.getTestRecipe;
-import static java.util.Objects.nonNull;
 
 public class MealTestUtils {
 
-    public static MealRequest buildCreateRequest(List<MealInfo> mealInfo, MealPlanInfo planInfo, List<MealRecordInfo> recordInfo) {
+    public static MealRequest buildRequest(List<MealInfo> mealInfo, MealPlanInfo planInfo, List<MealRecordInfo> recordInfo) {
         return MealRequest.builder()
                 .plan(planInfo)
                 .meals(mealInfo)
@@ -47,6 +47,16 @@ public class MealTestUtils {
                 .nickname("Super Diet")
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now().plusDays(3))
+                .build();
+    }
+
+    public static MealRecordInfo buildMealRecordInfo() {
+        return MealRecordInfo.builder()
+                .id(String.valueOf(MEAL_RECORD_ID))
+                .mealType(DINNER)
+                .date(LocalDate.now())
+                .mealId(String.valueOf(MEAL_ID))
+                .mealPlanId(String.valueOf(MEAL_PLAN_ID))
                 .build();
     }
 
@@ -139,5 +149,11 @@ public class MealTestUtils {
                                 .records(List.of(buildMealRecord()))
                                 .build()))
                 .build();
+    }
+
+    public static MealResponse buildMealUpdateResponse() {
+        MealResponse response = buildMealCreatedResponse();
+        response.setStatus(UPDATED);
+        return response;
     }
 }

@@ -23,20 +23,9 @@ public class MealInfo {
 
     @NotNull
     private String name;
-
     private String notes;
-
-    @Size(min=1)
     private List<Long> recipeIds;
-
+    private List<Long> mealRecipeIds;
     @NotBlank
     private String relationId;
-
-    public boolean isCopyOfMeal(Meal meal) {
-        return meal.getName().equals(this.name) &&
-                meal.getNotes().equals(this.notes) &&
-                meal.getMealRecipes().stream()
-                        .map(MealRecipe::getId)
-                        .allMatch(recipeIds::contains);
-    }
 }

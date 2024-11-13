@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import static com.digitalkitchen.meals.service.MealResponseMapper.buildSearchResponse;
 import static com.digitalkitchen.util.Constants.NOTHING_CREATED;
 import static com.digitalkitchen.util.Constants.NOT_FOUND;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static org.apache.logging.log4j.util.Strings.isBlank;
 import static org.springframework.util.CollectionUtils.isEmpty;
@@ -51,15 +52,19 @@ public class MealService {
 
         for (MealInfo info: request) {
             Meal meal = buildMeal(info);
-            List<Recipe> recipes = recipeRepository.findAllById(info.getRecipeIds());
-            List<MealRecipe> mealRecipes = recipes.stream()
-                    .map(recipe -> buildMealRecipes(meal, recipe))
-                    .toList();
+            List<MealRecipe> mealRecipes = buildMealRecipes(meal, info.getMealRecipeIds());
             meal.setMealRecipes(mealRecipes);
             meals.add(meal);
         }
 
         return mealRepository.saveAll(meals);
+    }
+
+    private List<MealRecipe> buildMealRecipes(Meal meal, List<Long> recipeIds) {
+        List<Recipe> recipes = recipeRepository.findAllById(recipeIds);
+        return recipes.stream()
+                .map(recipe -> buildMealRecipes(meal, recipe))
+                .toList();
     }
 
     public MealPlan buildAndSaveMealPlan(MealPlanInfo request) {
@@ -68,12 +73,7 @@ public class MealService {
     }
 
     public List<MealRecord> buildAndSaveMealRecords(List<MealRecordInfo> recordInfos) {
-        List<MealRecord> records = new ArrayList<>();
-        recordInfos.forEach(recordInfo ->{
-            Meal meal = mealRepository.findById(Long.valueOf(recordInfo.getMealId())).get();
-            MealPlan mealPlan = mealPlanRepository.findById(Long.valueOf(recordInfo.getMealPlanId())).get();
-            records.add(buildMealRecord(recordInfo, meal, mealPlan));
-        });
+        List<MealRecord> records = buildMealRecords(recordInfos);
         return mealRecordRepository.saveAll(records);
     }
 
@@ -105,7 +105,33 @@ public class MealService {
 
     @Transactional
     public MealResponse processUpdateRequest(MealRequest request) {
-        return MealResponseMapper.buildEmptyResponse(NOTHING_CREATED);
+        if (request.isEmpty()) {
+            return MealResponseMapper.buildEmptyResponse(NOTHING_CREATED);
+        }
+
+        List<Meal> meals = !isEmpty(request.getMeals())
+                ? updateMeals(request.getMeals())
+                : null;
+
+        MealPlan mealPlan = !isNull(request.getPlan())
+                ? updateMealPlan(request.getPlan())
+                : null;
+
+        List<MealRecord> mealRecords;
+        if (!isEmpty(request.getRecords())) {
+            mealRecords = buildMealRecords(request.getRecords().stream()
+                    .filter(mealRecord -> mealRecord.getId().isEmpty())
+                    .toList());
+            mealRecords.addAll(updateMealRecords(request.getRecords().stream()
+                    .filter(mealRecord -> !mealRecord.getId().isEmpty() )
+                    .toList()));
+        } else {
+            mealRecords = null;
+        }
+
+
+
+        return MealResponseMapper.buildUpdateResponse(meals, mealPlan, mealRecords);
     }
 
     public MealResponse getMeal(Long mealId) {
@@ -128,6 +154,64 @@ public class MealService {
         return plan.isPresent()
                 ? buildSearchResponse(plan.get())
                 : MealResponseMapper.buildEmptyResponse(NOT_FOUND);
+    }
+
+    private List<MealRecord> buildMealRecords(List<MealRecordInfo> mealRecordInfos) {
+        List<MealRecord> records = new ArrayList<>();
+        mealRecordInfos.forEach(recordInfo ->{
+            Meal meal = mealRepository.findById(Long.valueOf(recordInfo.getMealId())).get();
+            MealPlan mealPlan = mealPlanRepository.findById(Long.valueOf(recordInfo.getMealPlanId())).get();
+            records.add(buildMealRecord(recordInfo, meal, mealPlan));
+        });
+        return records;
+    }
+
+    private MealPlan updateMealPlan(MealPlanInfo mealPlanInfo) {
+        MealPlan mealPlan = mealPlanRepository.findById(Long.valueOf(mealPlanInfo.getId()))
+                .orElseThrow(() -> new DataException(null, "Meal Plan " + mealPlanInfo.getId() + " could not be found"));
+
+        mealPlan.setNickname(mealPlanInfo.getNickname());
+        mealPlan.setStartDate(mealPlanInfo.getStartDate());
+        mealPlan.setEndDate(mealPlanInfo.getEndDate());
+        return mealPlan;
+    }
+
+    private List<MealRecord> updateMealRecords(List<MealRecordInfo> mealRecordInfos) {
+        return mealRecordInfos.stream()
+                .map(this::updateMealRecord)
+                .toList();
+    }
+
+    private MealRecord updateMealRecord(MealRecordInfo mealRecordInfo) {
+        MealRecord mealRecord = mealRecordRepository.findById(Long.valueOf(mealRecordInfo.getId()))
+                .orElseThrow(() -> new DataException(null, "Meal Record " + mealRecordInfo.getId() + " could not be found"));
+        mealRecord.setDate(mealRecordInfo.getDate());
+        mealRecord.setType(mealRecordInfo.getMealType());
+        return mealRecord;
+    }
+
+    private List<Meal> updateMeals(List<MealInfo> mealInfos) {
+        return mealInfos.stream()
+                .map(this::updateMeal)
+                .toList();
+    }
+
+    private Meal updateMeal(MealInfo requestInfo) {
+        Meal meal = mealRepository.findById(Long.valueOf(requestInfo.getId()))
+                .orElseThrow(() -> new DataException(null, "Meal " + requestInfo.getId() + " could not be found"));
+
+        meal.setName(requestInfo.getName());
+        meal.setNotes(requestInfo.getNotes());
+
+        List<MealRecipe> mealRecipes = new ArrayList<>();
+        mealRecipes.addAll(meal.getMealRecipes().stream()
+                .filter(mealRecipe -> requestInfo.getMealRecipeIds().contains(mealRecipe.getId()))
+                .toList());
+        mealRecipes.addAll(buildMealRecipes(meal, requestInfo.getRecipeIds()));
+
+        meal.setMealRecipes(mealRecipes);
+
+        return meal;
     }
 
     private Meal buildMeal(MealInfo requestInfo) {

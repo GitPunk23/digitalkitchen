@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static com.digitalkitchen.meals.util.MealTestUtils.buildMealCreatedResponse;
 import static com.digitalkitchen.meals.util.MealTestUtils.buildMealSearchResponse;
+import static com.digitalkitchen.meals.util.MealTestUtils.buildMealUpdateResponse;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -44,6 +45,19 @@ class MealControllerTest {
                         .content("{\"field\":\"value\"}"))
                 .andExpect(status().isCreated());
         verify(mealService, times(1)).processCreateRequest(request);
+    }
+
+    @Test
+    void testUpdateMeal() throws Exception {
+        MealRequest request = new MealRequest();
+        MealResponse response = buildMealUpdateResponse();
+
+        when(mealService.processUpdateRequest(request)).thenReturn(response);
+        mockMvc.perform(patch("/meals/update")
+                        .contentType("application/json")
+                        .content("{\"field\":\"value\"}"))
+                .andExpect(status().isOk());
+        verify(mealService, times(1)).processUpdateRequest(request);
     }
 
     @Test

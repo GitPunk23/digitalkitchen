@@ -12,6 +12,7 @@ import java.util.List;
 import static com.digitalkitchen.enums.ResponseStatus.CREATED;
 import static com.digitalkitchen.enums.ResponseStatus.EMPTY;
 import static com.digitalkitchen.enums.ResponseStatus.FOUND;
+import static com.digitalkitchen.enums.ResponseStatus.UPDATED;
 import static java.util.Objects.nonNull;
 
 public class MealResponseMapper {
@@ -77,5 +78,11 @@ public class MealResponseMapper {
                                 .records(records)
                                 .build()))
                 .build();
+    }
+
+    public static MealResponse buildUpdateResponse(List<Meal> meals, MealPlan mealPlan, List<MealRecord> mealRecords) {
+        MealResponse response = buildCreateResponse(meals, mealPlan, mealRecords);
+        response.setStatus(UPDATED);
+        return response;
     }
 }
