@@ -20,7 +20,7 @@ ALTER TABLE meals
     ADD CONSTRAINT fk_meals_author FOREIGN KEY (author_id) REFERENCES authors(id);
 
 ALTER TABLE recipes
-    DROP COLUMN author,
+    ADD COLUMN author_id BIGINT NOT NULL DEFAULT 2,
     ADD CONSTRAINT fk_recipes_author FOREIGN KEY (author_id) REFERENCES authors(id);
 
 ALTER TABLE recipe_ingredients

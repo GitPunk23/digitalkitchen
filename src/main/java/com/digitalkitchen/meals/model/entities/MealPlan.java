@@ -30,7 +30,8 @@ public class MealPlan {
     @Column
     private LocalDate endDate;
 
-    @Column(name = "author_id")
+    @ManyToOne
+    @JoinColumn(name = "author_id")
     private Author author;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
