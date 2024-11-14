@@ -94,10 +94,6 @@ INSERT INTO authors (name)
 SELECT 'system'
 WHERE NOT EXISTS (SELECT 1 FROM authors WHERE name = 'system');
 
-INSERT INTO authors (name)
-SELECT 'brett'
-WHERE NOT EXISTS (SELECT 1 FROM authors WHERE name = 'brett');
-
 
 
 
