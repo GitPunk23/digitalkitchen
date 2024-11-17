@@ -4,7 +4,6 @@ target/
 .env
 *.iml
 
-src/main/resources/application*
 build/
 archive/
 *.jar
