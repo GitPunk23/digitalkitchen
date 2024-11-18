@@ -42,12 +42,12 @@ public class MealResponseMapper {
                 .build();
     }
 
-    public static MealResponse buildSearchResponse(Meal meal) {
+    public static MealResponse buildSearchResponse(List<Meal> meals) {
         return MealResponse.builder()
                 .status(FOUND)
                 .meals(Collections.singletonList(
                         MealResponseInfo.builder()
-                                .meals(Collections.singletonList(meal))
+                                .meals(meals)
                                 .build()))
                 .build();
     }

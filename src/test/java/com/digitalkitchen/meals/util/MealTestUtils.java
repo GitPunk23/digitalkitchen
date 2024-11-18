@@ -8,6 +8,7 @@ import com.digitalkitchen.meals.model.request.MealRecordInfo;
 import com.digitalkitchen.meals.model.request.MealRequest;
 import com.digitalkitchen.meals.model.request.MealInfo;
 import com.digitalkitchen.meals.model.request.MealPlanInfo;
+import com.digitalkitchen.meals.model.request.MealSearchRequest;
 import com.digitalkitchen.meals.model.response.MealResponse;
 import com.digitalkitchen.meals.model.response.MealResponseInfo;
 
@@ -23,6 +24,22 @@ import static com.digitalkitchen.meals.util.TestConstants.*;
 import static com.digitalkitchen.recipes.util.RecipeTestUtils.getTestRecipe;
 
 public class MealTestUtils {
+
+    public static MealSearchRequest buildSearchRequest() {
+        return MealSearchRequest.builder()
+                .name("Star Wars Night")
+                .authors(List.of("Luke Skywalker"))
+                .recipes(List.of(String.valueOf(RECIPE_ID)))
+                .build();
+    }
+
+    public static MealSearchRequest buildSearchRequest(String name, List<String> authors, List<String> recipes) {
+        return MealSearchRequest.builder()
+                .name(name)
+                .authors(authors)
+                .recipes(recipes)
+                .build();
+    }
 
     public static MealRequest buildRequest(List<MealInfo> mealInfo, MealPlanInfo planInfo, List<MealRecordInfo> recordInfo) {
         return MealRequest.builder()

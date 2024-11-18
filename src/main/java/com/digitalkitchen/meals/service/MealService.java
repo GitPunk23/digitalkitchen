@@ -9,10 +9,12 @@ import com.digitalkitchen.meals.model.request.MealRequest;
 import com.digitalkitchen.meals.model.request.MealInfo;
 import com.digitalkitchen.meals.model.request.MealPlanInfo;
 import com.digitalkitchen.meals.model.entities.MealPlan;
+import com.digitalkitchen.meals.model.request.MealSearchRequest;
 import com.digitalkitchen.meals.model.response.MealResponse;
 import com.digitalkitchen.meals.repository.MealPlanRepository;
 import com.digitalkitchen.meals.repository.MealRecordRepository;
 import com.digitalkitchen.meals.repository.MealRepository;
+import com.digitalkitchen.meals.repository.MealRepositoryExtension;
 import com.digitalkitchen.recipes.model.entities.Recipe;
 import com.digitalkitchen.recipes.repository.RecipeRepository;
 import jakarta.transaction.Transactional;
@@ -24,7 +26,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.digitalkitchen.meals.service.MealResponseMapper.buildEmptyResponse;
 import static com.digitalkitchen.meals.service.MealResponseMapper.buildSearchResponse;
+import static com.digitalkitchen.meals.service.MealResponseMapper.buildUpdateResponse;
 import static com.digitalkitchen.util.Constants.NOTHING_CREATED;
 import static com.digitalkitchen.util.Constants.NOT_FOUND;
 import static java.util.Objects.isNull;
@@ -39,12 +43,14 @@ public class MealService {
     private final MealPlanRepository mealPlanRepository;
     private final MealRecordRepository mealRecordRepository;
     private final RecipeRepository recipeRepository;
+    private final MealRepositoryExtension mealRepositoryExtension;
 
-    MealService(MealRepository mealRepository, MealPlanRepository mealPlanRepository, MealRecordRepository mealRecordRepository, RecipeRepository recipeRepository) {
+    MealService(MealRepository mealRepository, MealPlanRepository mealPlanRepository, MealRecordRepository mealRecordRepository, RecipeRepository recipeRepository, MealRepositoryExtension mealRepositoryExtension) {
         this.mealRepository = mealRepository;
         this.mealPlanRepository = mealPlanRepository;
         this.mealRecordRepository = mealRecordRepository;
         this.recipeRepository = recipeRepository;
+        this.mealRepositoryExtension = mealRepositoryExtension;
     }
 
     public List<Meal> buildAndSaveMeal(List<MealInfo> request) {
@@ -80,7 +86,7 @@ public class MealService {
     @Transactional
     public MealResponse processCreateRequest(MealRequest request) {
         if (request.isEmpty()) {
-            return MealResponseMapper.buildEmptyResponse(NOTHING_CREATED);
+            return buildEmptyResponse(NOTHING_CREATED);
         }
         List<Meal> meals = request.getMeals() != null
                 ? buildAndSaveMeal(request.getMeals())
@@ -106,7 +112,7 @@ public class MealService {
     @Transactional
     public MealResponse processUpdateRequest(MealRequest request) {
         if (request.isEmpty()) {
-            return MealResponseMapper.buildEmptyResponse(NOTHING_CREATED);
+            return buildEmptyResponse(NOTHING_CREATED);
         }
 
         List<Meal> meals = !isEmpty(request.getMeals())
@@ -129,23 +135,25 @@ public class MealService {
             mealRecords = null;
         }
 
+        return buildUpdateResponse(meals, mealPlan, mealRecords);
+    }
 
-
-        return MealResponseMapper.buildUpdateResponse(meals, mealPlan, mealRecords);
+    public MealResponse searchMeals(MealSearchRequest searchParams) {
+        return buildSearchResponse(mealRepositoryExtension.searchMeals(searchParams));
     }
 
     public MealResponse getMeal(Long mealId) {
         Optional<Meal> meal = mealRepository.findById(mealId);
         return meal.isPresent()
-                ? buildSearchResponse(meal.get())
-                : MealResponseMapper.buildEmptyResponse(NOT_FOUND);
+                ? buildSearchResponse(List.of(meal.get()))
+                : buildEmptyResponse(NOT_FOUND);
     }
 
     public MealResponse getMealRecord(Long mealRecordId) {
         Optional<MealRecord> mealRecord = mealRecordRepository.findById(mealRecordId);
         return mealRecord.isPresent()
                 ? buildSearchResponse(mealRecord.get())
-                : MealResponseMapper.buildEmptyResponse(NOT_FOUND);
+                : buildEmptyResponse(NOT_FOUND);
     }
 
     public MealResponse getMealPlan(Long planId) {
@@ -153,14 +161,16 @@ public class MealService {
 
         return plan.isPresent()
                 ? buildSearchResponse(plan.get())
-                : MealResponseMapper.buildEmptyResponse(NOT_FOUND);
+                : buildEmptyResponse(NOT_FOUND);
     }
 
     private List<MealRecord> buildMealRecords(List<MealRecordInfo> mealRecordInfos) {
         List<MealRecord> records = new ArrayList<>();
         mealRecordInfos.forEach(recordInfo ->{
-            Meal meal = mealRepository.findById(Long.valueOf(recordInfo.getMealId())).get();
-            MealPlan mealPlan = mealPlanRepository.findById(Long.valueOf(recordInfo.getMealPlanId())).get();
+            Meal meal = mealRepository.findById(Long.valueOf(recordInfo.getMealId()))
+                    .orElseThrow(() -> new DataException(null, "Meal " + recordInfo.getMealId() + " could not be found"));
+            MealPlan mealPlan = mealPlanRepository.findById(Long.valueOf(recordInfo.getMealPlanId()))
+                    .orElseThrow(() -> new DataException(null, "Meal Plan " + recordInfo.getMealPlanId() + " could not be found"));
             records.add(buildMealRecord(recordInfo, meal, mealPlan));
         });
         return records;
@@ -262,7 +272,7 @@ public class MealService {
                                     .filter(meal -> meal.getName().equalsIgnoreCase(requestMeal.getName()))
                                     .findFirst()
                                     .map(Meal::getId)
-                                    .orElseThrow(()-> new DataException("", "An error occurred while mapping relationIds, request failed"))//DATAEXCEPTION
+                                    .orElseThrow(()-> new DataException("", "An error occurred while mapping relationIds, request failed"))
                     ));
 
             recordInfos.stream()

@@ -8,6 +8,7 @@ import com.digitalkitchen.meals.model.response.MealResponse;
 import com.digitalkitchen.meals.repository.MealPlanRepository;
 import com.digitalkitchen.meals.repository.MealRecordRepository;
 import com.digitalkitchen.meals.repository.MealRepository;
+import com.digitalkitchen.meals.repository.MealRepositoryExtension;
 import com.digitalkitchen.recipes.model.entities.Recipe;
 import com.digitalkitchen.recipes.repository.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,12 +43,14 @@ class MealServiceTest {
     private MealRecordRepository mealRecordRepository;
     @Mock
     private RecipeRepository recipeRepository;
+    @Mock
+    private MealRepositoryExtension mealRepositoryExtension;
 
 
     @BeforeEach
     void beforeEach() {
         MockitoAnnotations.openMocks(this);
-        testObject = Mockito.spy(new MealService(mealRepository, mealPlanRepository, mealRecordRepository, recipeRepository));
+        testObject = Mockito.spy(new MealService(mealRepository, mealPlanRepository, mealRecordRepository, recipeRepository, mealRepositoryExtension));
     }
 
     @Test

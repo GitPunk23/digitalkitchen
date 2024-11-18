@@ -1,5 +1,6 @@
 package com.digitalkitchen.recipes.service;
 
+import com.digitalkitchen.authors.model.entities.Author;
 import com.digitalkitchen.recipes.enums.Category;
 import com.digitalkitchen.recipes.model.entities.*;
 import com.digitalkitchen.recipes.model.request.RecipeSearchRequest;
@@ -43,7 +44,12 @@ public class RecipeRepositoryExtensionImpl implements RecipeRepositoryExtension 
 
         if (listContainsElements(searchParams.getAuthors())) {
             List<String> authors = searchParams.getAuthors();
-            final Predicate predicateForAuthors = root.get("author").in(authors);
+            Subquery<Author> subquery = query.subquery(Author.class);
+            Root<Author> subRoot = subquery.from(Author.class);
+            subquery.select(subRoot.get("id"));
+            Predicate authorPredicate = subRoot.get("id").in(authors);
+            subquery.where(authorPredicate);
+            final Predicate predicateForAuthors = root.get("author").get("id").in(authors);
             predicates.add(predicateForAuthors);
         }
 

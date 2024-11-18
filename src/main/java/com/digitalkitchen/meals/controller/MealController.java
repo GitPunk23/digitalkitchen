@@ -1,6 +1,7 @@
 package com.digitalkitchen.meals.controller;
 
 import com.digitalkitchen.meals.model.request.MealRequest;
+import com.digitalkitchen.meals.model.request.MealSearchRequest;
 import com.digitalkitchen.meals.model.response.MealResponse;
 import com.digitalkitchen.meals.service.MealService;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,13 @@ public class MealController {
     public ResponseEntity<MealResponse> create(@RequestBody @Valid MealRequest request) {
         MealResponse response = mealService.processCreateRequest(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<MealResponse> search(@RequestBody @Valid MealSearchRequest request) {
+        MealResponse response = mealService.searchMeals(request);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PatchMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
