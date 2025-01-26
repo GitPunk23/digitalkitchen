@@ -10,7 +10,7 @@ services:
     #image: digitalkitchen-frontend
 
   backend:
-    build: ../backend
+    build: ./Dockerfile
     ports:
       - "8000:8000"  # Map host port 8000 to container port 8000
     networks:
