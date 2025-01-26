@@ -1,13 +1,13 @@
 version: '3'
 services:
-  frontend:
-    build: ./frontend/
-    ports:
-      - "8080:8080"  # Map host port 8080 to container port 8080
-    networks:
-      - digitalkitchen-network
-    container_name: digitalkitchen-frontend
-    image: digitalkitchen-frontend
+  #frontend:
+    #build: ./frontend/
+    #ports:
+      #- "8080:8080"  # Map host port 8080 to container port 8080
+    #networks:
+      #- digitalkitchen-network
+    #container_name: digitalkitchen-frontend
+    #image: digitalkitchen-frontend
 
   backend:
     build: ../backend

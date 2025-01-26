@@ -1,14 +1,14 @@
 version: '3'
 services:
-  frontend-dev:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.dev
-    ports:
-      - "4040:4040"  # Map host port 4040 to container port 4040
-    networks:
-      - digitalkitchen-network-dev
-    container_name: digitalkitchen-frontend-dev
+  #frontend-dev:
+    #build:
+      #context: ./frontend
+      #dockerfile: Dockerfile.dev
+    #ports:
+      #- "4040:4040"  # Map host port 4040 to container port 4040
+    #networks:
+      #- digitalkitchen-network-dev
+    #container_name: digitalkitchen-frontend-dev
 
   backend-dev:
     build: 

@@ -1,10 +1,11 @@
 #!/bin/bash
+git checkout main
 
 # Move to root
 cd ..
 
 # Move the current JAR to the archive directory
-mv target/*.jar archive/
+mv target/*.jar jars/
 
 # Rebuild
 mvn clean
