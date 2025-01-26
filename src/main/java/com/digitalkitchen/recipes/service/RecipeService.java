@@ -13,9 +13,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static com.digitalkitchen.recipes.enums.ResponseStatus.NOT_FOUND;
+import static com.digitalkitchen.enums.ResponseStatus.NOT_FOUND;
 import static com.digitalkitchen.recipes.service.ResponseMapper.*;
 
 @Service
@@ -61,7 +60,7 @@ public class RecipeService {
         List<Ingredient> ingredients = saveIngredients(recipeIngredients.stream()
                 .map(RecipeIngredient::getIngredient)
                 .map(Ingredient::getName)
-                .collect(Collectors.toList()));
+                .toList());
 
         for (int i = 0; i < recipeIngredients.size(); i++) {
             RecipeIngredient recipeIngredient = recipeIngredients.get(i);
@@ -76,7 +75,7 @@ public class RecipeService {
         List<Tag> tags = saveTags(recipeTags.stream()
                 .map(RecipeTag::getTag)
                 .map(Tag::getName)
-                .collect(Collectors.toList()));
+                .toList());
 
         for (int i = 0; i < recipeTags.size(); i++) {
             RecipeTag recipeTag = recipeTags.get(i);
@@ -222,10 +221,10 @@ public class RecipeService {
     }
 
     @Transactional
-    public RecipeResponse createRecipe(RecipeRequest request, boolean force) {
+    public RecipeResponse createRecipe(RecipeRequest request) {
         String name = request.getRecipes().get(0).getName();
-        String author = request.getRecipes().get(0).getAuthor();
-        Optional<Recipe> duplicate = recipeRepository.findByNameAndAuthor(name, author);
+        long authorId = request.getRecipes().get(0).getAuthor().getId();
+        Optional<Recipe> duplicate = recipeRepository.findByNameAndAuthorId(name, authorId);
         RecipeResponse response;
         if (duplicate.isPresent()) {
             response = buildRecipeDuplicateResponse(duplicate.get());
@@ -243,15 +242,15 @@ public class RecipeService {
     }
 
     public RecipeResponse retrieveRecipe(String idString) {
-        int recipeId = Integer.parseInt(idString);
-        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
-        List<Recipe> recipes = Collections.singletonList(recipeOptional.get());
+        Long recipeId = Long.parseLong(idString);
+        Optional<Recipe> optRecipe = recipeRepository.findById(recipeId);
+        List<Recipe> recipes = Collections.singletonList(optRecipe.orElse(null));
         return buildRecipeSearchResponse(recipes);
     }
 
     @Transactional
     public RecipeResponse updateRecipe(RecipeRequest request) {
-        int recipeId = request.getRecipes().get(0).getId();
+        Long recipeId = request.getRecipes().get(0).getId();
         Optional<Recipe> recipeOpt = recipeRepository.findById(recipeId);
         if (recipeOpt.isPresent()) {
             Recipe recipe = recipeOpt.get();
@@ -264,7 +263,7 @@ public class RecipeService {
     }
 
     @Transactional
-    public void deleteRecipe(int recipeId) {
+    public void deleteRecipe(Long recipeId) {
         Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
         recipeOptional.ifPresent(recipeRepository::delete);
     }

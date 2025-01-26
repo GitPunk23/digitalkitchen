@@ -11,7 +11,7 @@ import com.digitalkitchen.recipes.model.request.RecipeRequest;
 import com.digitalkitchen.recipes.model.response.RecipeResponse;
 import com.digitalkitchen.recipes.service.RecipeService;
 
-import static com.digitalkitchen.recipes.enums.ResponseStatus.*;
+import static com.digitalkitchen.enums.ResponseStatus.*;
 
 @RestController
 @RequestMapping("/recipes")
@@ -26,9 +26,8 @@ public class RecipeController {
 
     @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<RecipeResponse> createRecipe( @RequestParam(name = "bypass", defaultValue = "false") Boolean bypassFlag,
-                                                        @RequestBody RecipeRequest request) {
-        RecipeResponse response = recipeService.createRecipe(request, bypassFlag);
+    public ResponseEntity<RecipeResponse> createRecipe(@RequestBody RecipeRequest request) {
+        RecipeResponse response = recipeService.createRecipe(request);
         HttpStatus status = response.getStatus().equals(CREATED) ? HttpStatus.CREATED : HttpStatus.CONFLICT;
         return ResponseEntity.status(status).body(response);
     }
@@ -59,7 +58,7 @@ public class RecipeController {
 
     @DeleteMapping(value = "/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<RecipeResponse> deleteRecipe(final @RequestParam int recipeId) {
+    public ResponseEntity<RecipeResponse> deleteRecipe(final @RequestParam Long recipeId) {
         recipeService.deleteRecipe(recipeId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }

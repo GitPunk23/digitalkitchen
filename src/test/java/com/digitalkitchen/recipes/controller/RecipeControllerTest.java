@@ -1,6 +1,6 @@
 package com.digitalkitchen.recipes.controller;
 
-import static com.digitalkitchen.recipes.enums.ResponseStatus.*;
+import static com.digitalkitchen.enums.ResponseStatus.*;
 import static com.digitalkitchen.recipes.util.RecipeTestUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -35,8 +35,8 @@ class RecipeControllerTest {
         RecipeResponse sampleResponse = getTestRecipeResponse();
         sampleResponse.setStatus(CREATED);
 
-        when(recipeService.createRecipe(any(), anyBoolean())).thenReturn(sampleResponse);
-        ResponseEntity<RecipeResponse> response = testObject.createRecipe(false, getTestRecipeRequest());
+        when(recipeService.createRecipe(any())).thenReturn(sampleResponse);
+        ResponseEntity<RecipeResponse> response = testObject.createRecipe( getTestRecipeRequest());
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(sampleResponse, response.getBody());
     }
@@ -76,8 +76,8 @@ class RecipeControllerTest {
 
     @Test
     void testDeleteRecipe() {
-        Mockito.doNothing().when(recipeService).deleteRecipe(anyInt());
-        ResponseEntity<RecipeResponse> response = testObject.deleteRecipe(7);
+        Mockito.doNothing().when(recipeService).deleteRecipe(any());
+        ResponseEntity<RecipeResponse> response = testObject.deleteRecipe(7L);
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         assertNull(response.getBody());
     }

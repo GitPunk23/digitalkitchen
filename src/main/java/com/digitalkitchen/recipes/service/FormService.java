@@ -1,28 +1,28 @@
 package com.digitalkitchen.recipes.service;
 
+import com.digitalkitchen.authors.model.entities.Author;
+import com.digitalkitchen.authors.repository.AuthorRepository;
 import com.digitalkitchen.recipes.enums.Category;
 import com.digitalkitchen.recipes.enums.Measurement;
 import com.digitalkitchen.recipes.model.entities.Ingredient;
 import com.digitalkitchen.recipes.model.entities.Tag;
 import com.digitalkitchen.recipes.repository.IngredientRepository;
-import com.digitalkitchen.recipes.repository.RecipeRepository;
 import com.digitalkitchen.recipes.repository.TagRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class FormService {
 
-    private final RecipeRepository recipeRepository;
     private final TagRepository tagRepository;
     private final IngredientRepository ingredientRepository;
+    private final AuthorRepository authorRepository;
 
-    public FormService(RecipeRepository recipeRepository, TagRepository tagRepository, IngredientRepository ingredientRepository) {
-        this.recipeRepository = recipeRepository;
+    public FormService(TagRepository tagRepository, IngredientRepository ingredientRepository, AuthorRepository authorRepository) {
         this.tagRepository = tagRepository;
         this.ingredientRepository = ingredientRepository;
+        this.authorRepository = authorRepository;
     }
 
     public List<String> getAllCategories() {
@@ -33,19 +33,19 @@ public class FormService {
         return Measurement.getAllMeasurementStrings();
     }
 
-    public List<String> getAllAuthors() {
-        return recipeRepository.getAllAuthors();
+    public List<Author> getAllAuthors() {
+        return authorRepository.findAll();
     }
 
     public List<String> getAllTags() {
         return tagRepository.findAll().stream()
                 .map(Tag::getName)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<String> getAllIngredients() {
         return ingredientRepository.findAll().stream()
                 .map(Ingredient::getName)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

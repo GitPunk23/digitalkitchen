@@ -1,5 +1,6 @@
 package com.digitalkitchen.recipes.controller;
 
+import com.digitalkitchen.authors.model.entities.Author;
 import com.digitalkitchen.recipes.service.FormService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -43,7 +44,7 @@ public class FormController {
      */
     @GetMapping(value="/authors", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public List<String> getAllAuthors() {
+    public List<Author> getAllAuthors() {
         return formService.getAllAuthors();
     }
 

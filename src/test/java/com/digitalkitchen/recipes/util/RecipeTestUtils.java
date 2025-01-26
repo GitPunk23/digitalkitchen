@@ -1,5 +1,6 @@
 package com.digitalkitchen.recipes.util;
 
+import com.digitalkitchen.authors.model.entities.Author;
 import com.digitalkitchen.recipes.model.entities.*;
 import com.digitalkitchen.recipes.model.request.RecipeRequest;
 import com.digitalkitchen.recipes.model.request.RecipeRequestInfo;
@@ -17,11 +18,17 @@ import static com.digitalkitchen.recipes.enums.Measurement.WHOLE;
 
 public class RecipeTestUtils {
 
+    public static Author getTestAuthor() {
+        return Author.builder()
+                .name("Han Solo")
+                .build();
+    }
+
     public static Recipe getTestRecipe() {
         Recipe recipe = Recipe.builder()
-            .id(1337)
+            .id(1337L)
             .name("bantha burgers")
-            .author("Han Solo")
+            .author(getTestAuthor())
             .category(Category.SANDWICHES_AND_WRAPS)
             .description("mos eisley special")
             .servings(4)

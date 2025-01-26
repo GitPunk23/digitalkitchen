@@ -1,5 +1,7 @@
 package com.digitalkitchen.recipes.model.entities;
 
+import com.digitalkitchen.authors.model.entities.Author;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import com.digitalkitchen.recipes.enums.Category;
@@ -21,7 +23,7 @@ public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
-    private int id;
+    private long id;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -42,8 +44,9 @@ public class Recipe {
     @Column
     private String notes;
 
-    @Column
-    private String author;
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Author author;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "recipe_id")

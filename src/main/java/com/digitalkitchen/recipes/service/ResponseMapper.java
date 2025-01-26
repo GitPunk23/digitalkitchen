@@ -1,13 +1,13 @@
 package com.digitalkitchen.recipes.service;
 
-import com.digitalkitchen.recipes.enums.ResponseStatus;
+import com.digitalkitchen.enums.ResponseStatus;
 import com.digitalkitchen.recipes.model.entities.Recipe;
 import com.digitalkitchen.recipes.model.response.RecipeResponse;
 
 import java.util.Collections;
 import java.util.List;
 
-import static com.digitalkitchen.recipes.enums.ResponseStatus.*;
+import static com.digitalkitchen.enums.ResponseStatus.*;
 
 public class ResponseMapper {
     

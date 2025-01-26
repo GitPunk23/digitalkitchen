@@ -2,6 +2,7 @@ package com.digitalkitchen.recipes.model.request;
 
 import java.util.List;
 
+import com.digitalkitchen.authors.model.entities.Author;
 import com.digitalkitchen.recipes.enums.Category;
 import com.digitalkitchen.recipes.model.entities.RecipeIngredient;
 import com.digitalkitchen.recipes.model.entities.Step;
@@ -17,14 +18,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class RecipeRequestInfo {
-    private int id;
+    private Long id;
     private Category category;
     private String name;
     private String description;
     private int servings;
     private int caloriesPerServing;
     private String notes;
-    private String author;
+    private Author author;
     private List<RecipeIngredient> ingredients;
     private List<Step> steps;
     private List<RecipeTag> tags;

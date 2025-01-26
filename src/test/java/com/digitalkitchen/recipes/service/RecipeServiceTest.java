@@ -53,11 +53,11 @@ class RecipeServiceTest {
         Recipe recipe = getTestRecipe();
         RecipeRequest request = RecipeTestUtils.getTestRecipeRequest();
 
-        when(recipeRepository.findByNameAndAuthor(any(), any())).thenReturn(Optional.empty());
+        when(recipeRepository.findByNameAndAuthorId(any(), anyLong())).thenReturn(Optional.empty());
         when(ingredientRepository.save(any())).thenReturn(recipe.getIngredients().get(0).getIngredient());
         when(tagRepository.save(any())).thenReturn(recipe.getTags().get(0).getTag());
         when(recipeRepository.save(any())).thenReturn(recipe);
-        RecipeResponse response = testObject.createRecipe(request, false);
+        RecipeResponse response = testObject.createRecipe(request);
         verify(recipeRepository, times(1)).save(any());
         assertNotNull(response.getRecipes());
     }
@@ -67,8 +67,8 @@ class RecipeServiceTest {
         Recipe recipe = getTestRecipe();
         RecipeRequest request = RecipeTestUtils.getTestRecipeRequest();
 
-        when(recipeRepository.findByNameAndAuthor(any(), any())).thenReturn(Optional.of(recipe));
-        RecipeResponse response = testObject.createRecipe(request, false);
+        when(recipeRepository.findByNameAndAuthorId(any(), anyLong())).thenReturn(Optional.of(recipe));
+        RecipeResponse response = testObject.createRecipe(request);
         assertNotNull(response.getRecipes());
     }
 
@@ -112,8 +112,8 @@ class RecipeServiceTest {
 
         when(recipeRepository.findById(any())).thenReturn(Optional.of(recipe));
         Mockito.doNothing().when(recipeRepository).delete(any());
-        testObject.deleteRecipe(7);
-        verify(recipeRepository, times(1)).findById(anyInt());
+        testObject.deleteRecipe(7L);
+        verify(recipeRepository, times(1)).findById(any());
         verify(recipeRepository, times(1)).delete(any());
     }
 }

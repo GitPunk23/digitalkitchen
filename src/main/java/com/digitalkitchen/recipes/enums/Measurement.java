@@ -4,7 +4,6 @@ import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 public enum Measurement {
@@ -25,6 +24,6 @@ public enum Measurement {
     public static List<String> getAllMeasurementStrings() {
         return Arrays.stream(Measurement.values())
                 .map(Enum::name)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

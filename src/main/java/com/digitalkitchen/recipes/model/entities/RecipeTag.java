@@ -16,7 +16,7 @@ public class RecipeTag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "recipe_id")
