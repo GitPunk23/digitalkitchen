@@ -13,8 +13,8 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:3000") // Replace with your React app's URL
+                registry.addMapping("/**")
+                        .allowedOrigins("http://digitalkitchen-frontend:3000", "http://digitalkitchen-frontend:7070")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH");
             }
         };

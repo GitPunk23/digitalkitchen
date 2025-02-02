@@ -9,5 +9,6 @@ archive/
 *.jar
 certs/
 jars/
+keystore/
 
 
