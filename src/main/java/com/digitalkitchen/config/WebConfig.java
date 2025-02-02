@@ -16,7 +16,8 @@ public class WebConfig {
                 registry.addMapping("/**")
                         .allowedOrigins("http://digitalkitchen-frontend:3000", "http://digitalkitchen-frontend:7070", "http://digitalkitchen.oblsk.xyz")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
-                        .allowedHeaders("Content-Type", "Authorization");
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
 
             }
         };
