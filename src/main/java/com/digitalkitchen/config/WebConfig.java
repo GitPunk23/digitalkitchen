@@ -14,8 +14,10 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://digitalkitchen-frontend:3000", "http://digitalkitchen-frontend:7070")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH");
+                        .allowedOrigins("http://digitalkitchen-frontend:3000", "http://digitalkitchen-frontend:7070", "http://digitalkitchen.oblsk.xyz")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+                        .allowedHeaders("Content-Type", "Authorization");
+
             }
         };
     }
