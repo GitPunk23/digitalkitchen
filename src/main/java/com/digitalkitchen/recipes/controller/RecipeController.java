@@ -14,6 +14,7 @@ import com.digitalkitchen.recipes.service.RecipeService;
 import static com.digitalkitchen.enums.ResponseStatus.*;
 
 @RestController
+@CrossOrigin(origins= {"*"}, maxAge = 4800, allowCredentials = "false" )
 @RequestMapping("/recipes")
 @Validated
 public class RecipeController {
