@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 
 
 @RestController
+@CrossOrigin(origins= {"*"}, maxAge = 4800, allowCredentials = "false" )
 @RequestMapping("/meals")
 @Validated
 public class MealController {
