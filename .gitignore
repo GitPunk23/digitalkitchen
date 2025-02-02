@@ -10,5 +10,6 @@ archive/
 certs/
 jars/
 keystore/
+*.jks
 
 
