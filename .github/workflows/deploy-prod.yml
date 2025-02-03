@@ -1,15 +1,15 @@
-name: Deploy  prod
+name: Deploy Prod
 
 on:
   push:
     branches:
-      - main  # Trigger deployment when pushing to the main branch
+      - main
 
 jobs:
   deploy:
-    runs-on: [self-hosted, linux]  # Ensure this job runs on your self-hosted runner
+    runs-on: [self-hosted, linux]
 
     steps:
       - name: Run deployment script
-        run: /opt/digitalkitchen/scripts/deploy_digitalkitchen-backend.sh  # Call your deployment script
+        run: sudo /opt/digitalkitchen/scripts/deploy_digitalkitchen-backend.sh
 
