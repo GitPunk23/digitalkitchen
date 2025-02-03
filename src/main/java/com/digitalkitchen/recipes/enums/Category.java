@@ -4,7 +4,6 @@ import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 public enum Category {
@@ -33,6 +32,6 @@ public enum Category {
     public static List<String> getAllCategoryStrings() {
         return Arrays.stream(Category.values())
                 .map(Enum::name)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

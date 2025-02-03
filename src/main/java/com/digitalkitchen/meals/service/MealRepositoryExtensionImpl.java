@@ -4,7 +4,6 @@ import com.digitalkitchen.authors.model.entities.Author;
 import com.digitalkitchen.meals.model.entities.*;
 import com.digitalkitchen.meals.model.request.MealSearchRequest;
 import com.digitalkitchen.meals.repository.MealRepositoryExtension;
-import com.digitalkitchen.recipes.model.entities.Recipe;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;

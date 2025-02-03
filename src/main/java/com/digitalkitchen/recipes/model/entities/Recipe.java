@@ -1,7 +1,6 @@
 package com.digitalkitchen.recipes.model.entities;
 
 import com.digitalkitchen.authors.model.entities.Author;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import com.digitalkitchen.recipes.enums.Category;
