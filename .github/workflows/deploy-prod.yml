@@ -12,3 +12,4 @@ jobs:
     steps:
       - name: Run deployment script
         run: /opt/digitalkitchen/scripts/deploy_digitalkitchen-backend.sh  # Call your deployment script
+

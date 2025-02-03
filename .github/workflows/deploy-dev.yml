@@ -1,0 +1,15 @@
+name: Deploy Dev
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, linux]
+
+    steps:
+      - name: Run deployment script
+        run: /opt/digitalkitchen/scripts/deploy_digitalkitchen-backend_dev.sh
+
