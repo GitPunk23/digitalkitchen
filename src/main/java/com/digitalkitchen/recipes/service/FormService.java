@@ -33,8 +33,10 @@ public class FormService {
         return Measurement.getAllMeasurementStrings();
     }
 
-    public List<Author> getAllAuthors() {
-        return authorRepository.findAll();
+    public List<String> getAllAuthors() {
+        return authorRepository.findAll().stream()
+                .map(Author::getName)
+                .toList();
     }
 
     public List<String> getAllTags() {
