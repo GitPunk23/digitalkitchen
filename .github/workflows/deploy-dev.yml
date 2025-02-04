@@ -1,9 +1,9 @@
-name: Deploy Prod
+name: Deploy Dev
 
 on:
   push:
     branches:
-      - main
+      - dev
 
 jobs:
   deploy:
@@ -11,5 +11,5 @@ jobs:
 
     steps:
       - name: Run deployment script
-        run: sudo /opt/digitalkitchen/scripts/deploy_digitalkitchen-backend.sh
+        run: sudo /opt/digitalkitchen/scripts/deploy_digitalkitchen-backend_dev.sh
 

@@ -1,0 +1,8 @@
+FROM openjdk:17-jdk
+
+WORKDIR /app
+
+COPY CICD/app.jar .
+COPY .env /app/.env
+
+CMD ["java", "-Dspring.profiles.active=dev", "-jar", "app.jar"]

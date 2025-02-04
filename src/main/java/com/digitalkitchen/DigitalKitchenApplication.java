@@ -19,6 +19,6 @@ public class DigitalKitchenApplication implements CommandLineRunner
     }
 
     @Override
-    public void run(String... args) throws InterruptedException {
+    public void run(String... args) {
     }
 }

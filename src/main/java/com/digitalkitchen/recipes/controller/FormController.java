@@ -45,7 +45,7 @@ public class FormController {
      */
     @GetMapping(value="/authors", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public List<Author> getAllAuthors() {
+    public List<String> getAllAuthors() {
         return formService.getAllAuthors();
     }
 
