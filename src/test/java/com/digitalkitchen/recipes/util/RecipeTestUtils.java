@@ -71,7 +71,7 @@ public class RecipeTestUtils {
         Recipe recipe = getTestRecipe();
         RecipeRequestInfo requestInfo = RecipeRequestInfo.builder()
             .name(recipe.getName())
-            .author(recipe.getAuthor())
+            .authorName(recipe.getAuthor())
             .category(recipe.getCategory())
             .description(recipe.getDescription())
             .servings(recipe.getServings())
