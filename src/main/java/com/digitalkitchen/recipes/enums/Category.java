@@ -1,5 +1,7 @@
 package com.digitalkitchen.recipes.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -33,6 +35,21 @@ public enum Category {
 
     Category(String category) {
         this.category = category;
+    }
+
+    @JsonCreator
+    public static Category fromValue(String value) {
+        for (Category category : Category.values()) {
+            if (category.category.equalsIgnoreCase(value)) {
+                return category;
+            }
+        }
+        throw new IllegalArgumentException("Unknown enum type " + value);
+    }
+
+    @JsonValue
+    public String getCategory() {
+        return category;
     }
 
     public static List<String> getAllCategoryStrings() {
