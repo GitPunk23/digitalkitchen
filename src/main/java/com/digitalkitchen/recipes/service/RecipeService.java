@@ -47,7 +47,7 @@ public class RecipeService {
 
     private Author getAuthor(String authorName) {
         Optional<Author> authorOpt = authorRepository.findByName(authorName);
-        return authorOpt.orElseGet(() -> Author.builder().name(authorName).build());
+        return authorOpt.orElseGet(() -> authorRepository.save(Author.builder().name(authorName).build()));
     }
 
     private Recipe buildRecipe(RecipeRequestInfo requestInfo) {
