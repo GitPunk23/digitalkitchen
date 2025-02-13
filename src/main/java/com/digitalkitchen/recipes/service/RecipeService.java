@@ -59,14 +59,10 @@ public class RecipeService {
                 .servings(requestInfo.getServings())
                 .caloriesPerServing(requestInfo.getCaloriesPerServing())
                 .notes(requestInfo.getNotes())
-                .ingredients(requestInfo.getIngredients())
-                .steps(requestInfo.getSteps())
-                .tags(requestInfo.getTags())
                 .build();
     }
 
-    private void buildRecipeIngredientList(Recipe recipe) {
-        List<RecipeIngredient> recipeIngredients = recipe.getIngredients();
+    private void buildRecipeIngredientList(Recipe recipe, List<RecipeIngredient> recipeIngredients) {
         List<Ingredient> ingredients = saveIngredients(recipeIngredients.stream()
                 .map(RecipeIngredient::getIngredient)
                 .map(Ingredient::getName)
@@ -80,8 +76,7 @@ public class RecipeService {
         }
     }
 
-    private void buildRecipeTagList(Recipe recipe) {
-        List<RecipeTag> recipeTags = recipe.getTags();
+    private void buildRecipeTagList(Recipe recipe, List<RecipeTag> recipeTags) {
         List<Tag> tags = saveTags(recipeTags.stream()
                 .map(RecipeTag::getTag)
                 .map(Tag::getName)
@@ -95,17 +90,23 @@ public class RecipeService {
         }
     }
 
-    private void buildStepsList(Recipe recipe) {
-        List<Step> steps = recipe.getSteps();
+    private void buildStepsList(Recipe recipe, List<Step> steps) {
         steps.forEach(step -> step.setRecipe(recipe));
     }
 
     private Recipe processRecipeRequest(RecipeRequestInfo recipeRequestInfo) {
         Recipe recipe = buildRecipe(recipeRequestInfo);
-        buildRecipeIngredientList(recipe);
-        buildRecipeTagList(recipe);
-        buildStepsList(recipe);
+        List<RecipeIngredient> recipeIngredients = recipeRequestInfo.getIngredients();
+        List<Step> steps = recipeRequestInfo.getSteps();
+        List<RecipeTag> recipeTags = recipeRequestInfo.getTags();
 
+        buildRecipeIngredientList(recipe, recipeIngredients);
+        buildRecipeTagList(recipe, recipeTags);
+        buildStepsList(recipe, steps);
+
+        recipe.setIngredients(recipeIngredients);
+        recipe.setSteps(steps);
+        recipe.setTags(recipeTags);
         return recipe;
     }
 
