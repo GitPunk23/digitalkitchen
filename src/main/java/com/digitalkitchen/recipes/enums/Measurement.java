@@ -1,5 +1,7 @@
 package com.digitalkitchen.recipes.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -25,6 +27,21 @@ public enum Measurement {
 
     Measurement(String measurement) {
         this.measurement = measurement;
+    }
+
+    @JsonCreator
+    public static Measurement fromValue(String value) {
+        for (Measurement measurement : Measurement.values()) {
+            if (measurement.measurement.equalsIgnoreCase(value)) {
+                return measurement;
+            }
+        }
+        throw new IllegalArgumentException("Unknown enum type " + value);
+    }
+
+    @JsonValue
+    public String getMeasurement() {
+        return measurement;
     }
 
     public static List<String> getAllMeasurementStrings() {
