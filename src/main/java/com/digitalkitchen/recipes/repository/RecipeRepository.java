@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
-    Optional<Recipe> findByNameAndAuthorId(String name, long authorId);
+    Optional<Recipe> findByName(String name);
 }

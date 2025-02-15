@@ -30,4 +30,8 @@ public class Ingredient {
 
     @Column
     private String name;
+
+    public Ingredient(String name) {
+        this.name = name;
+    }
 }

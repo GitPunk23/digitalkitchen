@@ -1,5 +1,7 @@
 package com.digitalkitchen.recipes.service;
 
+import com.digitalkitchen.authors.model.entities.Author;
+import com.digitalkitchen.authors.repository.AuthorRepository;
 import com.digitalkitchen.recipes.model.entities.*;
 import com.digitalkitchen.recipes.model.request.RecipeRequest;
 import com.digitalkitchen.recipes.model.request.RecipeRequestInfo;
@@ -27,10 +29,12 @@ public class RecipeService {
     private final StepRepository stepRepository;
     private final TagRepository tagRepository;
     private final RecipeTagRepository recipeTagRepository;
+    private final AuthorRepository authorRepository;
 
     RecipeService(RecipeRepository recipeRepository, RecipeRepositoryExtension recipeRepositoryExtension,
                   IngredientRepository ingredientRepository, RecipeIngredientRepository recipeIngredientRepository,
-                  StepRepository stepRepository, TagRepository tagRepository, RecipeTagRepository recipeTagRepository) {
+                  StepRepository stepRepository, TagRepository tagRepository, RecipeTagRepository recipeTagRepository,
+                  AuthorRepository authorRepository) {
         this.recipeRepository = recipeRepository;
         this.recipeRepositoryExtension = recipeRepositoryExtension;
         this.ingredientRepository = ingredientRepository;
@@ -38,25 +42,27 @@ public class RecipeService {
         this.stepRepository = stepRepository;
         this.tagRepository = tagRepository;
         this.recipeTagRepository = recipeTagRepository;
+        this.authorRepository = authorRepository;
+    }
+
+    private Author getAuthor(String authorName) {
+        Optional<Author> authorOpt = authorRepository.findByName(authorName);
+        return authorOpt.orElseGet(() -> authorRepository.save(Author.builder().name(authorName).build()));
     }
 
     private Recipe buildRecipe(RecipeRequestInfo requestInfo) {
         return Recipe.builder()
                 .name(requestInfo.getName())
-                .author(requestInfo.getAuthor())
+                .author(getAuthor(requestInfo.getAuthorName()))
                 .category(requestInfo.getCategory())
                 .description(requestInfo.getDescription())
                 .servings(requestInfo.getServings())
                 .caloriesPerServing(requestInfo.getCaloriesPerServing())
                 .notes(requestInfo.getNotes())
-                .ingredients(requestInfo.getIngredients())
-                .steps(requestInfo.getSteps())
-                .tags(requestInfo.getTags())
                 .build();
     }
 
-    private void buildRecipeIngredientList(Recipe recipe) {
-        List<RecipeIngredient> recipeIngredients = recipe.getIngredients();
+    private void buildRecipeIngredientList(Recipe recipe, List<RecipeIngredient> recipeIngredients) {
         List<Ingredient> ingredients = saveIngredients(recipeIngredients.stream()
                 .map(RecipeIngredient::getIngredient)
                 .map(Ingredient::getName)
@@ -70,8 +76,7 @@ public class RecipeService {
         }
     }
 
-    private void buildRecipeTagList(Recipe recipe) {
-        List<RecipeTag> recipeTags = recipe.getTags();
+    private void buildRecipeTagList(Recipe recipe, List<RecipeTag> recipeTags) {
         List<Tag> tags = saveTags(recipeTags.stream()
                 .map(RecipeTag::getTag)
                 .map(Tag::getName)
@@ -85,17 +90,23 @@ public class RecipeService {
         }
     }
 
-    private void buildStepsList(Recipe recipe) {
-        List<Step> steps = recipe.getSteps();
+    private void buildStepsList(Recipe recipe, List<Step> steps) {
         steps.forEach(step -> step.setRecipe(recipe));
     }
 
     private Recipe processRecipeRequest(RecipeRequestInfo recipeRequestInfo) {
         Recipe recipe = buildRecipe(recipeRequestInfo);
-        buildRecipeIngredientList(recipe);
-        buildRecipeTagList(recipe);
-        buildStepsList(recipe);
+        List<RecipeIngredient> recipeIngredients = recipeRequestInfo.getIngredients();
+        List<Step> steps = recipeRequestInfo.getSteps();
+        List<RecipeTag> recipeTags = recipeRequestInfo.getTags();
 
+        buildRecipeIngredientList(recipe, recipeIngredients);
+        buildRecipeTagList(recipe, recipeTags);
+        buildStepsList(recipe, steps);
+
+        recipe.setIngredients(recipeIngredients);
+        recipe.setSteps(steps);
+        recipe.setTags(recipeTags);
         return recipe;
     }
 
@@ -146,7 +157,7 @@ public class RecipeService {
         recipeToUpdate.setServings(requestInfo.getServings());
         recipeToUpdate.setCaloriesPerServing(requestInfo.getCaloriesPerServing());
         recipeToUpdate.setNotes(requestInfo.getNotes());
-        recipeToUpdate.setAuthor(requestInfo.getAuthor());
+        recipeToUpdate.setAuthor(getAuthor(requestInfo.getAuthorName()));
         updateAllRecipeIngredients(recipeToUpdate.getIngredients(), requestInfo.getIngredients());
         updateAllSteps(recipeToUpdate.getSteps(), requestInfo.getSteps());
         updateAllRecipeTags(recipeToUpdate.getTags(), requestInfo.getTags());
@@ -222,9 +233,8 @@ public class RecipeService {
 
     @Transactional
     public RecipeResponse createRecipe(RecipeRequest request) {
-        String name = request.getRecipes().get(0).getName();
-        long authorId = request.getRecipes().get(0).getAuthor().getId();
-        Optional<Recipe> duplicate = recipeRepository.findByNameAndAuthorId(name, authorId);
+        String recipeName = request.getRecipes().get(0).getName();
+        Optional<Recipe> duplicate = recipeRepository.findByName(recipeName);
         RecipeResponse response;
         if (duplicate.isPresent()) {
             response = buildRecipeDuplicateResponse(duplicate.get());

@@ -3,7 +3,7 @@ target/
 *.idea
 .env
 *.iml
-
+*.http
 build/
 archive/
 *.jar

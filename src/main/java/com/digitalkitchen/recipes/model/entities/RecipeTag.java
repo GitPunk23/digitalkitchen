@@ -26,5 +26,9 @@ public class RecipeTag {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tag_id")
     private Tag tag;
+
+    public RecipeTag(String tag) {
+        this.tag = new Tag(tag);
+    }
 }
 
