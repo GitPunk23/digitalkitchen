@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS recipes (
     description text,
     servings int,
     calories_per_serving int,
-    notes int,
+    notes text,
     UNIQUE KEY `unique_constraint` (`name`, `author_id`),
     FOREIGN KEY (author_id) REFERENCES authors(id)
 );
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS meals (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     author_id BIGINT NOT NULL,
     name VARCHAR(50) NOT NULL,
-    notes VARCHAR(255),
+    notes text,
     FOREIGN KEY (author_id) REFERENCES authors(id)
 );
 
