@@ -12,7 +12,6 @@ CREATE TABLE IF NOT EXISTS recipes (
     servings int,
     calories_per_serving int,
     notes int,
-    PRIMARY KEY (id),
     UNIQUE KEY `unique_constraint` (`name`, `author_id`),
     FOREIGN KEY (author_id) REFERENCES authors(id)
 );
@@ -20,13 +19,11 @@ CREATE TABLE IF NOT EXISTS recipes (
 CREATE TABLE IF NOT EXISTS ingredients (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name varchar(50) NOT NULL,
-    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS tags (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name varchar(20) NOT NULL,
-    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS recipe_ingredients (
@@ -36,7 +33,6 @@ CREATE TABLE IF NOT EXISTS recipe_ingredients (
     measurement varchar(20) NOT NULL,
     quantity float NOT NULL,
     notes text,
-    PRIMARY KEY (id),
     FOREIGN KEY (recipe_id) REFERENCES recipes(id) ON DELETE CASCADE,
     FOREIGN KEY (ingredient_id) REFERENCES ingredients(id)
 );
@@ -45,7 +41,6 @@ CREATE TABLE IF NOT EXISTS recipe_tags (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     recipe_id BIGINT NOT NULL,
     tag_id BIGINT NOT NULL,
-    PRIMARY KEY (id),
     FOREIGN KEY (recipe_id) REFERENCES recipes(id) ON DELETE CASCADE,
     FOREIGN KEY (tag_id) REFERENCES tags(id)
 );
@@ -55,7 +50,6 @@ CREATE TABLE IF NOT EXISTS steps (
     recipe_id BIGINT NOT NULL,
     step_number int NOT NULL,
     description text,
-    PRIMARY KEY (id),
     FOREIGN KEY (recipe_id) REFERENCES recipes(id) ON DELETE CASCADE
 );
 
