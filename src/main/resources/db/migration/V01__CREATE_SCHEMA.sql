@@ -18,12 +18,12 @@ CREATE TABLE IF NOT EXISTS recipes (
 
 CREATE TABLE IF NOT EXISTS ingredients (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name varchar(50) NOT NULL,
+    name varchar(50) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS tags (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name varchar(20) NOT NULL,
+    name varchar(20) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS recipe_ingredients (
