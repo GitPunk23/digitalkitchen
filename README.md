@@ -1,5 +1,5 @@
 # Digital Kitchen
-v0.8.0
+v1.0.0
 <br>Recipe database and meal planner!
 
 ## Table of Contents
