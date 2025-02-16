@@ -5,13 +5,13 @@ CREATE TABLE IF NOT EXISTS authors (
 
 CREATE TABLE IF NOT EXISTS recipes (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    author_id BIGINT NOT NULL,
     category varchar(30) NOT NULL,
     name varchar(50) NOT NULL,
     description text,
     servings int,
     calories_per_serving int,
     notes text,
+    author_id BIGINT NOT NULL,
     UNIQUE KEY `unique_constraint` (`name`, `author_id`),
     FOREIGN KEY (author_id) REFERENCES authors(id)
 );
