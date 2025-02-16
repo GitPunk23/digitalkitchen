@@ -1,5 +1,6 @@
 package com.digitalkitchen.recipes.service;
 
+import com.digitalkitchen.authors.repository.AuthorRepository;
 import com.digitalkitchen.recipes.model.entities.Recipe;
 import com.digitalkitchen.recipes.model.request.RecipeRequest;
 import com.digitalkitchen.recipes.model.request.RecipeSearchRequest;
@@ -40,12 +41,14 @@ class RecipeServiceTest {
     private TagRepository tagRepository;
     @Mock
     private RecipeTagRepository recipeTagRepository;
+    @Mock
+    private AuthorRepository authorRepository;
 
     @BeforeEach
     void beforeEach() {
         MockitoAnnotations.openMocks(this);
         testObject = Mockito.spy(new RecipeService(recipeRepository, recipeRepositoryExtension, ingredientRepository,
-                recipeIngredientRepository, stepRepository, tagRepository, recipeTagRepository));
+                recipeIngredientRepository, stepRepository, tagRepository, recipeTagRepository, authorRepository));
     }
 
     @Test
@@ -53,7 +56,7 @@ class RecipeServiceTest {
         Recipe recipe = getTestRecipe();
         RecipeRequest request = RecipeTestUtils.getTestRecipeRequest();
 
-        when(recipeRepository.findByNameAndAuthorId(any(), anyLong())).thenReturn(Optional.empty());
+        when(recipeRepository.findByName(any())).thenReturn(Optional.empty());
         when(ingredientRepository.save(any())).thenReturn(recipe.getIngredients().get(0).getIngredient());
         when(tagRepository.save(any())).thenReturn(recipe.getTags().get(0).getTag());
         when(recipeRepository.save(any())).thenReturn(recipe);
@@ -67,7 +70,7 @@ class RecipeServiceTest {
         Recipe recipe = getTestRecipe();
         RecipeRequest request = RecipeTestUtils.getTestRecipeRequest();
 
-        when(recipeRepository.findByNameAndAuthorId(any(), anyLong())).thenReturn(Optional.of(recipe));
+        when(recipeRepository.findByName(any())).thenReturn(Optional.of(recipe));
         RecipeResponse response = testObject.createRecipe(request);
         assertNotNull(response.getRecipes());
     }

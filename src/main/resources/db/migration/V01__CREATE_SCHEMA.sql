@@ -4,54 +4,52 @@ CREATE TABLE IF NOT EXISTS authors (
 );
 
 CREATE TABLE IF NOT EXISTS recipes (
-    id BIGINT NOT NULL AUTO_INCREMENT,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     author_id BIGINT NOT NULL,
-    category varchar(30) DEFAULT NULL,
+    category varchar(30) NOT NULL,
     name varchar(50) NOT NULL,
-    PRIMARY KEY (id),
-    UNIQUE KEY `unique_name_constraint` (`name`),
+    description text,
+    servings int,
+    calories_per_serving int,
+    notes text,
+    UNIQUE KEY `unique_constraint` (`name`, `author_id`),
     FOREIGN KEY (author_id) REFERENCES authors(id)
 );
 
 CREATE TABLE IF NOT EXISTS ingredients (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    name varchar(50) DEFAULT NULL,
-    PRIMARY KEY (id)
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name varchar(50) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS tags (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    name varchar(20) DEFAULT NULL,
-    PRIMARY KEY (id)
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name varchar(20) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS recipe_ingredients (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    recipe_id BIGINT,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    recipe_id BIGINT NOT NULL,
     ingredient_id BIGINT NOT NULL,
-    measurement varchar(20) DEFAULT NULL,
+    measurement varchar(20) NOT NULL,
     quantity float NOT NULL,
     notes text,
-    PRIMARY KEY (id),
     FOREIGN KEY (recipe_id) REFERENCES recipes(id) ON DELETE CASCADE,
     FOREIGN KEY (ingredient_id) REFERENCES ingredients(id)
 );
 
 CREATE TABLE IF NOT EXISTS recipe_tags (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    recipe_id BIGINT,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    recipe_id BIGINT NOT NULL,
     tag_id BIGINT NOT NULL,
-    PRIMARY KEY (id),
     FOREIGN KEY (recipe_id) REFERENCES recipes(id) ON DELETE CASCADE,
     FOREIGN KEY (tag_id) REFERENCES tags(id)
 );
 
 CREATE TABLE IF NOT EXISTS steps (
-    id BIGINT NOT NULL AUTO_INCREMENT,
-    recipe_id BIGINT,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    recipe_id BIGINT NOT NULL,
     step_number int NOT NULL,
     description text,
-    PRIMARY KEY (id),
     FOREIGN KEY (recipe_id) REFERENCES recipes(id) ON DELETE CASCADE
 );
 
@@ -59,7 +57,7 @@ CREATE TABLE IF NOT EXISTS meals (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     author_id BIGINT NOT NULL,
     name VARCHAR(50) NOT NULL,
-    notes VARCHAR(255),
+    notes text,
     FOREIGN KEY (author_id) REFERENCES authors(id)
 );
 
@@ -90,9 +88,6 @@ CREATE TABLE IF NOT EXISTS meal_records (
     FOREIGN KEY (meal_plan_id) REFERENCES meal_plans(id)
 );
 
-INSERT INTO authors (name)
-SELECT 'system'
-WHERE NOT EXISTS (SELECT 1 FROM authors WHERE name = 'system');
 
 
 
