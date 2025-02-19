@@ -285,4 +285,8 @@ public class MealService {
                     });
         }
     }
+
+    public List<MealPlan> getMealPlans() {
+        return mealPlanRepository.findAll();
+    }
 }

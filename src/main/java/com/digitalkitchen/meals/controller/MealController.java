@@ -1,5 +1,6 @@
 package com.digitalkitchen.meals.controller;
 
+import com.digitalkitchen.meals.model.entities.MealPlan;
 import com.digitalkitchen.meals.model.request.MealRequest;
 import com.digitalkitchen.meals.model.request.MealSearchRequest;
 import com.digitalkitchen.meals.model.response.MealResponse;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 
 @RestController
 @CrossOrigin(origins= {"*"}, maxAge = 4800, allowCredentials = "false" )
@@ -23,7 +26,7 @@ public class MealController {
 
     public MealController(final MealService mealService) { this.mealService = mealService; }
 
-    @PostMapping(value = "/create", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/meal", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<MealResponse> create(@RequestBody @Valid MealRequest request) {
         MealResponse response = mealService.processCreateRequest(request);
@@ -62,6 +65,13 @@ public class MealController {
     @ResponseStatus(HttpStatus.FOUND)
     public ResponseEntity<MealResponse> retrieveMealPlan(final @PathVariable("id") Long planId) {
         MealResponse response = mealService.getMealPlan(planId);
+        return ResponseEntity.status(HttpStatus.FOUND).body(response);
+    }
+
+    @GetMapping(value = "/mealplan", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.FOUND)
+    public ResponseEntity<List<MealPlan>> retrieveMealPlans() {
+        List<MealPlan> response = mealService.getMealPlans();
         return ResponseEntity.status(HttpStatus.FOUND).body(response);
     }
 }
