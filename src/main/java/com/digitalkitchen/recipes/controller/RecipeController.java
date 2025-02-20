@@ -49,6 +49,14 @@ public class RecipeController {
         return ResponseEntity.status(status).body(response);
     }
 
+    @GetMapping(value = "/recipes", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.FOUND)
+    public ResponseEntity<RecipeResponse> retrieveRecipes() {
+        RecipeResponse response = recipeService.retrieveRecipes();
+        HttpStatus status = response.getStatus().equals(FOUND) ? HttpStatus.FOUND : HttpStatus.NOT_FOUND;
+        return ResponseEntity.status(status).body(response);
+    }
+
     @PatchMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<RecipeResponse> updateRecipe(@RequestBody RecipeRequest request) {

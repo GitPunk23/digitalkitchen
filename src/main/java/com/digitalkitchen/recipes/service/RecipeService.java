@@ -258,6 +258,11 @@ public class RecipeService {
         return buildRecipeSearchResponse(recipes);
     }
 
+    public RecipeResponse retrieveRecipes() {
+        List<Recipe> recipes = recipeRepository.findAll();
+        return buildRecipeSearchResponse(recipes);
+    }
+
     @Transactional
     public RecipeResponse updateRecipe(RecipeRequest request) {
         Long recipeId = request.getRecipes().get(0).getId();
