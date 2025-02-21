@@ -92,4 +92,11 @@ class MealControllerTest {
                 .andExpect(status().isFound());
         verify(mealService, times(1)).getMealPlan(planId);
     }
+
+    @Test
+    void testRetrieveMealPlans() throws Exception {
+        mockMvc.perform(get("/meals/mealplans"))
+                .andExpect(status().isFound());
+        verify(mealService, times(1)).getMealPlans();
+    }
 }

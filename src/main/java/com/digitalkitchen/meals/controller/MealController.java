@@ -68,7 +68,7 @@ public class MealController {
         return ResponseEntity.status(HttpStatus.FOUND).body(response);
     }
 
-    @GetMapping(value = "/mealplan", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/mealplans", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.FOUND)
     public ResponseEntity<List<MealPlan>> retrieveMealPlans() {
         List<MealPlan> response = mealService.getMealPlans();
