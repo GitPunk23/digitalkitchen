@@ -51,27 +51,27 @@ public class MealController {
     @ResponseStatus(HttpStatus.FOUND)
     public ResponseEntity<MealResponse> retrieveMeal(final @PathVariable("id") Long mealId) {
         MealResponse response = mealService.getMeal(mealId);
-        return ResponseEntity.status(HttpStatus.FOUND).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping(value = "/mealrecord/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.FOUND)
     public ResponseEntity<MealResponse> retrieveMealRecord(final @PathVariable("id") Long mealRecordId) {
         MealResponse response = mealService.getMealRecord(mealRecordId);
-        return ResponseEntity.status(HttpStatus.FOUND).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping(value = "/mealplan/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.FOUND)
     public ResponseEntity<MealResponse> retrieveMealPlan(final @PathVariable("id") Long planId) {
         MealResponse response = mealService.getMealPlan(planId);
-        return ResponseEntity.status(HttpStatus.FOUND).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping(value = "/mealplans", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.FOUND)
     public ResponseEntity<List<MealPlan>> retrieveMealPlans() {
         List<MealPlan> response = mealService.getMealPlans();
-        return ResponseEntity.status(HttpStatus.FOUND).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

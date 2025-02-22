@@ -34,41 +34,37 @@ public class RecipeController {
     }
 
     @PostMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<RecipeResponse> searchRecipes(@RequestBody RecipeSearchRequest searchParams) {
         RecipeResponse response = recipeService.searchRecipes(searchParams);
-        HttpStatus status = response.getStatus().equals(FOUND) ? HttpStatus.FOUND : HttpStatus.NOT_FOUND;
-        return ResponseEntity.status(status).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<RecipeResponse> retrieveRecipe(final @PathVariable("id") String recipeId) {
         RecipeResponse response = recipeService.retrieveRecipe(recipeId);
-        HttpStatus status = response.getStatus().equals(FOUND) ? HttpStatus.FOUND : HttpStatus.NOT_FOUND;
-        return ResponseEntity.status(status).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping(value = "/recipes", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<RecipeResponse> retrieveRecipes() {
         RecipeResponse response = recipeService.retrieveRecipes();
-        HttpStatus status = response.getStatus().equals(FOUND) ? HttpStatus.FOUND : HttpStatus.NOT_FOUND;
-        return ResponseEntity.status(status).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PatchMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<RecipeResponse> updateRecipe(@RequestBody RecipeRequest request) {
         RecipeResponse response = recipeService.updateRecipe(request);
-        HttpStatus status = response.getStatus().equals(UPDATED) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
-        return ResponseEntity.status(status).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping(value = "/delete")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<RecipeResponse> deleteRecipe(final @RequestParam Long recipeId) {
         recipeService.deleteRecipe(recipeId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }
